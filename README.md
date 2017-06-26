@@ -1,2 +1,2 @@
 # fromfoss
-Simple online form survey.
+Simple online form survey from SJTU SE
