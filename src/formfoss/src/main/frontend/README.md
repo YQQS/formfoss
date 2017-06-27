@@ -2,9 +2,11 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.1.3.
 
-# We use yarn to manage dependency, to get start, run:
 
+## We use yarn to manage dependency, to get start, run:
     yarn 
+## or in case you like npm:
+    npm install
 
 ## Development server
 
