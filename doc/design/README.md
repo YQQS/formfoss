@@ -144,6 +144,7 @@ e.g :
 ```json
 {
     "id": 1,
+    "user_id": 2,
     "answers": [
         {
             "id": 1,
@@ -165,6 +166,8 @@ e.g :
 ```
 ### description
 + id: the corresponding form 
+    - type: number
++ user_id: the corresponding user id to this userAnswer 
     - type: number
 + answers: answers user input for a corresponding form
     - id: the form item id
