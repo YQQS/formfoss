@@ -43,7 +43,7 @@ e.g:
             "id": 3,
             "title": "yet another title",
             "desc": "yet another descript",
-            "type": multiChoice,
+            "type": "multiChoice",
             "validator": {
                 "required": true
             }
@@ -95,7 +95,7 @@ e.g:
         {
             "id": 1,
             "type": "string",
-            "result": ['ace','jack','mac','linus']
+            "result": ["ace","jack","mac","linus"]
         },
         {
             "id": 2,
