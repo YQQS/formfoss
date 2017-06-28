@@ -14,14 +14,6 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <properties>
-        <spring.version>4.3.9.RELEASE</spring.version>
-        <spring-data.version>Ingalls-SR4</spring-data.version>
-        <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
-        <mariadb.jdbc.version>2.0.2</mariadb.jdbc.version>
-        <java.version>1.8</java.version>
-        <frontend.maven.version>1.4</frontend.maven.version>
-    </properties>
 
     <dependencyManagement>
         <dependencies>
