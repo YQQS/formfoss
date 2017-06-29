@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.model.UserEntity;
 import se.sjtu.formfoss.repository.RoleRepository;
 import se.sjtu.formfoss.repository.UserRepository;
-
+import java.sql.Timestamp;
 /**
  * Created by ace on 6/28/17.
  */
@@ -18,12 +18,12 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
-    @PostMapping(path = "/all")
+    @GetMapping(path = "/all")
     public @ResponseBody Iterable<UserEntity> getAllUser() {
         return userRepository.findAll();
     }
 
-    @PostMapping(path = "/add")
+    @GetMapping(path = "/add")
     public @ResponseBody String userAdd(@RequestParam String userName,
                                         @RequestParam String userPassword,
                                         @RequestParam String userEmail,
@@ -32,6 +32,8 @@ public class UserController {
         newUser.setUserName(userName);
         newUser.setUserPassword(userPassword);
         newUser.setUserEmail(userEmail);
+        Timestamp d = new Timestamp(System.currentTimeMillis());
+        newUser.setCreateTime(d);
         if (userPhone != null) {
             newUser.setUserPhone(userPhone);
         }
@@ -68,7 +70,7 @@ public class UserController {
         return "{\"message\" :\"success\"}";
     }
 
-    @PostMapping(path = "/del")
+    @GetMapping(path = "/del")
     public @ResponseBody String userDel(@RequestParam Integer userId) {
         userRepository.delete(userId);
         return "{\"message\" :\"success\"}";
