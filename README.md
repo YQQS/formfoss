@@ -4,7 +4,7 @@ Simple online form survey from SJTU SE2017
 **To start this project, you need**
 + maven3
 + java
-    
+
 **installed correctly**
 
 **some extra configuration is needed**
@@ -47,8 +47,8 @@ CREATE TABLE `user_role` (
 ) 
 ;
 
+   ```
 
- ```
 
 **then**
 
