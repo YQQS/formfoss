@@ -56,9 +56,9 @@ Simple online form survey from SJTU SE2017
     ```
 
 
-    **then**
+**then**
 
     mvn clean package
     java -jar backend/target/backend-0.0.1-SNAPSHOT.jar
 
-    **open your browser at localhost:8080/**
+**open your browser at localhost:8080/**
