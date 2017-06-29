@@ -10,20 +10,20 @@ import java.util.Set;
  * Created by ace on 6/28/17.
  */
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id", length = 11)
     private Integer userId;
 
-    @Column(name = "user_name", length = 32, nullable = false)
+    @Column(name = "user_name", length = 32, nullable = false, unique = true)
     private String userName;
 
     @Column(name = "password", length = 64, nullable = false)
     private String userPassword;
 
-    @Column(name = "email", length = 128, nullable = false)
+    @Column(name = "email", length = 128, nullable = false, unique = true)
     private String userEmail;
 
     @Column(name = "phone",  length = 16)

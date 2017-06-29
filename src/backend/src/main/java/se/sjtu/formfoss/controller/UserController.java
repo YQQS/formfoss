@@ -7,6 +7,8 @@ import se.sjtu.formfoss.model.UserEntity;
 import se.sjtu.formfoss.repository.RoleRepository;
 import se.sjtu.formfoss.repository.UserRepository;
 
+import java.util.List;
+
 /**
  * Created by ace on 6/28/17.
  */
@@ -18,12 +20,22 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
-    @PostMapping(path = "/all")
+    @RequestMapping(path = "/login")
+    public @ResponseBody String login(@RequestParam String userName,
+                                      @RequestParam String userPassword) {
+        List<UserEntity> users= userRepository.findByUserName(userName);
+        if (users.size() == 1 && users.get(0).getUserPassword().equals(userPassword)) {
+            return "{\"message\" :\"success\"}";
+        }
+        return "{\"errorMsg\": \"username or password not match\"}";
+    }
+
+    @RequestMapping(path = "/all")
     public @ResponseBody Iterable<UserEntity> getAllUser() {
         return userRepository.findAll();
     }
 
-    @PostMapping(path = "/add")
+    @RequestMapping(path = "/add")
     public @ResponseBody String userAdd(@RequestParam String userName,
                                         @RequestParam String userPassword,
                                         @RequestParam String userEmail,
@@ -40,7 +52,7 @@ public class UserController {
         return "{\"message\": \"success\"}";
     }
 
-    @PostMapping(path = "/update")
+    @RequestMapping(path = "/update")
     public @ResponseBody String userUpdate(@RequestParam Integer userId,
                                            @RequestParam(required = false) String userName,
                                            @RequestParam(required = false) String userPassword,
@@ -68,13 +80,13 @@ public class UserController {
         return "{\"message\" :\"success\"}";
     }
 
-    @PostMapping(path = "/del")
+    @RequestMapping(path = "/del")
     public @ResponseBody String userDel(@RequestParam Integer userId) {
         userRepository.delete(userId);
         return "{\"message\" :\"success\"}";
     }
 
-    @PostMapping(path = "/search")
+    @RequestMapping(path = "/search")
     public @ResponseBody Iterable<UserEntity> search(@RequestParam String username) {
         return userRepository.findByUserNameContainingIgnoreCase(username);
     }
