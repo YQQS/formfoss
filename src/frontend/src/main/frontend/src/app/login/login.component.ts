@@ -9,12 +9,10 @@ import { Router } from "@angular/router";
     styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-    constructor(private userService: UserService,
-                private router: Router) { }
+    constructor(private userService: UserService) { }
 
     login(username: string, password: string) {
-        this.userService.login(username, password)
-            .then();
+        let obj = this.userService.login(username, password);
     }
     ngOnInit() {
     }

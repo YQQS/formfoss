@@ -1,5 +1,7 @@
 package se.sjtu.formfoss.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.management.relation.RoleNotFoundException;
 import javax.persistence.*;
 import javax.websocket.ClientEndpoint;
@@ -33,6 +35,7 @@ public class UserEntity {
     private Timestamp userCreateTime;
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<UserRoleEntity> userRoleEntities;
 
     public UserEntity() {

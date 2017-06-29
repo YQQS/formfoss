@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/map';
 import { User } from '../models/user';
 
 @Injectable()
@@ -10,17 +11,25 @@ export class UserService {
 
     constructor(private http: Http) { }
 
-    getAll() {
+    getAll() : Promise<User[]> {
         return this.http.get('/user/all')
+            .toPromise()
+            .then(response => {
+                return JSON.parse(response.text());
+                }
+            )
+            .catch(this.handleError);
     }
+
 
 
     login(userName: string, userPassword: string) {
         let body = {userName: userName, userPassword: userPassword};
         return this.http.post('/user/login', JSON.stringify(body))
-            .toPromise()
-            .then(res => res.json())
-            .catch(this.handleError);
+            .map((response: Response) => {
+                console.log(response.json());
+                return JSON.parse(response.text())
+            });
     }
 
     private jwt() {
