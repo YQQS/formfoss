@@ -24,8 +24,10 @@ export class UserService {
 
 
     login(userName: string, userPassword: string) {
-        let body = {userName: userName, userPassword: userPassword};
-        return this.http.post('/user/login', JSON.stringify(body))
+        //let body = {userName: userName, userPassword: userPassword};
+        let theHeaders = new Headers({'content-type': 'application/x-www-form-urlencoded'});
+        let body: string = "userName=" + userName + "&userPassword=" + userPassword;
+        return this.http.post('/user/login', body, theHeaders)
             .map((response: Response) => {
                 console.log(response.json());
                 return JSON.parse(response.text())

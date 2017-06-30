@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Response } from '@angular/http';
 
 import { UserService } from '../services/user.service';
 import { Router } from "@angular/router";
+import 'rxjs/add/operator/toPromise';
 
 @Component({
     selector: 'app-login',
@@ -9,10 +11,16 @@ import { Router } from "@angular/router";
     styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-    constructor(private userService: UserService) { }
+    constructor(private userService: UserService,
+                private router: Router
+               ) { }
 
     login(username: string, password: string) {
-        let obj = this.userService.login(username, password);
+        return this.userService.login(username, password)
+            .toPromise()
+            .then(res => {
+                return res;
+            });
     }
     ngOnInit() {
     }
