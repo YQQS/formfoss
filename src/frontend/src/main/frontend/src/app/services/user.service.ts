@@ -7,17 +7,12 @@ import { User } from '../models/user';
 
 @Injectable()
 export class UserService {
-<<<<<<< HEAD
     private userUrl = '/users/';
     private headers = new Headers({'Content-Type': 'application/json'});
     private theHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
     private requestOpts: RequestOptions = new RequestOptions({
         headers: this.theHeaders
     });
-=======
-    private headers = new Headers({'Content-Type': 'application/json'});
-    private theHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
->>>>>>> master
 
     constructor(private http: Http) { }
 
@@ -52,7 +47,6 @@ export class UserService {
             });
     }
 
-<<<<<<< HEAD
     add(username: string, password: string, email: string) {
         let body: string = "userName=" + username +
             "&userPassword=" + password +
@@ -63,7 +57,6 @@ export class UserService {
             })
     }
 
-<<<<<<< HEAD
     delete(id: number) {
         let body: string = "userId=" + id;
         return this.http.post('/user/del', body, {headers: this.theHeaders})
