@@ -19,6 +19,11 @@ export class LoginComponent implements OnInit {
         return this.userService.login(username, password)
             .toPromise()
             .then(res => {
+                if (res.errorMsg) {
+                    alert(res.errorMsg);
+                } else {
+                    this.router.navigate(['/list']);
+                }
                 return res;
             });
     }

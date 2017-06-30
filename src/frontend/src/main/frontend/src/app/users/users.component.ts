@@ -4,11 +4,11 @@ import {UserService} from "../services/user.service";
 import {Router} from "@angular/router";
 
 @Component({
-    selector: 'app-useres',
-    templateUrl: './useres.component.html',
-    styleUrls: ['./useres.component.css']
+    selector: 'app-users',
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.css']
 })
-export class UseresComponent implements OnInit {
+export class UsersComponent implements OnInit {
     users: User[];
     selectedUser: User;
 

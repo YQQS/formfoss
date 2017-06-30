@@ -52,6 +52,7 @@ public class UserController {
         return "{\"message\": \"success\"}";
     }
 
+
     @RequestMapping(path = "/update")
     public @ResponseBody String userUpdate(@RequestParam Integer userId,
                                            @RequestParam(required = false) String userName,

@@ -8,20 +8,24 @@ import {RegisterComponent} from "./register/register.component";
 import {FormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
 import {AppRoutingModule} from "./app-routing.module";
-import {UseresComponent} from "./useres/useres.component";
+import {UsersComponent} from "./users/users.component";
+import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
     declarations: [
         AppComponent,
         LoginComponent,
         RegisterComponent,
-        UseresComponent
+        UsersComponent,
+        UserDetailComponent
     ],
     imports: [
         BrowserModule,
         FormsModule,
         HttpModule,
-        AppRoutingModule
+        AppRoutingModule,
+        BrowserAnimationsModule
     ],
     providers: [UserService],
     bootstrap: [AppComponent]
