@@ -8,6 +8,7 @@ import { User } from '../models/user';
 @Injectable()
 export class UserService {
     private headers = new Headers({'Content-Type': 'application/json'});
+    private theHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
 
     constructor(private http: Http) { }
 
@@ -25,12 +26,21 @@ export class UserService {
 
     login(userName: string, userPassword: string) {
         //let body = {userName: userName, userPassword: userPassword};
-        let theHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
         let body: string = "userName=" + userName + "&userPassword=" + userPassword;
-        return this.http.post('/user/login', body, {headers: theHeaders})
+        return this.http.post('/user/login', body, {headers: this.theHeaders})
             .map((response: Response) => {
                 return JSON.parse(response.text())
             });
+    }
+
+    add(user: User) {
+        let body: string = "userName=" + user.userName +
+            "&userPassword=" + user.userPassword +
+            "&userEmail=" + user.userEmail;
+        return this.http.post('/user/add', body, {headers: this.theHeaders})
+            .map((response: Response) => {
+                return JSON.parse(response.text());
+            })
     }
 
     private jwt() {

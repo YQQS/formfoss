@@ -2,14 +2,20 @@
     <form>
         <div class="form-group">
             <label for="userName">username</label>
-            <input  [(ngModel)]="user.userName" name="userName"
+            <input #userName
             type="text" class="form-control" id="userName" required />
         </div>
         <div class="form-group">
             <label for="userPassword">password</label>
-            <input [(ngModel)]="user.userPassword" name="userPassword"
+            <input #userPassword
             type="password" class="form-control" id="userPassword" required />
         </div>
-        <button type="submit" class="btn btn-success" >Register</button>
+        <div class="form-group">
+            <label for="userEmail">email</label>
+            <input #userEmail
+            type="email" class="form-control" required />
+        </div>
+
+        <button (click)="register(userName.value, userPassword.value, userEmail.value)" >Register</button>
     </form>
 </div>
