@@ -15,12 +15,12 @@ public class FormController {
     @Autowired
     private FormRepository formRepository;
 
-    @GetMapping(path = "/all")
+    @RequestMapping(path = "/all")
     public @ResponseBody Iterable<FormEntity> getAllForm() {
         return formRepository.findAll();
     }
 
-    @GetMapping(path = "/add")
+    @RequestMapping(path = "/add")
     public @ResponseBody String userAdd(@RequestParam String title) {
         FormEntity newForm = new FormEntity();
         newForm.setTitle(title);
@@ -28,7 +28,7 @@ public class FormController {
         return "{\"message\": \"success\"}";
     }
 
-    @GetMapping(path = "/update")
+    @RequestMapping(path = "/update")
     public @ResponseBody String userUpdate(@RequestParam String formId,
                                            @RequestParam String title) {
         FormEntity form = formRepository.findOne(formId);
@@ -42,7 +42,7 @@ public class FormController {
         return "{\"message\" :\"success\"}";
     }
 
-    @GetMapping(path = "/del")
+    @RequestMapping(path = "/del")
     public @ResponseBody String formDel(@RequestParam String formId) {
         formRepository.delete(formId);
         return "{\"message\" :\"success\"}";

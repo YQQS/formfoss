@@ -33,14 +33,21 @@ export class UserService {
             });
     }
 
-    add(user: User) {
-        let body: string = "userName=" + user.userName +
-            "&userPassword=" + user.userPassword +
-            "&userEmail=" + user.userEmail;
+    add(username: string, password: string, email: string) {
+        let body: string = "userName=" + username +
+            "&userPassword=" + password +
+            "&userEmail=" + email;
         return this.http.post('/user/add', body, {headers: this.theHeaders})
             .map((response: Response) => {
                 return JSON.parse(response.text());
             })
+    }
+
+    delete(id: number) {
+        let body: string = "userId=" + id;
+        return this.http.post('/user/del', body, {headers: this.theHeaders})
+            .map(response => JSON.parse(response.text()));
+
     }
 
     private jwt() {

@@ -9,24 +9,20 @@ import { UserService } from '../services/user.service';
     styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-    private user: User;
-
     constructor(private userService: UserService,
                 private router: Router
                ) { }
 
     register(username:string, password: string, email: string) {
-        this.user = new User();
-        this.user.userName = username;
-        this.user.userPassword = password;
-        this.user.userEmail = email;
-        this.userService.add(this.user)
+        this.userService.add(username, password, email)
             .toPromise()
             .then(response => {
                 if (response.errorMsg) {
                     alert(response.errorMsg);
+                } else {
+                    alert(response.message);
+                    this.router.navigate(['/list']);
                 }
-                this.router.navigate(['/list']);
             })
     }
 
