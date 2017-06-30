@@ -3,17 +3,17 @@
         <div class="form-group">
             <label for="userName">username</label>
             <input #userName
-            type="text" class="form-control" id="userName" required />
+            type="text" class="form-control" id="userName" required /><br>
         </div>
         <div class="form-group">
             <label for="userPassword">password</label>
             <input #userPassword
-            type="password" class="form-control" id="userPassword" required />
+            type="password" class="form-control" id="userPassword" required /><br>
         </div>
         <div class="form-group">
             <label for="userEmail">email</label>
             <input #userEmail
-            type="email" class="form-control" required />
+            type="email" class="form-control" required /><br>
         </div>
 
         <button (click)="register(userName.value, userPassword.value, userEmail.value)" >Register</button>

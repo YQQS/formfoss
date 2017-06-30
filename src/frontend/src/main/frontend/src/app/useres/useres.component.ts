@@ -26,6 +26,10 @@ export class UseresComponent implements OnInit {
         this.selectedUser = user;
     }
 
+    gotoDetail(): void {
+        this.router.navigate(['/user/detail', this.selectedUser.userId]);
+    }
+
     ngOnInit() {
         this.getAll();
     }

@@ -9,6 +9,9 @@ import { User } from '../models/user';
 export class UserService {
     private headers = new Headers({'Content-Type': 'application/json'});
     private theHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
+    private requestOpts: RequestOptions = new RequestOptions({
+        headers: this.theHeaders
+    });
 
     constructor(private http: Http) { }
 
@@ -27,7 +30,7 @@ export class UserService {
     login(userName: string, userPassword: string) {
         //let body = {userName: userName, userPassword: userPassword};
         let body: string = "userName=" + userName + "&userPassword=" + userPassword;
-        return this.http.post('/user/login', body, {headers: this.theHeaders})
+        return this.http.post('/user/login', body, this.requestOpts)
             .map((response: Response) => {
                 return JSON.parse(response.text())
             });
