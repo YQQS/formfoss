@@ -2,6 +2,7 @@
     <form>
         <div class="form-group">
             <label for="userName">username</label>
+<<<<<<< HEAD
             <input #userName
             type="text" class="form-control" id="userName" required /><br>
         </div>
@@ -17,5 +18,16 @@
         </div>
 
         <button (click)="register(userName.value, userPassword.value, userEmail.value)" >Register</button>
+=======
+            <input  [(ngModel)]="user.userName" name="userName"
+            type="text" class="form-control" id="userName" required />
+        </div>
+        <div class="form-group">
+            <label for="userPassword">password</label>
+            <input [(ngModel)]="user.userPassword" name="userPassword"
+            type="password" class="form-control" id="userPassword" required />
+        </div>
+        <button type="submit" class="btn btn-success" >Register</button>
+>>>>>>> master
     </form>
 </div>
