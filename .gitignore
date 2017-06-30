@@ -78,3 +78,4 @@ testem.log
 typings
 
 ut-tsc
+application.properties
