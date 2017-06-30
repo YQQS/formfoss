@@ -7,6 +7,7 @@ import { User } from '../models/user';
 
 @Injectable()
 export class UserService {
+    private userUrl = '/users/';
     private headers = new Headers({'Content-Type': 'application/json'});
     private theHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
     private requestOpts: RequestOptions = new RequestOptions({
@@ -22,6 +23,16 @@ export class UserService {
                 return JSON.parse(response.text());
                 }
             )
+            .catch(this.handleError);
+    }
+
+    getUser(id: number) : Promise<User> {
+        const url = this.userUrl + id;
+        return this.http.get(url)
+            .toPromise()
+            .then((response: Response) => {
+                return response.json() as User;
+            })
             .catch(this.handleError);
     }
 
@@ -51,6 +62,16 @@ export class UserService {
         return this.http.post('/user/del', body, {headers: this.theHeaders})
             .map(response => JSON.parse(response.text()));
 
+    }
+
+    update(user: User) : Promise<User> {
+        const url = this.userUrl  + user.userId;
+        return this.http.put(url, JSON.stringify(user), this.requestOpts)
+            .toPromise()
+            .then(() => {
+                return user;
+            })
+            .catch(this.handleError);
     }
 
     private jwt() {
