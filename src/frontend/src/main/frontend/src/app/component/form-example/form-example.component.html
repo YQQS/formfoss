@@ -1,0 +1,113 @@
+<md-sidenav-container>
+    <md-sidenav mode="side" align="start" #side>
+        <button md-button routerLink="/login">login</button>
+    </md-sidenav>
+    <div>
+        a slide nav
+        <button md-button (click)="side.toggle()">open me</button>
+    </div>
+    <md-toolbar color="primary">
+        <span>the form</span>
+    </md-toolbar>
+
+    <md-menu #myMenu="mdMenu">
+        <button md-menu-item>Setting</button>
+        <button md-menu-item>Help</button>
+    </md-menu>
+    <button md-icon-button [mdMenuTriggerFor]="myMenu">
+        <md-icon>A menu button</md-icon>
+    </button>
+
+    <div>
+        <label>input auto complete</label>
+        <md-input-container>
+            <input mdInput placeholder="State" [mdAutocomplete]="auto" [formControl]="stateCtrl">
+        </md-input-container>
+
+        <md-autocomplete #auto="mdAutocomplete">
+            <md-option *ngFor="let state of filteredStates | async" [value]="state">
+                {{ state }}
+            </md-option>
+        </md-autocomplete>
+    </div>
+
+    <fieldset>
+        <label>check box</label><br>
+        <md-card>
+            <md-card-content>
+                <section class="example-section">
+                    <md-checkbox class="example-margin" [(ngModel)]="checked">Checked</md-checkbox>
+                    <md-checkbox class="example-margin" [(ngModel)]="indeterminate">Indeterminate</md-checkbox>
+                </section><br>
+
+                <section class="example-section">
+                    <label class="example-margin">Align:</label>
+                    <md-radio-group [(ngModel)]="align">
+                        <md-radio-button class="example-margin" value="start">Start</md-radio-button>
+                        <md-radio-button class="example-margin" value="end">End</md-radio-button>
+                    </md-radio-group>
+                </section><br>
+
+                <section class="example-section">
+                    <md-checkbox class="example-margin" [(ngModel)]="disabled">Disabled</md-checkbox>
+                </section><br>
+            </md-card-content>
+        </md-card>
+
+        <md-card class="result">
+            <md-card-content>
+                <h2 class="example-h2">Result</h2>
+
+                <section class="example-section">
+                    <md-checkbox
+                            class="example-margin"
+                            [checked]="checked"
+                            [indeterminate]="indeterminate"
+                            [align]="align"
+                            [disabled]="disabled">
+                        I'm a checkbox
+                    </md-checkbox>
+                </section>
+            </md-card-content>
+        </md-card>
+    </fieldset>
+
+    <div>
+        <label>date pick</label><br>
+        <md-input-container>
+            <input placeholder="date" mdInput [mdDatepicker]="mypick">
+            <button mdSuffix [mdDatepickerToggle]="mypick"></button>
+        </md-input-container>
+        <md-datepicker #mypick></md-datepicker>
+    </div>
+
+    <div>
+        <md-select placeholder="animal">
+            <md-option *ngFor="let opt of animals" [value]="opt">
+                {{ opt }}
+            </md-option>
+        </md-select>
+    </div>
+
+    <div>
+        <label>slider</label>
+        <md-slider thumbLabel tickInterval="1" min="1" max="30" step="2"  value="2" ></md-slider>
+        <br><label>slider toggle</label>
+        <md-slide-toggle color="warn">toggle</md-slide-toggle>
+    </div>
+
+    <md-toolbar color="warn">
+        <label>tab example</label>
+    </md-toolbar>
+    <md-tab-group>
+        <md-tab label="question" >
+            <md-input-container>
+                <label>Name: </label>
+                <input mdInput >
+            </md-input-container>
+        </md-tab>
+        <md-tab label="response">
+            <label>responses: </label>
+        </md-tab>
+    </md-tab-group>
+</md-sidenav-container>
