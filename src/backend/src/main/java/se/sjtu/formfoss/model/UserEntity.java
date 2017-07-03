@@ -1,8 +1,10 @@
 package se.sjtu.formfoss.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 
 import javax.management.relation.RoleNotFoundException;
 import javax.persistence.*;
@@ -15,7 +17,7 @@ import java.util.Set;
  */
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true
 @Table(name = "user")
 public class UserEntity {
     @Id

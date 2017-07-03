@@ -1,0 +1,18 @@
+<div>
+    <form>
+        <md-input-container>
+            <input mdInput placeholder="username" type="text" #userName required>
+        </md-input-container><br>
+
+        <md-input-container>
+            <input mdInput placeholder="password" type="password" #userPassword required>
+        </md-input-container><br>
+
+        <div>
+            <button md-raised-button (click)="login(userName.value, userPassword.value)">
+                login
+            </button>
+            <a routerLink="/register" md-button>register</a>
+        </div>
+    </form>
+</div>

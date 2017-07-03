@@ -1,0 +1,17 @@
+.example-question {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.example-radio {
+    margin: 5px;
+}
+
+.example-card-title {
+    font-size: 35px;
+}
+
+.example-input {
+    color: mediumspringgreen;
+}
+

@@ -1,6 +1,9 @@
 # Compiled class file
 *.class
 
+# git
+*.orig
+
 # Log file
 *.log
 
@@ -75,6 +78,4 @@ testem.log
 typings
 
 ut-tsc
-
-#my configurations
-src/frontend
+application.properties

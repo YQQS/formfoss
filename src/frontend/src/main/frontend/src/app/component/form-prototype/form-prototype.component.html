@@ -1,0 +1,40 @@
+<md-tab-group>
+    <md-tab label="priview">
+        <md-card class="prototype">
+            <md-card-header>
+                <md-card-title class="example-card-title">Question 1</md-card-title>
+            </md-card-header>
+
+            <md-card-content>
+                <h1>Whats your pet?</h1>
+                <md-radio-group [(ngModel)]="selectedAnimal" class="example-question">
+                    <md-radio-button class="example-radio" *ngFor="let animal of animals" [value]="animal">
+                        {{animal}}
+                    </md-radio-button>
+                </md-radio-group>
+                <div>You selected {{selectedAnimal}}</div>
+            </md-card-content>
+        </md-card>
+
+        <md-card class="prototype">
+            <md-card-header>
+                <md-card-title class="example-card-title">question 2</md-card-title>
+            </md-card-header>
+
+            <md-card-content>
+                <h1>express your feeling</h1>
+                <md-input-container class="example-input">
+                    <input mdInput placeholder="your answer" type="text">
+                </md-input-container>
+            </md-card-content>
+        </md-card>
+    </md-tab>
+
+    <md-tab label="edit">
+
+    </md-tab>
+
+    <md-tab label="answers">
+
+    </md-tab>
+</md-tab-group>

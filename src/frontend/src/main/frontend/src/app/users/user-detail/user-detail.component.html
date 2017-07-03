@@ -1,0 +1,22 @@
+<div *ngIf="user">
+    <h2>Detail of userid = {{user.userId}}</h2>
+    <div>
+        <label>username</label>
+        <input [(ngModel)]="user.userName" placeholder="userName" />
+    </div>
+    <div>
+        <label>password</label>
+        <input [(ngModel)]="user.userPassword" />
+    </div>
+    <div>
+        <label>email</label>
+        <input [(ngModel)]="user.userEmail" />
+    </div>
+    <div>
+        <label>phone</label>
+        <input [(ngModel)]="user.userPhone" />
+    </div>
+
+    <button (click)="save()" >Save</button>
+    <button (click)="goBack()">Back</button>
+</div>

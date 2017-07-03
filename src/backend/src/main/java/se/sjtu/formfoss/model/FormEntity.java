@@ -1,9 +1,9 @@
 package se.sjtu.formfoss.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import org.springframework.data.annotation.Id;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
 
@@ -20,16 +20,14 @@ public class FormEntity {
     @Id
     String id;
 
-    int userId;
     String title;
     String desc;
     Map<String,Object> settings;
     List<Map<String,Object>> formItems;
     public FormEntity() {}
 
-    public FormEntity(String id,int userId, String title, String desc, Map<String,Object> settings, List<Map<String,Object>> formItems) {
+    public FormEntity(String id,String title,String desc,Map<String,Object> settings,List<Map<String,Object>> formItems) {
         this.id=id;
-        this.userId=userId;
         this.title = title;
         this.desc =desc;
         this.settings=settings;
@@ -42,14 +40,6 @@ public class FormEntity {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getTitle() {

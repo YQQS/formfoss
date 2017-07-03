@@ -1,0 +1,14 @@
+<h2>registered users</h2>
+<ul>
+    <li *ngFor="let user of users" >
+        <span>{{user.userName}}</span>
+    </li>
+</ul>
+<h2>edit</h2>
+<div class="grid grid-pad">
+    <a *ngFor="let user of users" [routerLink]="['/users', user.userId]" class="col-1-4">
+        <div class="module user">
+            <h4>{{user.userName}}</h4>
+        </div>
+    </a>
+</div>
