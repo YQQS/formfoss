@@ -29,13 +29,21 @@ public class UserEntity {
     @Column(name = "phone",  length = 16)
     private String userPhone;
 
-    @Column(name = "create_time", insertable = false, updatable = false, nullable = false)
+    @Column(name = "create_time",  updatable = false, nullable = false)
     private Timestamp userCreateTime;
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
     private Set<UserRoleEntity> userRoleEntities;
 
     public UserEntity() {
+    }
+
+    public Timestamp getCreateTime() {
+        return userCreateTime;
+    }
+
+    public void setCreateTime(Timestamp userCreateTime) {
+        this.userCreateTime = userCreateTime;
     }
 
     public Integer getUserId() {
