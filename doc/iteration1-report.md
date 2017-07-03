@@ -1,6 +1,7 @@
 **Report on the evaluation of the iteration plan**
 ==================================================
 **Elaboration Phase**
+
 -----------------------
 - Technology Study
     - Spring
@@ -13,7 +14,7 @@
 
     >- Spring boot
     >>- Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can "just run". We take an opinionated view of the Spring platform and third-party libraries so you can get started with minimum fuss. Most Spring Boot applications need very little Spring configuration    
-    - AngularJS 
+    - AngularJS
         >- data binding
         >- dependency injection
         >- routing

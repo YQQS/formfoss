@@ -1,6 +1,9 @@
 # Compiled class file
 *.class
 
+# git
+*.orig
+
 # Log file
 *.log
 
@@ -33,6 +36,14 @@ build/
 .classpath
 .project
 .settings
+.vscode/*
+*.sublime-workspace
+*.launch
+.c9/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 # intellij
 *.iml
@@ -45,3 +56,26 @@ accessingdataneo4j.db
 dependency-reduced-pom.xml
 out
 README.html
+
+# front
+# e2e
+e2e/*.js
+e2e/*.map
+
+node_modules
+node
+
+# compiled output
+dist
+tmp
+o# misc
+.sass-cache
+connect.lock
+coverage
+libpeerconnection.log
+npm-debug.log
+testem.log
+typings
+
+ut-tsc
+application.properties

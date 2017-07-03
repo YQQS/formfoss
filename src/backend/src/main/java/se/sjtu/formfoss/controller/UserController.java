@@ -1,5 +1,6 @@
 package se.sjtu.formfoss.controller;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.util.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.model.UserEntity;
 import se.sjtu.formfoss.repository.RoleRepository;
 import se.sjtu.formfoss.repository.UserRepository;
+
 
 import java.io.IOException;
 import java.util.List;
@@ -22,6 +24,7 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+
 
     @GetMapping(path={"/",""})
     public @ResponseBody Iterable<UserEntity> getAllUser() {
@@ -121,4 +124,5 @@ public class UserController {
 //    public @ResponseBody Iterable<UserEntity> search(@RequestParam String username) {
 //        return userRepository.findByUserNameContainingIgnoreCase(username);
 //    }
+
 }
