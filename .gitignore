@@ -75,3 +75,6 @@ testem.log
 typings
 
 ut-tsc
+
+#my configurations
+src/frontend
