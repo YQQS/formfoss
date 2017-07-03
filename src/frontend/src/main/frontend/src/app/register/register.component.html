@@ -1,0 +1,27 @@
+<div class="container">
+    <form>
+        <div class="form-group">
+            <md-input-container>
+                <input #userName mdInput placeholder="username"
+                       type="text" class="form-control" required /><br>
+            </md-input-container>
+        </div>
+        <div class="form-group">
+            <md-input-container>
+                <input #userPassword mdInput placeholder="password"
+                       type="password" class="form-control" required />
+            </md-input-container>
+        </div>
+        <div class="form-group">
+            <md-input-container>
+                <input #userEmail mdInput placeholder="email"
+                       type="email" class="form-control" required />
+            </md-input-container>
+        </div>
+
+        <div>
+            <button md-raised-button (click)="register(userName.value, userPassword.value, userEmail.value)" >register</button>
+            <a routerLink="/login" md-button>have a accout?login</a>
+        </div>
+    </form>
+</div>
