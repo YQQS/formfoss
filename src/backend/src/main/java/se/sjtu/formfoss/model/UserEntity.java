@@ -1,5 +1,7 @@
 package se.sjtu.formfoss.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.management.relation.RoleNotFoundException;
 import javax.persistence.*;
 import javax.websocket.ClientEndpoint;
@@ -10,40 +12,33 @@ import java.util.Set;
  * Created by ace on 6/28/17.
  */
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id", length = 11)
     private Integer userId;
 
-    @Column(name = "user_name", length = 32, nullable = false)
+    @Column(name = "user_name", length = 32, nullable = false, unique = true)
     private String userName;
 
     @Column(name = "password", length = 64, nullable = false)
     private String userPassword;
 
-    @Column(name = "email", length = 128, nullable = false)
+    @Column(name = "email", length = 128, nullable = false, unique = true)
     private String userEmail;
 
     @Column(name = "phone",  length = 16)
     private String userPhone;
 
-    @Column(name = "create_time",  updatable = false, nullable = false)
+    @Column(name = "create_time", insertable = false, updatable = false, nullable = false)
     private Timestamp userCreateTime;
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<UserRoleEntity> userRoleEntities;
 
     public UserEntity() {
-    }
-
-    public Timestamp getCreateTime() {
-        return userCreateTime;
-    }
-
-    public void setCreateTime(Timestamp userCreateTime) {
-        this.userCreateTime = userCreateTime;
     }
 
     public Integer getUserId() {
