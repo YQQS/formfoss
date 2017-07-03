@@ -27,6 +27,7 @@ import {
 } from "@angular/material";
 import { FormExampleComponent } from './component/form-example/form-example.component';
 import "hammerjs";
+import { FormPrototypeComponent } from './component/form-prototype/form-prototype.component';
 
 @NgModule({
     declarations: [
@@ -35,7 +36,8 @@ import "hammerjs";
         RegisterComponent,
         UsersComponent,
         UserDetailComponent,
-        FormExampleComponent
+        FormExampleComponent,
+        FormPrototypeComponent
     ],
     imports: [
         BrowserModule,

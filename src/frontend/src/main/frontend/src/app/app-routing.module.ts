@@ -6,9 +6,11 @@ import { RegisterComponent } from './register/register.component';
 import { UsersComponent } from './users/users.component';
 import {UserDetailComponent} from "./users/user-detail/user-detail.component";
 import {FormExampleComponent} from './component/form-example/form-example.component';
+import {FormPrototypeComponent} from "./component/form-prototype/form-prototype.component";
 
 const routes:Routes = [
-    {path: "", redirectTo: '/form', pathMatch: 'full'},
+    {path: "", redirectTo: '/prototype', pathMatch: 'full'},
+    {path: "prototype", component: FormPrototypeComponent},
     {path: "login", component: LoginComponent},
     {path: "register", component: RegisterComponent},
     {path: "list", component: UsersComponent},

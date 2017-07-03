@@ -1,12 +1,35 @@
-<div style="text-align:left">
-  <h1>
-    Hi {{title}} start here!!
-  </h1>
-</div>
+<md-sidenav-container>
+    <md-sidenav #sidebar class="example-side" mode="push">
+        <button md-button class="example-button" >
+            <md-icon>build</md-icon>
+            frontend test
+        </button><br>
+        <button md-button class="example-button" routerLink="/list" >
+            <md-icon>explore</md-icon>
+            backend test
+        </button>
+    </md-sidenav>
 
-<nav>
-    <a routerLink="/login" routerLinkActive="active">Login</a>
-    <a routerLink="/list" routerLinkActive="active">UserList</a>
-    <a routerLink="/form" routerLinkActive="active">Example Form</a>
-</nav>
-<router-outlet></router-outlet>
+    <md-toolbar color="primary">
+        <span>Hi {{title}} start here!!</span>
+    </md-toolbar>
+
+    <nav>
+        <button md-button (click)="sidebar.toggle()">
+            <md-icon>dehaze</md-icon>
+        </button>
+        <button md-button routerLink="/login" color="accent" routerLinkActive="active">
+            <md-icon>inbox</md-icon>
+            Login
+        </button>
+        <button md-button routerLink="/form" routerLinkActive="active">
+            <md-icon>history</md-icon>
+            Example Form
+        </button>
+        <button md-button color="warn" routerLink="/prototype" routerLinkActive="active">
+            <md-icon>stars</md-icon>
+            prototype
+        </button>
+    </nav>
+    <router-outlet></router-outlet>
+</md-sidenav-container>
