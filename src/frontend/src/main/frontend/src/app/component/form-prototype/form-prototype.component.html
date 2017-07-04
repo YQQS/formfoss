@@ -1,12 +1,8 @@
 <md-tab-group>
-    <md-tab label="priview">
-        <md-card class="prototype">
-            <md-card-header>
-                <md-card-title class="example-card-title">Question 1</md-card-title>
-            </md-card-header>
-
+    <md-tab label="priview" color="primary">
+        <md-card class="prototype" tabindex="0">
             <md-card-content>
-                <h1>Whats your pet?</h1>
+                <h3>Whats your pet?</h3>
                 <md-radio-group [(ngModel)]="selectedAnimal" class="example-question">
                     <md-radio-button class="example-radio" *ngFor="let animal of animals" [value]="animal">
                         {{animal}}
@@ -16,18 +12,99 @@
             </md-card-content>
         </md-card>
 
-        <md-card class="prototype">
+        <md-card class="prototype" tabindex="0">
             <md-card-header>
                 <md-card-title class="example-card-title">question 2</md-card-title>
             </md-card-header>
 
             <md-card-content>
-                <h1>express your feeling</h1>
+                <h3>express your feeling</h3>
                 <md-input-container class="example-input">
                     <input mdInput placeholder="your answer" type="text">
                 </md-input-container>
             </md-card-content>
+
+            <md-card-actions>
+                <md-slide-toggle class="example-slide">required</md-slide-toggle>
+            </md-card-actions>
         </md-card>
+
+        <md-card class="prototype" tabindex="0">
+            <md-card-content>
+                <h3>pick a date</h3>
+                <md-input-container>
+                    <input mdInput [mdDatepicker]="myPick"  [(ngModel)]="selectedDate">
+                    <button mdSuffix [mdDatepickerToggle]="myPick"></button>
+                </md-input-container>
+                <md-datepicker #myPick></md-datepicker>
+                <h3>you select {{selectedDate}}</h3>
+            </md-card-content>
+        </md-card>
+
+        <md-card class="prototype" tabindex="0">
+            <md-card-content>
+                <h3>Phone?</h3>
+                <md-input-container>
+                    <span mdPrefix>
+                        +86
+                    </span>
+                    <input mdInput>
+                    <md-icon mdSuffix>edit</md-icon>
+                </md-input-container>
+            </md-card-content>
+        </md-card>
+
+        <md-card tabindex="0">
+            <md-card-content>
+                <h3>review</h3>
+                <md-input-container>
+                    <textarea mdTextareaAutosize mdInput cols="100" rows="4" placeholder="write here"
+                              [(ngModel)]="words" (change)="updateCount()"></textarea>
+                    <md-icon mdSuffix>edit</md-icon>
+                    <md-hint>{{counts}}/255</md-hint>
+                </md-input-container>
+            </md-card-content>
+        </md-card>
+
+        <md-card tabindex="0">
+            <md-card-content>
+                <md-toolbar color="primary">
+                    <h3>single select</h3>
+                </md-toolbar>
+                <md-select [(ngModel)]="selectedAnimal" color="warn" class="example-select">
+                    <md-option *ngFor="let an of animals" [value]="an">{{an}}</md-option>
+                </md-select>
+                <p>you selected {{selectedAnimal}}</p>
+            </md-card-content>
+        </md-card>
+
+        <md-card tabindex="0">
+            <md-card-content>
+                <h3>multi select</h3>
+                <md-select multiple [(ngModel)]="animalList">
+                    <md-option *ngFor="let an of animals" [value]="an">{{an}}</md-option>
+                </md-select>
+                <h3 *ngFor="let an of animalList">{{an}}</h3>
+            </md-card-content>
+        </md-card>
+
+        <md-card tabindex="0">
+            <md-card-content>
+                <h3>give a score</h3>
+                <md-slider thumbLabel tickInterval="auto" min="1" max="100" step="1" value="50"></md-slider>
+            </md-card-content>
+        </md-card>
+
+        <!--
+        <md-card>
+            <md-card-content>
+                <h3>multi check</h3>
+                <div>
+                    <md-checkbox *ngFor="let an of animals" [value]="an">{{an}}</md-checkbox>
+                </div>
+            </md-card-content>
+        </md-card>
+        -->
     </md-tab>
 
     <md-tab label="edit">
