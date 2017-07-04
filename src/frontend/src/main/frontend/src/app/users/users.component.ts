@@ -26,6 +26,17 @@ export class UsersComponent implements OnInit {
         this.selectedUser = user;
     }
 
+    deleteUser(id: number): void {
+        this.userService.deleteUser(id);
+        this.selectedUser = null;
+        this.getAll();
+        this.router.navigate(['/list']);
+    }
+
+    gotoDetail() {
+        this.router.navigate(['/users', this.selectedUser.userId]);
+    }
+
     ngOnInit() {
         this.getAll();
     }
