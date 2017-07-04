@@ -11,17 +11,17 @@
     </md-sidenav>
 
     <md-toolbar color="primary">
-        <span>Hi {{title}} start here!!</span>
-    </md-toolbar>
-
-    <nav>
         <button md-button (click)="sidebar.toggle()">
             <md-icon>dehaze</md-icon>
         </button>
-        <button md-button routerLink="/login" color="accent" routerLinkActive="active">
-            <md-icon>inbox</md-icon>
+        <span>Hi {{title}} start here!!</span>
+        <button md-button class="example-button-login" routerLink="/login" color="accent" routerLinkActive="active">
+            <md-icon>person</md-icon>
             Login
         </button>
+    </md-toolbar>
+
+    <nav>
         <button md-button routerLink="/form" routerLinkActive="active">
             <md-icon>history</md-icon>
             Example Form

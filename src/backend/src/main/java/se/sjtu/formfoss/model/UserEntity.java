@@ -17,7 +17,7 @@ import java.util.Set;
  */
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "user")
 public class UserEntity {
     @Id
