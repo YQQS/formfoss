@@ -9,12 +9,20 @@ import { UserService } from '../services/user.service';
     styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+    username: string;
+    password: string;
+    passwordRepeat: string;
+    email: string;
+
+    valid: boolean = false;
+    pristine: boolean = true;
+
     constructor(private userService: UserService,
                 private router: Router
                ) { }
 
-    register(username:string, password: string, email: string) {
-        this.userService.add(username, password, email)
+    register() {
+        this.userService.add(this.username, this.password, this.email)
             .toPromise()
             .then(response => {
                 if (response.errorMsg) {
@@ -24,6 +32,10 @@ export class RegisterComponent implements OnInit {
                     this.router.navigate(['/list']);
                 }
             })
+    }
+
+    validUserName() {
+
     }
 
     ngOnInit() {
