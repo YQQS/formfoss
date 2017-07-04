@@ -10,6 +10,19 @@
     }
 }
 
+.prototype-card {
+    width: 70%;
+}
+
+.prototype-slider {
+    width: 60%;
+}
+
+.prototype-card-content {
+    position: relative;
+    left: 20px;
+}
+
 .example-question {
     display: inline-flex;
     flex-direction: column;

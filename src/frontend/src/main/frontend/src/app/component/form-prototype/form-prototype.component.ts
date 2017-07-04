@@ -29,8 +29,8 @@ export class FormPrototypeComponent implements OnInit {
 
     constructor() { }
 
-    updateCount(): void {
-        this.counts = this.words.length;
+    updateCount(input: string): void {
+        this.counts = input.length;
     }
     ngOnInit() {
     }
