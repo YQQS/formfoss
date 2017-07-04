@@ -56,6 +56,8 @@ export class UserService {
             })
     }
 
+    }
+
     deleteUser(id: number) {
         const url = this.userUrl + id;
         return this.http.delete(url, {headers: this.formHeader})

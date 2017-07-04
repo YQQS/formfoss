@@ -1,6 +1,5 @@
 package se.sjtu.formfoss.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +20,22 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+
+    }
+
+        return "{\"message\": \"success\"}";
+    }
+
+
+    @RequestMapping(path = "/login")
+    public @ResponseBody String login(@RequestParam String userName,
+                                      @RequestParam String userPassword) {
+        List<UserEntity> users= userRepository.findByUserName(userName);
+        if (users.size() == 1 && users.get(0).getUserPassword().equals(userPassword)) {
+            return "{\"message\" :\"success\"}";
+        }
+        return "{\"errorMsg\": \"username or password not match\"}";
+    }
 
 
     @GetMapping(path={"/",""})
