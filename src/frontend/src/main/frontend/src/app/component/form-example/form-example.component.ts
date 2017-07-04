@@ -70,7 +70,7 @@ export class FormExampleComponent {
         'Wyoming',
     ];
 
-    private animals = [
+    animals = [
         'dog',
         'cat',
         'bird'

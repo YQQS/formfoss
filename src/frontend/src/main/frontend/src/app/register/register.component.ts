@@ -13,7 +13,7 @@ export class RegisterComponent implements OnInit {
                 private router: Router
                ) { }
 
-    register(username:string, password: string, email: string) {
+    register(username: string, password: string, email: string) {
         this.userService.add(username, password, email)
             .toPromise()
             .then(response => {

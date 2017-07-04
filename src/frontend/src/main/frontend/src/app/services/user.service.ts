@@ -8,16 +8,16 @@ import { User } from '../models/user';
 @Injectable()
 export class UserService {
     private userUrl = '/users/';
-    private headers = new Headers({'Content-Type': 'application/json'});
-    private theHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
+    private jsonHeader = new Headers({'Content-Type': 'application/json'});
+    private formHeader = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
     private requestOpts: RequestOptions = new RequestOptions({
-        headers: this.theHeaders
+        headers: this.formHeader
     });
 
     constructor(private http: Http) { }
 
     getAll() : Promise<User[]> {
-        return this.http.get('/user/all')
+        return this.http.get(this.userUrl)
             .toPromise()
             .then(response => {
                 return JSON.parse(response.text());
@@ -41,30 +41,30 @@ export class UserService {
     login(userName: string, userPassword: string) {
         //let body = {userName: userName, userPassword: userPassword};
         let body: string = "userName=" + userName + "&userPassword=" + userPassword;
-        return this.http.post('/user/login', body, this.requestOpts)
+        return this.http.post(this.userUrl, body, this.requestOpts)
             .map((response: Response) => {
                 return JSON.parse(response.text())
             });
     }
 
     add(username: string, password: string, email: string) {
-        let body: string = "userName=" + username +
+        let body: string = 'userName=' + username +
             "&userPassword=" + password +
             "&userEmail=" + email;
-        return this.http.post('/user/add', body, {headers: this.theHeaders})
+        return this.http.post('/user/add', body, {headers: this.formHeader})
             .map((response: Response) => {
                 return JSON.parse(response.text());
             })
     }
 
     delete(id: number) {
-        let body: string = "userId=" + id;
-        return this.http.post('/user/del', body, {headers: this.theHeaders})
+        const url = this.userUrl + id;
+        return this.http.delete(url, {headers: this.formHeader})
             .map(response => JSON.parse(response.text()));
 
     }
 
-    update(user: User) : Promise<User> {
+    update(user: User): Promise<User> {
         const url = this.userUrl  + user.userId;
         return this.http.put(url, JSON.stringify(user), this.requestOpts)
             .toPromise()
