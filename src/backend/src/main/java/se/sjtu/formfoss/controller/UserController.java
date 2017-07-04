@@ -1,8 +1,5 @@
 package se.sjtu.formfoss.controller;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.util.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +10,6 @@ import se.sjtu.formfoss.repository.UserRepository;
 
 import java.io.IOException;
 import java.util.List;
-import java.sql.Timestamp;
 /**
  * Created by ace on 6/28/17.
  */
@@ -25,10 +21,50 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
+    }
+
+        return "{\"message\": \"success\"}";
+    }
+
+
+    @RequestMapping(path = "/login")
+    public @ResponseBody String login(@RequestParam String userName,
+                                      @RequestParam String userPassword) {
+        List<UserEntity> users= userRepository.findByUserName(userName);
+        if (users.size() == 1 && users.get(0).getUserPassword().equals(userPassword)) {
+            return "{\"message\" :\"success\"}";
+        }
+        return "{\"errorMsg\": \"username or password not match\"}";
+    }
+
 
     @GetMapping(path={"/",""})
-    public @ResponseBody Iterable<UserEntity> getAllUser() {
-        return userRepository.findAll();
+    public @ResponseBody Iterable<UserEntity> getAllUser(@RequestParam(defaultValue = "") String userName,
+                                                         @RequestParam(defaultValue = "") String userEmail,
+                                                         @RequestParam(defaultValue = "false") Boolean fuzzy) {
+        if (userName.length() == 0 && userEmail.length() == 0) {
+            return userRepository.findAll();
+        }
+
+        else if (userName.length() > 0 && userEmail.length() == 0) {
+            if (fuzzy){
+                return userRepository.findByUserNameContainingIgnoreCase(userName);
+            }
+            return userRepository.findByUserNameIgnoreCase(userName);
+        }
+
+        else if (userEmail.length() > 0 && userName.length() == 0) {
+            if (fuzzy) {
+                return userRepository.findByUserEmailContainingIgnoreCase(userEmail);
+            }
+            return userRepository.findByUserEmailIgnoreCase(userEmail);
+        }
+
+        if (fuzzy) {
+            return userRepository.findByUserNameContainingIgnoreCaseAndUserEmailContainingIgnoreCase(userName, userEmail);
+        }
+        return userRepository.findByUserNameIgnoreCaseAndUserEmailIgnoreCase(userName, userEmail);
+
     }
 
     //search by id
@@ -46,18 +82,14 @@ public class UserController {
 
     //create a user
     @PostMapping(path={"/",""})
-    public @ResponseBody String userAdd(@RequestParam String jsonString) throws IOException {
-        ObjectMapper objectMapper=new ObjectMapper();
-        UserEntity user = objectMapper.readValue(jsonString,UserEntity.class);
+    public @ResponseBody String userAdd(@RequestBody UserEntity user) {
         userRepository.save(user);
         return "{\"message\": \"success\"}";
     }
 
     //update a user
     @PutMapping(path = "")
-    public @ResponseBody String userUpdate(@RequestParam String jsonString) throws IOException {
-        ObjectMapper objectMapper=new ObjectMapper();
-        UserEntity user = objectMapper.readValue(jsonString,UserEntity.class);
+    public @ResponseBody String userUpdate(@RequestBody UserEntity user) throws IOException {
         userRepository.save(user);
         return "{\"message\": \"success\"}";
     }
@@ -65,7 +97,7 @@ public class UserController {
     @RequestMapping(path = "/login")
     public @ResponseBody String login(@RequestParam String userName,
                                       @RequestParam String userPassword) {
-        List<UserEntity> users= userRepository.findByUserName(userName);
+        List<UserEntity> users= userRepository.findByUserNameIgnoreCase(userName);
         if (users.size() == 1 && users.get(0).getUserPassword().equals(userPassword)) {
             return "{\"message\" :\"success\"}";
         }
