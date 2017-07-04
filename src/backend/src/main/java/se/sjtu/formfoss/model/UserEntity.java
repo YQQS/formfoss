@@ -1,10 +1,8 @@
 package se.sjtu.formfoss.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 
 import javax.management.relation.RoleNotFoundException;
 import javax.persistence.*;
@@ -37,7 +35,7 @@ public class UserEntity {
     @Column(name = "phone",  length = 16)
     private String userPhone;
 
-    @Column(name = "create_time", insertable = false, updatable = false, nullable = false)
+    @Column(name = "create_time", updatable = false, nullable = false)
     private Timestamp userCreateTime;
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
@@ -85,6 +83,14 @@ public class UserEntity {
 
     public void setUserPhone(String userPhone) {
         this.userPhone = userPhone;
+    }
+
+    public Timestamp getUserCreateTime() {
+        return userCreateTime;
+    }
+
+    public void setUserCreateTime(Timestamp userCreateTime) {
+        this.userCreateTime = userCreateTime;
     }
 
     public Set<UserRoleEntity> getUserRoleEntities() {
