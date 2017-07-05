@@ -56,7 +56,6 @@ export class UserService {
             })
     }
 
-    }
 
     deleteUser(id: number) {
         const url = this.userUrl + id;

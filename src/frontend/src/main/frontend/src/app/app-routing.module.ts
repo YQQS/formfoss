@@ -8,10 +8,10 @@ import {UserDetailComponent} from "./users/user-detail/user-detail.component";
 import {FormExampleComponent} from './component/form-example/form-example.component';
 import {FormPrototypeComponent} from "./component/form-prototype/form-prototype.component";
 import {SurfaceComponent} from "./surface/surface.component";
-import {AppComponent} from "./app.component";
+
 
 const routes:Routes = [
-    {path: "", redirectTo: '/surface', pathMatch: 'full'},
+    {path: "", redirectTo: '/prototype', pathMatch: 'full'},
     {path: "prototype", component: FormPrototypeComponent},
     {path: "surface", component: SurfaceComponent},
     {path: "login", component: LoginComponent},
