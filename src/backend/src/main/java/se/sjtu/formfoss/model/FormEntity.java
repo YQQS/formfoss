@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Map;
 
@@ -18,28 +19,38 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FormEntity {
     @Id
-    String id;
-
-    String title;
-    String desc;
-    Map<String,Object> settings;
-    List<Map<String,Object>> formItems;
+    @GeneratedValue
+    private Integer formId;
+    private Integer userId;
+    private String title;
+    private String desc;
+    private Map<String,Object> settings;
+    private List<Map<String,Object>> formItems;
     public FormEntity() {}
 
-    public FormEntity(String id,String title,String desc,Map<String,Object> settings,List<Map<String,Object>> formItems) {
-        this.id=id;
+    public FormEntity(Integer formId, Integer userId, String title, String desc, Map<String,Object> settings, List<Map<String,Object>> formItems) {
+        this.formId=formId;
+        this.userId = userId;
         this.title = title;
         this.desc =desc;
         this.settings=settings;
         this.formItems=formItems;
     }
 
-    public String getId() {
-        return id;
+    public Integer getFormId() {
+        return formId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setFormId(Integer id) {
+        this.formId = id;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getTitle() {
