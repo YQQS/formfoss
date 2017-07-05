@@ -9,10 +9,8 @@ import { UserService } from '../services/user.service';
     styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-    username: string;
-    password: string;
+    newUser: User;
     passwordRepeat: string;
-    email: string;
 
     valid: boolean = false;
     pristine: boolean = true;
@@ -21,9 +19,9 @@ export class RegisterComponent implements OnInit {
                 private router: Router
                ) { }
 
-    register() {
-        this.userService.add(this.username, this.password, this.email)
-            .toPromise()
+    register(value: any) {
+        console.log(value);
+        return this.userService.add(value.userName, value.userPassword, value.userEmail)
             .then(response => {
                 if (response.errorMsg) {
                     alert(response.errorMsg);
