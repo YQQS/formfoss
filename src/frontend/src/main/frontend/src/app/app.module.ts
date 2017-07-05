@@ -11,6 +11,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {UsersComponent} from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import  {SurfaceComponent } from './surface/surface.component';
 import {
     MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdCardModule, MdCheckboxModule, MdDatepickerModule,
     MdDialogModule,
@@ -29,6 +30,7 @@ import { FormExampleComponent } from './component/form-example/form-example.comp
 import 'hammerjs';
 import { FormPrototypeComponent } from './component/form-prototype/form-prototype.component';
 
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -37,7 +39,8 @@ import { FormPrototypeComponent } from './component/form-prototype/form-prototyp
         UsersComponent,
         UserDetailComponent,
         FormExampleComponent,
-        FormPrototypeComponent
+        FormPrototypeComponent,
+        SurfaceComponent
     ],
     imports: [
         BrowserModule,
