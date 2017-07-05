@@ -13,8 +13,15 @@ export class UserService {
 
     constructor(private http: Http) { }
 
-    getAll() : Promise<User[]> {
-        return this.http.get(this.userUrl)
+    getAll(userName?: string, userEmail?: string, fuzzy: boolean = false) : Promise<User[]> {
+        let url: string = this.userUrl + '?fuzzy=' + fuzzy;
+        if (userName) {
+            url += ('&userName=' + userName);
+        }
+        if (userEmail) {
+            url += ('&userEmail=' + userEmail);
+        }
+        return this.http.get(url)
             .toPromise()
             .then(response => {
                 return JSON.parse(response.text());
@@ -35,36 +42,41 @@ export class UserService {
 
 
 
-    login(userName: string, userPassword: string) {
+
+    login(userName: string, userPassword: string): Promise<any> {
         //let body = {userName: userName, userPassword: userPassword};
         let body: string = "userName=" + userName + "&userPassword=" + userPassword;
         return this.http.post(this.userUrl + 'login', body, {headers: this.formHeader})
-            .map((response: Response) => {
+            .toPromise()
+            .then((response: Response) => {
                 return JSON.parse(response.text())
-            });
+            })
+            .catch(this.handleError);
     }
 
-    add(username: string, password: string, email: string) {
+
+    add(username: string, password: string, email: string): Promise<any> {
         let body: string = JSON.stringify({
             userName: username,
             userPassword: password,
             userEmail: email
         });
         return this.http.post(this.userUrl, body, {headers: this.jsonHeader})
-            .map((response: Response) => {
+            .toPromise()
+            .then((response: Response) => {
                 return JSON.parse(response.text());
             })
+            .catch(this.handleError);
     }
 
-    }
-
-    deleteUser(id: number) {
+    deleteUser(id: number): Promise<any> {
         const url = this.userUrl + id;
         return this.http.delete(url, {headers: this.formHeader})
             .toPromise()
             .then((response: Response) => {
                 return response;
             })
+            .catch(this.handleError);
     }
 
     update(user: User): Promise<User> {
