@@ -15,9 +15,8 @@ export class LoginComponent implements OnInit {
                 private router: Router
                ) { }
 
-    login(username: string, password: string) {
-        return this.userService.login(username, password)
-            .toPromise()
+    login(input: any) {
+        return this.userService.login(input.userName, input.userPassword)
             .then(res => {
                 if (res.errorMsg) {
                     alert(res.errorMsg);

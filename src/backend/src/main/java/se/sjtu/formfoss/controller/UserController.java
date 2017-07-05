@@ -1,8 +1,6 @@
 package se.sjtu.formfoss.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.util.JSON;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +11,10 @@ import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.model.UserEntity;
 import se.sjtu.formfoss.repository.RoleRepository;
 import se.sjtu.formfoss.repository.UserRepository;
-import se.sjtu.formfoss.repository.FormRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import se.sjtu.formfoss.model.FormEntity;
-import se.sjtu.formfoss.repository.FormRepository;
 import se.sjtu.formfoss.exception.UserNotFoundException;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.sql.Date;
 import java.util.List;
 /**
  * Created by ace on 6/28/17.
@@ -34,7 +27,7 @@ public class UserController {
     private RoleRepository roleRepository;
 
     @GetMapping(path="/users")
-    public @ResponseBody ResponseEntity<Iterable<UserEntity>> getAllUser()  {
+    public @ResponseBody ResponseEntity<Iterable<UserEntity>> getAllUser(@RequestParam(defaultValue = "") String userName,@RequestParam(defaultValue = "") String userEmail, @RequestParam(defaultValue = "false") Boolean fuzzy)  {
 
         Iterable<UserEntity> allUser =  userRepository.findAll();
         HttpStatus status;
@@ -43,6 +36,31 @@ public class UserController {
             throw new NoUserException();
         }
         status=HttpStatus.OK;
+        if(userName.length()==0 && userEmail.length()==0){
+            return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+        }
+        else if(userName.length()>0 && userEmail.length()==0){
+            if(fuzzy){
+                allUser= userRepository.findByUserNameContainingIgnoreCase(userName);
+                return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+            }
+            allUser =userRepository.findByUserNameIgnoreCase(userName);
+            return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+        }
+        else if(userEmail.length()>0 &&userName.length()==0){
+            if(fuzzy){
+                allUser=userRepository.findByUserEmailContainingIgnoreCase(userEmail);
+                return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+            }
+            allUser=userRepository.findByUserEmailIgnoreCase(userEmail);
+            return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+        }
+
+        if(fuzzy){
+            allUser=userRepository.findByUserNameContainingIgnoreCaseAndUserEmailContainingIgnoreCase(userName,userEmail);
+            return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+        }
+        allUser =userRepository.findByUserNameIgnoreCaseAndUserEmailIgnoreCase(userName, userEmail);
         return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
     }
 
@@ -93,7 +111,7 @@ public class UserController {
     @RequestMapping(path = "/users/login")
     public @ResponseBody ResponseEntity<String> login(@RequestParam String userName,
                                                       @RequestParam String userPassword) {
-        List<UserEntity> users= userRepository.findByUserNameContainingIgnoreCase(userName);
+        List<UserEntity> users= userRepository.findByUserNameIgnoreCase(userName);
         HttpStatus status;
         if (users.size() == 1 && users.get(0).getUserPassword().equals(userPassword)) {
             status=HttpStatus.OK;
