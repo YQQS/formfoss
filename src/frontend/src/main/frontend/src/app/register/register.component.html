@@ -7,9 +7,11 @@
                         mdInput placeholder="username"
                         type="text" class="form-control"/><br>
             </md-input-container>
-            <div [hidden]="userName.valid || userName.pristine"
+            <div *ngIf="userName.errors &(userName.dirty || userName.touched)"
                  class="alter alter-danger">
-                <p>Oops, length of username should be 3~32 </p>
+                <div [hidden]="!userName.errors.required">
+
+                </div>
             </div>
         </div>
 

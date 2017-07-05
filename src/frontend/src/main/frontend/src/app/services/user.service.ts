@@ -13,8 +13,15 @@ export class UserService {
 
     constructor(private http: Http) { }
 
-    getAll() : Promise<User[]> {
-        return this.http.get(this.userUrl)
+    getAll(userName?: string, userEmail?: string, fuzzy: boolean = false) : Promise<User[]> {
+        let url: string = this.userUrl + '?fuzzy=' + fuzzy;
+        if (userName) {
+            url += ('&userName=' + userName);
+        }
+        if (userEmail) {
+            url += ('&userEmail=' + userEmail);
+        }
+        return this.http.get(url)
             .toPromise()
             .then(response => {
                 return JSON.parse(response.text());
@@ -35,6 +42,7 @@ export class UserService {
 
 
 
+
     login(userName: string, userPassword: string): Promise<any> {
         //let body = {userName: userName, userPassword: userPassword};
         let body: string = "userName=" + userName + "&userPassword=" + userPassword;
@@ -45,6 +53,7 @@ export class UserService {
             })
             .catch(this.handleError);
     }
+
 
     add(username: string, password: string, email: string): Promise<any> {
         let body: string = JSON.stringify({
