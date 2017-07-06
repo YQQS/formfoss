@@ -35,7 +35,7 @@ public class UserEntity {
     @Column(name = "phone",  length = 16)
     private String userPhone;
 
-    @Column(name = "create_time", updatable = false, nullable = false)
+    @Column(name = "create_time", updatable = false, nullable = false, insertable = false)
     private Timestamp userCreateTime;
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)

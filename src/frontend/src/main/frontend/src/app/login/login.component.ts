@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
     login(input: any) {
         return this.userService.login(input.userName, input.userPassword)
             .then(res => {
-                if (res.errorMsg) {
+                if (res == 401 ) {
                     alert(res.errorMsg);
                 } else {
                     this.router.navigate(['/list']);

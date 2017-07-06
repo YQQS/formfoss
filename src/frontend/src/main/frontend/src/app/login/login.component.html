@@ -6,8 +6,9 @@
                 <input mdInput class="login-input" placeholder="username" type="text"
                        #userName="ngModel" name="userName" ngModel required>
             </md-input-container>
-            <div [hidden]="userName.valid || userName.pristine">
-                <p>Oops, username can not be empty.</p>
+            <div class="alter alter-warn"
+                    [hidden]="userName.valid || userName.pristine">
+                Oops, username can not be empty.
             </div>
         </div>
 
@@ -16,8 +17,9 @@
                 <input mdInput class="login-input" placeholder="password" type="password"
                        #userPassword="ngModel" name="userPassword" ngModel required>
             </md-input-container>
-            <div [hidden]="userPassword.valid || userPassword.pristine">
-                <p>Oops, password can not be empty.</p>
+            <div class="alter alter-warn"
+                    [hidden]="userPassword.valid || userPassword.pristine">
+                Oops, password can not be empty.
             </div>
         </div>
 
