@@ -14,7 +14,6 @@ import se.sjtu.formfoss.repository.UserRepository;
 import se.sjtu.formfoss.exception.GlobalException;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.List;
 /**
  * Created by ace on 6/28/17.
@@ -27,7 +26,10 @@ public class UserController {
     private RoleRepository roleRepository;
 
     @GetMapping(path="/users")
-    public @ResponseBody ResponseEntity<Iterable<UserEntity>> getAllUser(@RequestParam(defaultValue = "") String userName,@RequestParam(defaultValue = "") String userEmail, @RequestParam(defaultValue = "false") Boolean fuzzy)  {
+    public @ResponseBody Iterable<UserEntity> getAllUser(@RequestParam(defaultValue = "") String userName,
+                                                         @RequestParam(defaultValue = "") String userEmail,
+                                                         @RequestParam(defaultValue = "false") Boolean fuzzy)  {
+
 
         Iterable<UserEntity> allUser =  userRepository.findAll();
         HttpStatus status;
@@ -39,39 +41,34 @@ public class UserController {
         if(userName.length()==0 && userEmail.length()==0){
             return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
         }
-        else if(userName.length()>0 && userEmail.length()==0){
-            if(fuzzy){
-                allUser= userRepository.findByUserNameContainingIgnoreCase(userName);
-                return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+        else if(userName.length() > 0 && userEmail.length() == 0) {
+            if(fuzzy) {
+                return userRepository.findByUserNameContainingIgnoreCase(userName);
             }
-            allUser =userRepository.findByUserNameIgnoreCase(userName);
-            return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+            return userRepository.findByUserNameIgnoreCase(userName);
         }
         else if(userEmail.length()>0 &&userName.length()==0){
             if(fuzzy){
-                allUser=userRepository.findByUserEmailContainingIgnoreCase(userEmail);
-                return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+                return userRepository.findByUserEmailContainingIgnoreCase(userEmail);
             }
-            allUser=userRepository.findByUserEmailIgnoreCase(userEmail);
-            return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+            return userRepository.findByUserEmailIgnoreCase(userEmail);
         }
 
         if(fuzzy){
-            allUser=userRepository.findByUserNameContainingIgnoreCaseAndUserEmailContainingIgnoreCase(userName,userEmail);
-            return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+            return userRepository.findByUserNameContainingIgnoreCaseAndUserEmailContainingIgnoreCase(userName, userEmail);
         }
-        allUser =userRepository.findByUserNameIgnoreCaseAndUserEmailIgnoreCase(userName, userEmail);
-        return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+        return userRepository.findByUserNameIgnoreCaseAndUserEmailIgnoreCase(userName, userEmail);
     }
 
 
     //search by id
     @GetMapping(path="/users/{id}")
     public @ResponseBody ResponseEntity<UserEntity> searchById(@PathVariable Integer id) {
-        UserEntity result=userRepository.findOne(id);
-        HttpStatus status=result!=null?HttpStatus.OK: HttpStatus.NOT_FOUND;
-        if(result==null)
-            throw new GlobalException(status);
+
+        UserEntity result = userRepository.findOne(id);
+        HttpStatus status = result!=null ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        if(result == null)
+            throw new UserNotFoundException(id);
         return new ResponseEntity<UserEntity>(result,status);
     }
 
@@ -93,26 +90,30 @@ public class UserController {
         userRepository.save(user);
         HttpStatus status=HttpStatus.OK;
         return new ResponseEntity<String>("{\"message\": \"Add new user successfully\"}",status);
+
     }
 
     //update a user
     @PutMapping(path = "/users")
     public @ResponseBody ResponseEntity<String> userUpdate(@RequestBody UserEntity user) throws IOException {
         userRepository.save(user);
-        return new ResponseEntity<String>("{\"message\": \"Update user successfully\"}",HttpStatus.OK);
+        return new ResponseEntity<String>("{\"message\": \"Updated\"}", HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/users/login")
+    @RequestMapping(path = "/users/login", method = RequestMethod.POST)
     public @ResponseBody ResponseEntity<String> login(@RequestParam String userName,
                                                       @RequestParam String userPassword) {
         List<UserEntity> users= userRepository.findByUserNameIgnoreCase(userName);
         HttpStatus status;
         if (users.size() == 1 && users.get(0).getUserPassword().equals(userPassword)) {
             status=HttpStatus.OK;
-            return new ResponseEntity<String>("{\"message\": \"Login success\"}",status);
+
+            String message = "{\"message\": \"Login Success\"}";
+            return new ResponseEntity<String>(message, status);
         }
         status=HttpStatus.UNAUTHORIZED;
-        return new ResponseEntity<String>("{\"message\": \"username or pass word not match\"}",status);
+        String errorMsg = "{\"errorMsg\": \"username or password not match\"}";
+        return new ResponseEntity<String>(errorMsg, status);
     }
 
     @ExceptionHandler(GlobalException.class)
