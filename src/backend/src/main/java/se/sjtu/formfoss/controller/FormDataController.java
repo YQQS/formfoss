@@ -1,19 +1,16 @@
 package se.sjtu.formfoss.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.objects.Global;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import se.sjtu.formfoss.exception.DataNotFoundException;
-import se.sjtu.formfoss.exception.NoDataException;
 import se.sjtu.formfoss.model.FormDataEntity;
-import se.sjtu.formfoss.model.FormEntity;
 import se.sjtu.formfoss.repository.FormDataRepository;
 import se.sjtu.formfoss.exception.Error;
+import se.sjtu.formfoss.exception.GlobalException;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by QHZ on 2017/7/4.
@@ -30,7 +27,8 @@ public class FormDataController {
         Iterable<FormDataEntity> result=formDataRepository.findAll();
         HttpStatus status;
         if(!result.iterator().hasNext()){
-            throw new NoDataException();
+            status=HttpStatus.NOT_FOUND;
+            throw new GlobalException(status);
         }
         status=HttpStatus.OK;
         return new ResponseEntity<Iterable<FormDataEntity>>(result,status);
@@ -42,7 +40,7 @@ public class FormDataController {
     ResponseEntity<FormDataEntity> getFormDataById(@PathVariable int fid){
         FormDataEntity result=formDataRepository.findOne(fid);
         if(result==null){
-            throw new DataNotFoundException();
+            throw new GlobalException(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<FormDataEntity>(result,HttpStatus.OK);
     }
@@ -51,7 +49,7 @@ public class FormDataController {
     @DeleteMapping(path="/formdata/{fid}")
     public @ResponseBody ResponseEntity<String> delFormDataById(@PathVariable int fid){
         formDataRepository.delete(fid);
-        return new ResponseEntity<String>("Delete form data successfully",HttpStatus.OK);
+        return new ResponseEntity<String>("{\"message\": \"Delete successfully\"}",HttpStatus.OK);
     }
 
     //Create form data
@@ -62,11 +60,11 @@ public class FormDataController {
         HttpStatus status;
         if(result!=null){
             status=HttpStatus.CONFLICT;
-            return new ResponseEntity<String>("Form data already exists!",status);
+            return new ResponseEntity<String>("{\"code\": 409,\"message\": \"Form data already exists\"}",status);
         }
         status=HttpStatus.OK;
         formDataRepository.save(formData);
-        return new ResponseEntity<String>("Create form data successfully!",status);
+        return new ResponseEntity<String>("{\"message\": \"Create form data successfully\"}",status);
 
     }
 
@@ -74,22 +72,15 @@ public class FormDataController {
     @PutMapping(path="/formdata")
     public @ResponseBody ResponseEntity<String> updateFormData(@RequestBody FormDataEntity formData){
         formDataRepository.save(formData);
-        return new ResponseEntity<String>("Update form data successfully!",HttpStatus.OK);
+        return new ResponseEntity<String>("{\"message\": \"Update form data successfully\"}",HttpStatus.OK);
     }
 
-    @ExceptionHandler(NoDataException.class)
-    public ResponseEntity<Error> NoData(NoDataException e){
+    @ExceptionHandler(GlobalException.class)
+    public ResponseEntity<Error> NoData(GlobalException e){
         Error error=new Error();
         error.setCode(404);
-        error.setMessage("No form data available");
+        error.setMessage("Form data not found");
         return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(DataNotFoundException.class)
-    public ResponseEntity<Error> DataNotFound(DataNotFoundException e){
-        Error error=new Error();
-        error.setCode(404);
-        error.setMessage("Data not found");
-        return new ResponseEntity<Error>(error,HttpStatus.NOT_FOUND);
-    }
 }
