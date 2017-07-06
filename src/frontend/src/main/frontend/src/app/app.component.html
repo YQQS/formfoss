@@ -1,5 +1,5 @@
 <md-sidenav-container>
-    <md-sidenav #sidebar class="example-side" mode="push">
+    <md-sidenav #sidebar class="example-side" mode="side">
         <button md-button class="example-button" >
             <md-icon>build</md-icon>
             frontend test
@@ -29,6 +29,10 @@
         <button md-button color="warn" routerLink="/prototype" routerLinkActive="active">
             <md-icon>stars</md-icon>
             prototype
+        </button>
+        <button md-button color="primary" routerLink="/dynamic-form" routerLinkActive="active">
+            <md-icon>favorite</md-icon>
+            dynamic form
         </button>
     </nav>
     <router-outlet></router-outlet>

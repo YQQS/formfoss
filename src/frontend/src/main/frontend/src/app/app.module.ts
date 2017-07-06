@@ -28,6 +28,8 @@ import {
 import { FormExampleComponent } from './component/form-example/form-example.component';
 import 'hammerjs';
 import { FormPrototypeComponent } from './component/form-prototype/form-prototype.component';
+import { DynamicFormComponent } from './questions/dynamic-form/dynamic-form.component';
+import { DynamicQuestionComponent } from './questions/dynamic-question/dynamic-question.component';
 
 @NgModule({
     declarations: [
@@ -37,7 +39,9 @@ import { FormPrototypeComponent } from './component/form-prototype/form-prototyp
         UsersComponent,
         UserDetailComponent,
         FormExampleComponent,
-        FormPrototypeComponent
+        FormPrototypeComponent,
+        DynamicFormComponent,
+        DynamicQuestionComponent
     ],
     imports: [
         BrowserModule,
