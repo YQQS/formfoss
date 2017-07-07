@@ -7,7 +7,7 @@
                         mdInput placeholder="username"
                         type="text" class="form-control"/><br>
             </md-input-container>
-            <div *ngIf="userName.errors &(userName.dirty || userName.touched)"
+            <div *ngIf="userName.errors &&(userName.dirty || userName.touched)"
                  class="alter alter-danger">
                 <div [hidden]="!userName.errors.required">
 

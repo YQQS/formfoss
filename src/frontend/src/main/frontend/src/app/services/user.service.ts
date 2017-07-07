@@ -69,12 +69,7 @@ export class UserService {
             .catch(this.handleError);
     }
 
-<<<<<<< HEAD
-
-    deleteUser(id: number) {
-=======
     deleteUser(id: number): Promise<any> {
->>>>>>> 4aa71141531c4c4910afca964d64cb5cc941babb
         const url = this.userUrl + id;
         return this.http.delete(url, {headers: this.formHeader})
             .toPromise()

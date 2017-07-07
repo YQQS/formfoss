@@ -1,0 +1,46 @@
+<md-toolbar color="warn">
+    <label>tab example</label>
+</md-toolbar>
+<nav>
+    <button md-button routerLink="/form" routerLinkActive="active" plain="false">
+        <md-icon>history</md-icon>
+        Add
+    </button>
+    <button md-button color="warn" routerLink="/prototype" routerLinkActive="active">
+        <md-icon>stars</md-icon>
+        Delete
+    </button>
+    <button md-button routerLink="/questionnaire" routerLinkActive="active">
+        <md-icon>question_answer</md-icon>
+        Get Result
+    </button>
+</nav>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/demo/demo.css">
+
+</head>
+
+
+<body>
+
+<table id="dg" title="My Users" style="width:700px;height:250px"
+       toolbar="#toolbar" pagination="true" idField="id"
+       rownumbers="true" fitColumns="true" singleSelect="true">
+    <thead>
+    <tr>
+        <th field="" width="50">Name</th>
+        <th field="" width="100" >ID</th>
+        <th field="" width="50" >Data</th>
+        <th field="" width="50" >Account</th>
+
+    </tr>
+    </thead>
+</table>
+
+</body>
+</html>
