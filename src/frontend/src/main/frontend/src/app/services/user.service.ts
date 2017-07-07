@@ -9,7 +9,7 @@ import { User } from '../models/user';
 export class UserService {
     private userUrl = '/users/';
     private jsonHeader = new Headers({'Content-Type': 'application/json'});
-    private formHeader = new Headers({"Content-Type": "application/x-www-formGroup-urlencoded"});
+    private formHeader = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
 
     constructor(private http: Http) { }
 
