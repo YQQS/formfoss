@@ -39,7 +39,7 @@ public class UserController {
         }
         status=HttpStatus.OK;
         if(userName.length()==0 && userEmail.length()==0){
-            return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
+            return allUser;
         }
         else if(userName.length() > 0 && userEmail.length() == 0) {
             if(fuzzy) {
@@ -68,7 +68,7 @@ public class UserController {
         UserEntity result = userRepository.findOne(id);
         HttpStatus status = result!=null ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         if(result == null)
-            throw new UserNotFoundException(id);
+            throw new GlobalException(HttpStatus.NO_CONTENT);
         return new ResponseEntity<UserEntity>(result,status);
     }
 
