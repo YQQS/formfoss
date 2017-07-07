@@ -20,7 +20,7 @@ public class FormDataController {
     @Autowired
     FormDataRepository formDataRepository;
 
-    //Get all formGroup data
+    //Get all form data
     @GetMapping(path="/formdata")
     public @ResponseBody
     ResponseEntity<Iterable<FormDataEntity>> getAllFormData(){
@@ -34,7 +34,7 @@ public class FormDataController {
         return new ResponseEntity<Iterable<FormDataEntity>>(result,status);
     }
 
-    //Get formGroup data by formId
+    //Get form data by formId
     @GetMapping(path="/formdata/{fid}")
     public @ResponseBody
     ResponseEntity<FormDataEntity> getFormDataById(@PathVariable int fid){
@@ -45,14 +45,14 @@ public class FormDataController {
         return new ResponseEntity<FormDataEntity>(result,HttpStatus.OK);
     }
 
-    //Delete formGroup data by formId
+    //Delete form data by formId
     @DeleteMapping(path="/formdata/{fid}")
     public @ResponseBody ResponseEntity<String> delFormDataById(@PathVariable int fid){
         formDataRepository.delete(fid);
         return new ResponseEntity<String>("{\"message\": \"Delete successfully\"}",HttpStatus.OK);
     }
 
-    //Create formGroup data
+    //Create form data
     @PostMapping(path="/formdata")
     public @ResponseBody ResponseEntity<String> createFormData(@RequestBody FormDataEntity formData) throws IOException {
         int fid=formData.getFormId();
@@ -64,7 +64,7 @@ public class FormDataController {
         }
         status=HttpStatus.OK;
         formDataRepository.save(formData);
-        return new ResponseEntity<String>("{\"message\": \"Create formGroup data successfully\"}",status);
+        return new ResponseEntity<String>("{\"message\": \"Create form data successfully\"}",status);
 
     }
 
@@ -72,7 +72,7 @@ public class FormDataController {
     @PutMapping(path="/formdata")
     public @ResponseBody ResponseEntity<String> updateFormData(@RequestBody FormDataEntity formData){
         formDataRepository.save(formData);
-        return new ResponseEntity<String>("{\"message\": \"Update formGroup data successfully\"}",HttpStatus.OK);
+        return new ResponseEntity<String>("{\"message\": \"Update form data successfully\"}",HttpStatus.OK);
     }
 
     @ExceptionHandler(GlobalException.class)
