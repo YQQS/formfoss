@@ -3,6 +3,7 @@ import {QuestionControlService} from "../../services/question-control.service";
 import {QuestionBase} from "../question-base";
 import {FormGroup} from "@angular/forms";
 import {QuestionService} from "../../services/question.service";
+import {DynamicFormModel} from '../dynamic-form.model';
 
 @Component({
     selector: 'dynamic-form',
@@ -11,7 +12,8 @@ import {QuestionService} from "../../services/question.service";
     providers: [ QuestionControlService, QuestionService ]
 })
 export class DynamicFormComponent implements OnInit {
-    @Input() questions: QuestionBase<any>[] = [];
+    //@Input() questions: QuestionBase<any>[] = [];
+    formObject: DynamicFormModel;
     form: FormGroup;
     payLoad = '';
 
@@ -19,8 +21,9 @@ export class DynamicFormComponent implements OnInit {
                 private qtService: QuestionService) { }
 
     ngOnInit() {
-        this.questions = this.qtService.getQuestions();
-        this.form = this.qcService.toFormGroup(this.questions);
+        this.formObject = this.qtService.getDynamicFormModel();
+        this.form = this.qcService.toFormGroup(this.formObject.questions);
+        console.log(this.formObject);
     }
 
     onSubmit() {

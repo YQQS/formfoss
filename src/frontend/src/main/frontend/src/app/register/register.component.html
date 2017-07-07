@@ -46,6 +46,9 @@
                        formControlName="userPasswordRepeat"
                        type="password" class="form-control"><br>
             </md-input-container>
+            <div>
+                {{registerForm.errors | json}}
+            </div>
             <div class="alter alter-warn"
                  *ngIf="registerForm.get('userPasswordRepeat').hasError('required') &&
                  !registerForm.get('userPasswordRepeat').pristine">
