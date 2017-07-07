@@ -28,8 +28,13 @@ import {
 import { FormExampleComponent } from './component/form-example/form-example.component';
 import 'hammerjs';
 import { FormPrototypeComponent } from './component/form-prototype/form-prototype.component';
+<<<<<<< HEAD
 import {QuestionnaireComponent} from "./myquestionnaire;/questionnaire.component";
 import {QuestionnaireService} from "./services/questionnaire.service";
+=======
+import { DynamicFormComponent } from './questions/dynamic-form/dynamic-form.component';
+import { DynamicQuestionComponent } from './questions/dynamic-question/dynamic-question.component';
+>>>>>>> 84ca2ef3af5ac24f78ba86512f877f236003d126
 
 @NgModule({
     declarations: [
@@ -40,7 +45,12 @@ import {QuestionnaireService} from "./services/questionnaire.service";
         UserDetailComponent,
         FormExampleComponent,
         FormPrototypeComponent,
+<<<<<<< HEAD
         QuestionnaireComponent
+=======
+        DynamicFormComponent,
+        DynamicQuestionComponent
+>>>>>>> 84ca2ef3af5ac24f78ba86512f877f236003d126
     ],
     imports: [
         BrowserModule,

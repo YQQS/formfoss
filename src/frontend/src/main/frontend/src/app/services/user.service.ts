@@ -49,9 +49,9 @@ export class UserService {
         return this.http.post(this.userUrl + 'login', body, {headers: this.formHeader})
             .toPromise()
             .then((response: Response) => {
-                return JSON.parse(response.text())
+                console.log('first' + response.text());
+                return response.status;
             })
-            .catch(this.handleError);
     }
 
 
