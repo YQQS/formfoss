@@ -11,7 +11,7 @@ import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.model.UserEntity;
 import se.sjtu.formfoss.repository.RoleRepository;
 import se.sjtu.formfoss.repository.UserRepository;
-import se.sjtu.formfoss.exception.UserNotFoundException;
+import se.sjtu.formfoss.exception.GlobalException;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,8 +30,16 @@ public class UserController {
                                                          @RequestParam(defaultValue = "") String userEmail,
                                                          @RequestParam(defaultValue = "false") Boolean fuzzy)  {
 
-        if (userName.length()==0 && userEmail.length()==0){
-            return userRepository.findAll();
+
+        Iterable<UserEntity> allUser =  userRepository.findAll();
+        HttpStatus status;
+        if(!allUser.iterator().hasNext()){
+            status=HttpStatus.NOT_FOUND;
+            throw new GlobalException(status);
+        }
+        status=HttpStatus.OK;
+        if(userName.length()==0 && userEmail.length()==0){
+            return new ResponseEntity<Iterable<UserEntity>>(allUser,status);
         }
         else if(userName.length() > 0 && userEmail.length() == 0) {
             if(fuzzy) {
@@ -56,6 +64,7 @@ public class UserController {
     //search by id
     @GetMapping(path="/users/{id}")
     public @ResponseBody ResponseEntity<UserEntity> searchById(@PathVariable Integer id) {
+
         UserEntity result = userRepository.findOne(id);
         HttpStatus status = result!=null ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         if(result == null)
@@ -70,27 +79,18 @@ public class UserController {
         HttpStatus status=result!=null?HttpStatus.NON_AUTHORITATIVE_INFORMATION:HttpStatus.NOT_FOUND;
         userRepository.delete(id);
         if(result==null)
-            return new ResponseEntity<String>("User not found",status);
-        return new ResponseEntity<String>("Delete successfully",status);
+            return new ResponseEntity<String>("{\"code\": 404,\"message\": \"Delete successfully\"}",status);
+        return new ResponseEntity<String>("{\"message\": \"Delete successfully\"}",status);
     }
 
 
     //create a user
     @PostMapping(path="/users")
-    public @ResponseBody String userAdd(@RequestBody UserEntity user) {
-        /* bugly
-        Integer id=user.getUserId();
-        UserEntity res=userRepository.findOne(id);
-        HttpStatus status=res==null?HttpStatus.CONFLICT:HttpStatus.OK;
-        if(res!=null)
-            throw new UserAlreadyExistsException(id);
-        Timestamp create_time = new Timestamp(System.currentTimeMillis());
-        user.setUserCreateTime(create_time);
+    public @ResponseBody ResponseEntity<String> userAdd(@RequestBody UserEntity user) throws IOException {
         userRepository.save(user);
-        return new ResponseEntity<String>("Add new user successfully",status);
-         */
-        userRepository.save(user);
-        return "{\"message\": \"Registered\"}";
+        HttpStatus status=HttpStatus.OK;
+        return new ResponseEntity<String>("{\"message\": \"Add new user successfully\"}",status);
+
     }
 
     //update a user
@@ -107,6 +107,7 @@ public class UserController {
         HttpStatus status;
         if (users.size() == 1 && users.get(0).getUserPassword().equals(userPassword)) {
             status=HttpStatus.OK;
+
             String message = "{\"message\": \"Login Success\"}";
             return new ResponseEntity<String>(message, status);
         }
@@ -115,30 +116,13 @@ public class UserController {
         return new ResponseEntity<String>(errorMsg, status);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Error> UserNotFound(UserNotFoundException e){
-        int userId = e.getUserId();
+    @ExceptionHandler(GlobalException.class)
+    public ResponseEntity<Error> UserNotFound(GlobalException e){
         Error error=new Error();
         error.setCode(404);
         error.setMessage("User not found");
-        return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<Error>(error,e.getStatus());
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<Error> UserAlreadyExists(UserNotFoundException e){
-        int userId = e.getUserId();
-        Error error=new Error();
-        error.setCode(409);
-        error.setMessage("User Already Exists");
-        return new ResponseEntity<Error>(error, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(NoUserException.class)
-    public ResponseEntity<Error> NoUser(NoUserException e){
-        Error error=new Error();
-        error.setCode(404);
-        error.setMessage("No Users");
-        return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
-    }
 
 }
