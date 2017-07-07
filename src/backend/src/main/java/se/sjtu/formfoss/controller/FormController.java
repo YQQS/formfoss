@@ -62,7 +62,7 @@ public class FormController {
         countRepository.save(idCount);
         form.setFormId(formId);
         formRepository.save(form);
-        return new ResponseEntity<String>("{\"message\": \"Create new form successfully\"}", HttpStatus.OK);
+        return new ResponseEntity<String>("{\"message\": \"Create new formGroup successfully\"}", HttpStatus.OK);
     }
 
     @PutMapping(path = "/forms")
@@ -70,7 +70,7 @@ public class FormController {
     ResponseEntity<String> formUpdate(@RequestBody FormEntity form) throws IOException {
         formRepository.save(form);
         return new ResponseEntity<String>("{\n" +
-            "    \"message\": \"Update form successfully\"\n" +
+            "    \"message\": \"Update formGroup successfully\"\n" +
             "}", HttpStatus.OK);
     }
 
@@ -87,7 +87,7 @@ public class FormController {
                 "    \"message\": \"Create new orm successfully\"\n" +
                 "}", status);
         return new ResponseEntity<String>("{\n" +
-            "    \"message\": \"Delete form successfully\"\n" +
+            "    \"message\": \"Delete formGroup successfully\"\n" +
             "}", status);
     }
 
@@ -130,7 +130,7 @@ public class FormController {
         countRepository.save(idCount);
         form.setFormId(formId);
         formRepository.save(form);
-        return new ResponseEntity<String>("{\"message\": \"Create new form successfully\"}", status);
+        return new ResponseEntity<String>("{\"message\": \"Create new formGroup successfully\"}", status);
     }
 
     //OK
@@ -157,7 +157,7 @@ public class FormController {
     ResponseEntity<String> updateForm(@RequestBody FormEntity form) throws IOException {
         formRepository.save(form);
         return new ResponseEntity<String>("{\n" +
-            "    \"message\": \"Update form successfully\"\n" +
+            "    \"message\": \"Update formGroup successfully\"\n" +
             "}", HttpStatus.OK);
     }
 
