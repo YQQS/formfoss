@@ -19,6 +19,7 @@ export class QuestionBuilder {
         }
     }
 
+
     static buildDynamicForm(input: any): DynamicFormModel {
         let dyForm: DynamicFormModel = new DynamicFormModel();
         dyForm.title = input['title'] || '';
