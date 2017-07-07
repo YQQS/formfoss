@@ -31,7 +31,8 @@
 
         <div *ngSwitchCase="'dropdown'">
             <label class="question-desc">{{question.title}}</label>
-            <md-select class="question-item question-select" [multiple]="question.multiple" [id]="question.key" [formControlName]="question.key">
+            <md-select class="question-item question-select" [multiple]="question?.multiple"
+                       [id]="question.key" [formControlName]="question.key">
                 <md-option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</md-option>
             </md-select>
             <div class="alter alter-danger" *ngIf="getErrors()">

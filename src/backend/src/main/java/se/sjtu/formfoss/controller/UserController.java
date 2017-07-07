@@ -66,7 +66,7 @@ public class UserController {
     public @ResponseBody ResponseEntity<UserEntity> searchById(@PathVariable Integer id) {
 
         UserEntity result = userRepository.findOne(id);
-        HttpStatus status = result!=null ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        HttpStatus status = result!=null ? HttpStatus.OK : HttpStatus.NO_CONTENT;
         if(result == null)
             throw new GlobalException(HttpStatus.NO_CONTENT);
         return new ResponseEntity<UserEntity>(result,status);

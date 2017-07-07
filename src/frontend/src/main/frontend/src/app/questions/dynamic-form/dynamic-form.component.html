@@ -1,7 +1,9 @@
 <div align="center">
     <form (ngSubmit)="onSubmit()" [formGroup]="form">
-        <md-toolbar color="warn" align="center" class="question-header">{{formObject.title}}</md-toolbar>
-        <label>{{formObject.desc}}</label>
+        <md-toolbar color="warn" align="center" class="question-header">
+            <p class="header-title">{{formObject.title}}</p>
+        </md-toolbar>
+        <p class="header-desc">{{formObject.desc}}</p>
 
         <div *ngFor="let question of formObject.questions" class="form-row">
             <dynamic-question [question]="question" [form]="form"></dynamic-question>
