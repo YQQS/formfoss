@@ -1,6 +1,6 @@
-import {AbstractControl, FormGroup} from "@angular/forms";
+import {AbstractControl} from '@angular/forms';
 export class FossValidators {
-    static passwordMatchValidator(g: FormGroup) {
+    static passwordMatchValidator(g: AbstractControl) {
         return g.get('userPassword').value === g.get('userPasswordRepeat').value
             ? null : {
                 mismatch: {

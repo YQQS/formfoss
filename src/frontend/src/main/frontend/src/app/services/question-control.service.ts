@@ -9,7 +9,7 @@ import {QuestionSlider} from "../questions/question-slider";
 export class QuestionControlService {
     constructor() {}
 
-    toFormGroup(questions: QuestionBase<any>[]) {
+    toFormGroup(questions: any[]) {
         let group = new FormGroup({});
 
         questions.forEach(question => {

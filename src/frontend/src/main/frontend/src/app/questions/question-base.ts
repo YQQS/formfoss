@@ -2,7 +2,7 @@ import {QuestionValidator} from "./question-validator";
 export class QuestionBase<T> {
     value: T;
     key: string;
-    label: string;
+    title: string;
     order: number;
     controlType: string;
     validator?: QuestionValidator;
@@ -10,14 +10,14 @@ export class QuestionBase<T> {
     constructor(options: {
         value?: T,
         key?: string,
-        label?: string,
+        title?: string,
         order?: number,
         controlType?: string,
-        validator? : {}
+        validator? : QuestionValidator
     } = {}) {
         this.value = options.value;
         this.key = options.key || '';
-        this.label = options.label || '';
+        this.title = options.title || '';
         this.order = options.order === undefined ? 1 : options.order;
         this.controlType = options.controlType || '';
         this.validator = options.validator || {};
