@@ -20,7 +20,7 @@
                 <div *ngIf="getErrors()?.maxlength" >
                     {{question?.title}} should not longer than {{question.validator.maxLength}} bytes
                 </div>
-                <div *ngIf="getErrors()?.email && !getFormControl().pristine && getFormControl().value.length > 0" >
+                <div *ngIf="getErrors()?.email && !getFormControl().pristine && getFormControl().value?.length > 0" >
                     not a valid email address
                 </div>
                 <div *ngIf="getErrors()?.pattern && !getFormControl().pristine">
@@ -46,7 +46,7 @@
             <label class="question-desc">{{question.title}}</label>
             <md-slider class="question-slider question-item" thumbLabel tickInterval="auto"
                        [min]="question.validator?.min" [max]="question.validator?.max" step="auto"
-                       [value]="question.value" #slider>
+                       [value]="question.value" #slider [formControlName]="question.key">
             </md-slider>
             <label>value: {{slider.value}}</label>
         </div>

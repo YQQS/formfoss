@@ -5,13 +5,14 @@
         </md-toolbar>
         <p class="header-desc">{{formObject.desc}}</p>
 
-        <div *ngFor="let question of formObject.questions" class="form-row">
+        <div *ngFor="let question of formObject.formItems" class="form-row">
             <dynamic-question [question]="question" [form]="form"></dynamic-question>
         </div>
 
         <div class="form-row">
-            <button md-raised-button color="primary" type="submit" [disabled]="form.invalid">Save</button>
-            <button md-raised-button color="accent" type="reset" [disabled]="form.untouched">Reset</button>
+            <button md-raised-button color="primary" type="submit" [disabled]="form.invalid">Submit</button>
+            <button md-raised-button color="accent" (click)="save()" [disabled]="form.pristine">Save</button>
+            <button md-raised-button color="warn" type="reset" [disabled]="form.untouched">Reset</button>
         </div>
     </form>
 

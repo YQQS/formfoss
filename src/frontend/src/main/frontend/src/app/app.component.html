@@ -9,35 +9,29 @@
             backend test
         </button>
     </md-sidenav>
-
+    
     <md-toolbar color="primary">
         <button md-button (click)="sidebar.toggle()">
             <md-icon>dehaze</md-icon>
         </button>
-        <span>Hi {{title}} start here!!</span>
+        
+        <md-nav-list>
+            <button md-button color="" routerLink="/prototype" routerLinkActive="active">
+                <md-icon>stars</md-icon>
+                prototype
+            </button>
+            <button md-button color="" routerLink="/questionList" routerLinkActive="active">
+                <md-icon>cloud</md-icon>
+                questions
+            </button>
+        </md-nav-list>
+        
         <button md-button class="example-button-login" routerLink="/login" color="accent" routerLinkActive="active">
             <md-icon>person</md-icon>
             Login
         </button>
     </md-toolbar>
-
-    <nav>
-        <button md-button routerLink="/form" routerLinkActive="active">
-            <md-icon>history</md-icon>
-            Example Form
-        </button>
-        <button md-button color="warn" routerLink="/prototype" routerLinkActive="active">
-            <md-icon>stars</md-icon>
-            prototype
-        </button>
-        <button md-button color="primary" routerLink="/dynamic-form" routerLinkActive="active">
-            <md-icon>favorite</md-icon>
-            dynamic form
-        </button>
-        <button md-button color="primary" routerLink="/dynamic-edit" routerLinkActive="active">
-            <md-icon>edit</md-icon>
-            edit form
-        </button>
-    </nav>
+    
+    
     <router-outlet></router-outlet>
 </md-sidenav-container>
