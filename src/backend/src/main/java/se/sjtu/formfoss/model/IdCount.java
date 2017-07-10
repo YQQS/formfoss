@@ -10,7 +10,6 @@ import java.util.Map;
 /**
  * Created by Administrator on 2017/7/4.
  */
-@Document(collection = "IdCount")
 public class IdCount {
     @Id
     private String id;
