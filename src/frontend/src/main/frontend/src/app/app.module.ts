@@ -11,6 +11,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {UsersComponent} from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
 import {
     MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdCardModule, MdCheckboxModule, MdDatepickerModule,
     MdDialogModule,
@@ -28,13 +29,9 @@ import {
 import { FormExampleComponent } from './component/form-example/form-example.component';
 import 'hammerjs';
 import { FormPrototypeComponent } from './component/form-prototype/form-prototype.component';
-<<<<<<< HEAD
-import {QuestionnaireComponent} from "./myquestionnaire;/questionnaire.component";
-import {QuestionnaireService} from "./services/questionnaire.service";
-=======
 import { DynamicFormComponent } from './questions/dynamic-form/dynamic-form.component';
 import { DynamicQuestionComponent } from './questions/dynamic-question/dynamic-question.component';
->>>>>>> 84ca2ef3af5ac24f78ba86512f877f236003d126
+import { MyformComponent } from './myform/myform.component';
 
 @NgModule({
     declarations: [
@@ -45,12 +42,9 @@ import { DynamicQuestionComponent } from './questions/dynamic-question/dynamic-q
         UserDetailComponent,
         FormExampleComponent,
         FormPrototypeComponent,
-<<<<<<< HEAD
-        QuestionnaireComponent
-=======
         DynamicFormComponent,
-        DynamicQuestionComponent
->>>>>>> 84ca2ef3af5ac24f78ba86512f877f236003d126
+        DynamicQuestionComponent,
+        MyformComponent
     ],
     imports: [
         BrowserModule,
@@ -84,7 +78,7 @@ import { DynamicQuestionComponent } from './questions/dynamic-question/dynamic-q
         MdTooltipModule,
         MdSnackBarModule
     ],
-    providers: [UserService, QuestionnaireService],
+    providers: [UserService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

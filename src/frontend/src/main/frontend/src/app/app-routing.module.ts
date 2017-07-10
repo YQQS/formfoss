@@ -7,18 +7,12 @@ import { UsersComponent } from './users/users.component';
 import {UserDetailComponent} from "./users/user-detail/user-detail.component";
 import {FormExampleComponent} from './component/form-example/form-example.component';
 import {FormPrototypeComponent} from "./component/form-prototype/form-prototype.component";
-<<<<<<< HEAD
-import {QuestionnaireComponent} from "./myquestionnaire;/questionnaire.component";
-
-const routes:Routes = [
-    {path: "", redirectTo: '/prototype', pathMatch: 'full'},
-    {path: "questionnaire", component: QuestionnaireComponent},
-=======
 import {DynamicFormComponent} from "./questions/dynamic-form/dynamic-form.component";
+import {MyformComponent} from "./myform/myform.component"
 
 const routes:Routes = [
     {path: "", redirectTo: '/dynamic-form', pathMatch: 'full'},
->>>>>>> 84ca2ef3af5ac24f78ba86512f877f236003d126
+    {path: "myform", component: MyformComponent},
     {path: "prototype", component: FormPrototypeComponent},
     {path: "login", component: LoginComponent},
     {path: "register", component: RegisterComponent},

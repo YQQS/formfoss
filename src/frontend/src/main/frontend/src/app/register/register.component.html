@@ -7,12 +7,6 @@
                         mdInput placeholder="username"
                         type="text" class="form-control"/><br>
             </md-input-container>
-<<<<<<< HEAD
-            <div *ngIf="userName.errors &&(userName.dirty || userName.touched)"
-                 class="alter alter-danger">
-                <div [hidden]="!userName.errors.required">
-
-=======
             <div class="alter alter-warn"
                  *ngIf="registerForm.get('userName').errors && !registerForm.get('userName').pristine">
                 <div *ngIf="registerForm.get('userName').hasError('required')">
@@ -23,7 +17,6 @@
                 </div>
                 <div *ngIf="registerForm.get('userName').hasError('maxlength')">
                     username no more than 32 bytes
->>>>>>> 84ca2ef3af5ac24f78ba86512f877f236003d126
                 </div>
             </div>
         </div>
