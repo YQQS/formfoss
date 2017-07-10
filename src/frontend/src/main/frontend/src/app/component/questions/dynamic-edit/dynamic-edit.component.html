@@ -1,16 +1,16 @@
-<div align="center">
-    <md-toolbar>
-        <button md-raised-button color="primary" (click)="save()">
-            <md-icon>save</md-icon>
-            Save
-        </button>
-        <button md-raised-button color="accent" (click)="preview()" >
+<md-toolbar>
+    <button md-raised-button color="primary" (click)="save()">
+        <md-icon>save</md-icon>
+        Save
+    </button>
+    <button  md-raised-button color="accent" (click)="preview()" >
             <md-icon>visibility</md-icon>
             preview
-        </button>
-        <button md-button color="warn" type="reset">
-            <md-icon>refresh</md-icon>Reset</button>
-    </md-toolbar>
+    </button>
+    <button md-raised-button color="warn" (click)="reset()">
+        <md-icon>refresh</md-icon>Reset</button>
+</md-toolbar>
+<div align="center" *ngIf="!isPreview">
     <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
         <div>
             <div>
@@ -26,19 +26,27 @@
             </div>
         </div>
         
-        <div formGroupName="questions">
-            <md-card *ngFor="let question of formObject.questions; let i = index" [formGroupName]="question.key" class="edit-question">
+        <div formGroupName="formItems">
+            <md-card *ngFor="let question of formObject.formItems; let i = index"
+                     [formGroupName]="question.key" class="edit-question">
+                <md-card-header>
+                    <md-card-title>
+                        the {{question.order}}th question
+                    </md-card-title>
+                    <md-card-subtitle>
+                        {{formGroup.get('formItems').get(question.key).value | json}}
+                    </md-card-subtitle>
+                </md-card-header>
                 <md-card-content>
                     <div class="edit-question-title">
                         <md-input-container class="edit-question-title-input">
-                            <input mdInput formControlName="title-edit" placeholder="put a title"
-                                   [(ngModel)]="formObject.questions[i].title">
+                            <input mdInput formControlName="title-edit" [value]="question.title" placeholder="put a title">
                         </md-input-container><br>
                     </div><br>
                     
                     <div class="edit-select">
                         <p class="edit-type-text">question type</p>
-                        <md-select formControlName="controlType-edit" [(ngModel)]="formObject.questions[i].controlType">
+                        <md-select formControlName="controlType-edit" #typeTag>
                             <md-option *ngFor="let opt of controlTypes" [value]="opt">{{opt}}</md-option>
                         </md-select>
                     </div>
@@ -50,5 +58,14 @@
             </md-card>
         </div>
         
+        <div>
+            <p>things from fromGroup</p>
+            {{formGroup.getRawValue() | json}}
+        </div>
+    
     </form>
+</div>
+
+<div *ngIf="isPreview">
+    <dynamic-form [formObject]="formObject" [form]="form"></dynamic-form>
 </div>

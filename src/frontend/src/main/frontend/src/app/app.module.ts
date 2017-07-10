@@ -3,13 +3,13 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {UserService} from './services/user.service';
-import {LoginComponent} from './login/login.component';
-import {RegisterComponent} from './register/register.component';
+import {LoginComponent} from './component/login/login.component';
+import {RegisterComponent} from './component/register/register.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {AppRoutingModule} from './app-routing.module';
-import {UsersComponent} from './users/users.component';
-import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import {UsersComponent} from './component/users/users.component';
+import { UserDetailComponent } from './component/users/user-detail/user-detail.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
     MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdCardModule, MdCheckboxModule, MdDatepickerModule,
@@ -25,13 +25,15 @@ import {
     MdTabsModule,
     MdToolbarModule, MdTooltipModule
 } from '@angular/material';
-import { FormExampleComponent } from './component/form-example/form-example.component';
 import 'hammerjs';
 import { FormPrototypeComponent } from './component/form-prototype/form-prototype.component';
-import { DynamicFormComponent } from './questions/dynamic-form/dynamic-form.component';
-import { DynamicQuestionComponent } from './questions/dynamic-question/dynamic-question.component';
-import { DynamicEditComponent } from './questions/dynamic-edit/dynamic-edit.component';
+import { DynamicFormComponent } from './component/questions/dynamic-form/dynamic-form.component';
+import { DynamicQuestionComponent } from './component/questions/dynamic-question/dynamic-question.component';
+import { DynamicEditComponent } from './component/questions/dynamic-edit/dynamic-edit.component';
 import {QuestionService} from "./services/question.service";
+import { QuestionListComponent } from './component/questions/question-list/question-list.component';
+import { FormPreviewComponent } from './component/questions/dynamic-form/form-preview/form-preview.component';
+import { FormEditComponent } from './component/questions/dynamic-edit/form-edit/form-edit.component';
 
 @NgModule({
     declarations: [
@@ -40,11 +42,14 @@ import {QuestionService} from "./services/question.service";
         RegisterComponent,
         UsersComponent,
         UserDetailComponent,
-        FormExampleComponent,
         FormPrototypeComponent,
         DynamicFormComponent,
         DynamicQuestionComponent,
-        DynamicEditComponent
+        DynamicEditComponent,
+        QuestionListComponent,
+        QuestionListComponent,
+        FormPreviewComponent,
+        FormEditComponent
     ],
     imports: [
         BrowserModule,

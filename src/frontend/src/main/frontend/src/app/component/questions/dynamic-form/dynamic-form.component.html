@@ -5,7 +5,7 @@
         </md-toolbar>
         <p class="header-desc">{{formObject.desc}}</p>
 
-        <div *ngFor="let question of formObject.questions" class="form-row">
+        <div *ngFor="let question of formObject.formItems" class="form-row">
             <dynamic-question [question]="question" [form]="form"></dynamic-question>
         </div>
 

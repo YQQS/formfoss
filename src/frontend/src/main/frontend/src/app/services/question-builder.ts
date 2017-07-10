@@ -1,9 +1,9 @@
-import { QuestionBase } from '../questions/question-base';
-import { QuestionTextbox } from '../questions/question-textbox';
-import { QuestionSlider } from '../questions/question-slider';
-import { QuestionDropDown } from '../questions/question-dropdown';
-import { QuestionValidator } from '../questions/question-validator';
-import {DynamicFormModel}  from '../questions/dynamic-form.model';
+import { QuestionBase } from '../models/question-base';
+import { QuestionTextbox } from '../models/question-textbox';
+import { QuestionSlider } from '../models/question-slider';
+import { QuestionDropDown } from '../models/question-dropdown';
+import { QuestionValidator } from '../models/question-validator';
+import {DynamicFormModel}  from '../models/dynamic-form.model';
 
 export class QuestionBuilder {
     static buildQuestion(input: any): QuestionBase<any> {
@@ -22,10 +22,16 @@ export class QuestionBuilder {
 
     static buildDynamicForm(input: any): DynamicFormModel {
         let dyForm: DynamicFormModel = new DynamicFormModel();
+        if (input.formId) {
+            dyForm.formId = input.formId;
+        }
+        if (input.userId) {
+            dyForm.userId = input.userId;
+        }
         dyForm.title = input['title'] || '';
         dyForm.desc = input['desc'] || '';
         dyForm.settings = input['settings'] || {};
-        dyForm.questions = input['questions']
+        dyForm.formItems = input['formItems']
               .map(question => QuestionBuilder.buildQuestion(question))
               .sort((a,b) => a.order - b.order);
         return dyForm;

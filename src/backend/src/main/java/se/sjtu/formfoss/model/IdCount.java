@@ -1,6 +1,7 @@
 package se.sjtu.formfoss.model;
 import com.fasterxml.jackson.annotation.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -9,6 +10,7 @@ import java.util.Map;
 /**
  * Created by Administrator on 2017/7/4.
  */
+@Document(collection = "IdCount")
 public class IdCount {
     @Id
     private String id;
