@@ -44,12 +44,15 @@ public class FormController {
     //OK
     @GetMapping(path = "/forms/{formId}")
     public @ResponseBody
-    ResponseEntity<List<FormEntity>> searchById(@PathVariable Integer formId) {
+    ResponseEntity<FormEntity> searchById(@PathVariable Integer formId) {
         List<FormEntity> result = formRepository.findByFormId(formId);
         HttpStatus status = (result.iterator().hasNext() != false) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         if (result.iterator().hasNext() == false)
             throw new GlobalException(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<List<FormEntity>>(result, status);
+        if (result.size() != 1) {
+            throw  new GlobalException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<FormEntity>(result.get(0), status);
     }
 
     @PostMapping(path = "/forms")

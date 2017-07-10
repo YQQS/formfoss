@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {QuestionBase} from "../question-base";
+import {QuestionBase} from "../../../models/question-base";
 import {FormGroup} from "@angular/forms";
 
 @Component({
