@@ -11,7 +11,6 @@ import {AppRoutingModule} from './app-routing.module';
 import {UsersComponent} from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
 import {
     MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdCardModule, MdCheckboxModule, MdDatepickerModule,
     MdDialogModule,
@@ -32,6 +31,7 @@ import { FormPrototypeComponent } from './component/form-prototype/form-prototyp
 import { DynamicFormComponent } from './questions/dynamic-form/dynamic-form.component';
 import { DynamicQuestionComponent } from './questions/dynamic-question/dynamic-question.component';
 import { MyformComponent } from './myform/myform.component';
+import { DynamicEditComponent } from './questions/dynamic-edit/dynamic-edit.component';
 import {QuestionService} from "./services/question.service";
 
 @NgModule({
@@ -46,6 +46,7 @@ import {QuestionService} from "./services/question.service";
         DynamicFormComponent,
         DynamicQuestionComponent,
         MyformComponent
+        DynamicEditComponent
     ],
     imports: [
         BrowserModule,
@@ -79,7 +80,7 @@ import {QuestionService} from "./services/question.service";
         MdTooltipModule,
         MdSnackBarModule
     ],
-    providers: [UserService,QuestionService],
+    providers: [UserService, QuestionService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
