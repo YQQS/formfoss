@@ -32,6 +32,7 @@ import { FormPrototypeComponent } from './component/form-prototype/form-prototyp
 import { DynamicFormComponent } from './questions/dynamic-form/dynamic-form.component';
 import { DynamicQuestionComponent } from './questions/dynamic-question/dynamic-question.component';
 import { MyformComponent } from './myform/myform.component';
+import {QuestionService} from "./services/question.service";
 
 @NgModule({
     declarations: [
@@ -78,7 +79,7 @@ import { MyformComponent } from './myform/myform.component';
         MdTooltipModule,
         MdSnackBarModule
     ],
-    providers: [UserService],
+    providers: [UserService,QuestionService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

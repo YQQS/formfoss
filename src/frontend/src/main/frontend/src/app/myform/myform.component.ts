@@ -1,25 +1,21 @@
-import { Component,OnInit} from '@angular/core';
-declare var $:any;
+import { Component, OnInit } from '@angular/core';
+import {Questionnaire} from "../models/questionnaire";
+import {UserService} from "../services/user.service";
+import {Router} from "@angular/router";
 import {QuestionService} from "../services/question.service";
-import {DynamicFormModel} from '../questions/dynamic-form.model';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/observable/fromEvent';
 
 @Component({
-    selector: 'app-myform',
+    selector: 'app-myforms',
     templateUrl: './myform.component.html',
     styleUrls: ['./myform.component.css']
 })
-export class MyformComponent implements OnInit{
-    errorMessage: string;
-    dynamicform:DynamicFormModel[];
+export class MyformComponent implements OnInit {
+    users: Questionnaire[];
+    selectedQuestionnaire: Questionnaire;
 
-    constructor (private qusetionService: QuestionService) {}
-    ngOnInit(){}
+    constructor(private myformService: QuestionService,
+                private router: Router) { }
+
+    ngOnInit() {
+    }
 }

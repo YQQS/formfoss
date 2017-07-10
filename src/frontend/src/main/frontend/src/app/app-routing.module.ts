@@ -12,7 +12,7 @@ import {MyformComponent} from "./myform/myform.component"
 
 const routes:Routes = [
     {path: "", redirectTo: '/dynamic-form', pathMatch: 'full'},
-    {path: "myform", component: MyformComponent},
+    {path: "myforms", component: MyformComponent},
     {path: "prototype", component: FormPrototypeComponent},
     {path: "login", component: LoginComponent},
     {path: "register", component: RegisterComponent},
