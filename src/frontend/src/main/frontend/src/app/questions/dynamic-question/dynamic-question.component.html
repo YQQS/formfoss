@@ -2,54 +2,55 @@
     <!--
     <label [attr.for]="question.key">{{question.label}}</label>
     -->
-    
+
     <div [ngSwitch]="question.controlType">
-        
+
         <div *ngSwitchCase="'textbox'">
-            <md-input-container>
-                <input mdInput [formControlName]="question.key" [placeholder]="question.label"
+            <md-input-container class="question-item">
+                <input mdInput [formControlName]="question.key" [placeholder]="question?.title"
                        [id]="question.key" [type]="question.inputType">
             </md-input-container>
             <div class="alter alter-danger" *ngIf="getErrors()">
                 <div *ngIf="getErrors()?.required && !getFormControl().pristine" >
-                    {{question.label}} is required
+                    {{question?.title}} is required
                 </div>
                 <div *ngIf="getErrors()?.minlength" >
-                    {{question.label}} should not less than {{question.validator.minLength}} bytes
+                    {{question?.title}} should not less than {{question.validator.minLength}} bytes
                 </div>
                 <div *ngIf="getErrors()?.maxlength" >
-                    {{question.label}} should not longer than {{question.validator.maxLength}} bytes
+                    {{question?.title}} should not longer than {{question.validator.maxLength}} bytes
                 </div>
                 <div *ngIf="getErrors()?.email && !getFormControl().pristine && getFormControl().value.length > 0" >
                     not a valid email address
                 </div>
                 <div *ngIf="getErrors()?.pattern && !getFormControl().pristine">
-                    {{question.label}} should only contain those charactors: {{question.validator.pattern}}
+                    {{question?.title}} should only contain those charactors: {{question.validator.pattern}}
                 </div>
             </div>
         </div>
-        
+
         <div *ngSwitchCase="'dropdown'">
-            <label class="question-desc">{{question.label}}</label>
-            <md-select [multiple]="question.multiple" [id]="question.key" [formControlName]="question.key">
+            <label class="question-desc">{{question.title}}</label>
+            <md-select class="question-item question-select" [multiple]="question?.multiple"
+                       [id]="question.key" [formControlName]="question.key">
                 <md-option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</md-option>
             </md-select>
             <div class="alter alter-danger" *ngIf="getErrors()">
                 <div *ngIf="getErrors()?.required && !getFormControl().pristine">
-                    {{question.label}} is required
+                    {{question?.title}} is required
                 </div>
             </div>
         </div>
-        
+
         <div *ngSwitchCase="'slider'">
-            <label class="question-desc">{{question.label}}</label>
-            <md-slider class="dynamic-slider" thumbLabel tickInterval="auto"
+            <label class="question-desc">{{question.title}}</label>
+            <md-slider class="question-slider question-item" thumbLabel tickInterval="auto"
                        [min]="question.validator?.min" [max]="question.validator?.max" step="auto"
                        [value]="question.value" #slider>
             </md-slider>
             <label>value: {{slider.value}}</label>
         </div>
-    
+
     </div>
-    
+
 </div>

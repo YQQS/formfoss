@@ -30,6 +30,8 @@ import 'hammerjs';
 import { FormPrototypeComponent } from './component/form-prototype/form-prototype.component';
 import { DynamicFormComponent } from './questions/dynamic-form/dynamic-form.component';
 import { DynamicQuestionComponent } from './questions/dynamic-question/dynamic-question.component';
+import { DynamicEditComponent } from './questions/dynamic-edit/dynamic-edit.component';
+import {QuestionService} from "./services/question.service";
 
 @NgModule({
     declarations: [
@@ -41,7 +43,8 @@ import { DynamicQuestionComponent } from './questions/dynamic-question/dynamic-q
         FormExampleComponent,
         FormPrototypeComponent,
         DynamicFormComponent,
-        DynamicQuestionComponent
+        DynamicQuestionComponent,
+        DynamicEditComponent
     ],
     imports: [
         BrowserModule,
@@ -75,7 +78,7 @@ import { DynamicQuestionComponent } from './questions/dynamic-question/dynamic-q
         MdTooltipModule,
         MdSnackBarModule
     ],
-    providers: [UserService],
+    providers: [UserService, QuestionService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
