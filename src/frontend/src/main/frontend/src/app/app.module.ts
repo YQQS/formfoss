@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {UserService} from './services/user.service';
-import {LoginComponent} from './component/login/login.component';
-import {RegisterComponent} from './component/register/register.component';
+import {LoginComponent} from './component/users/login/login.component';
+import {RegisterComponent} from './component/users/register/register.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {AppRoutingModule} from './app-routing.module';
@@ -34,6 +34,7 @@ import {QuestionService} from "./services/question.service";
 import { QuestionListComponent } from './component/questions/question-list/question-list.component';
 import { FormPreviewComponent } from './component/questions/dynamic-form/form-preview/form-preview.component';
 import { FormEditComponent } from './component/questions/dynamic-edit/form-edit/form-edit.component';
+import { FormNewComponent } from './component/questions/dynamic-edit/form-new/form-new.component';
 
 @NgModule({
     declarations: [
@@ -49,7 +50,8 @@ import { FormEditComponent } from './component/questions/dynamic-edit/form-edit/
         QuestionListComponent,
         QuestionListComponent,
         FormPreviewComponent,
-        FormEditComponent
+        FormEditComponent,
+        FormNewComponent
     ],
     imports: [
         BrowserModule,

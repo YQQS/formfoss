@@ -45,8 +45,12 @@ export class QuestionListComponent implements OnInit {
         this.router.navigate(['/questions', id])
     }
 
-    add() {
+    stats(id: number) {
 
+    }
+
+    add() {
+        this.router.navigate(['/questions/new'])
     }
 
 }

@@ -30,4 +30,8 @@ export class DynamicFormComponent implements OnInit {
         this.payLoad = JSON.stringify(this.form.value);
     }
 
+    save() {
+
+    }
+
 }

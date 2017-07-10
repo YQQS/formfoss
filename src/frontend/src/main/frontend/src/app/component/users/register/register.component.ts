@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../../services/user.service';
 import {FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
-import {FossValidators} from "../../validator/validator";
+import {FossValidators} from "../../../validator/validator";
 
 @Component({
     selector: 'app-register',

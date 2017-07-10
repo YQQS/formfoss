@@ -11,6 +11,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/observable/throw';
+import {AnswerModel} from "../models/answer.model";
 
 @Injectable()
 export class QuestionService {
@@ -115,6 +116,8 @@ export class QuestionService {
     };
 
     private url = '/forms';
+    private answerUrl = '/useranswers';
+    private dataUrl = '/formdata';
     private jsonHeader = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http) {}
@@ -203,6 +206,12 @@ export class QuestionService {
         return this.http.post(this.url, JSON.stringify(form), {headers: this.jsonHeader})
             .map(res =>  res.json())
             .catch(this.handleError);
+    }
+
+    saveAnswer(answer: AnswerModel) {
+        return this.http.post(this.answerUrl, JSON.stringify(answer), {headers: this.jsonHeader})
+            .map(res => res.json())
+            .catch(this.handleError)
     }
 
     getAll() {

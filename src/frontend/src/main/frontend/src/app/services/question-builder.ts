@@ -4,6 +4,8 @@ import { QuestionSlider } from '../models/question-slider';
 import { QuestionDropDown } from '../models/question-dropdown';
 import { QuestionValidator } from '../models/question-validator';
 import {DynamicFormModel}  from '../models/dynamic-form.model';
+import {AnswerModel} from "../models/answer.model";
+import {FormGroup} from "@angular/forms";
 
 export class QuestionBuilder {
     static buildQuestion(input: any): QuestionBase<any> {
@@ -35,6 +37,11 @@ export class QuestionBuilder {
               .map(question => QuestionBuilder.buildQuestion(question))
               .sort((a,b) => a.order - b.order);
         return dyForm;
+    }
+
+    static buildAnswerModel(formGroup: FormGroup, formObject: DynamicFormModel){
+        let answerModel = new AnswerModel({formId: formObject.formId});
+
     }
 
 }

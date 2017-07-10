@@ -5,7 +5,8 @@
     </button>
     <button  md-raised-button color="accent" (click)="preview()" >
             <md-icon>visibility</md-icon>
-            preview
+            <label *ngIf="!isPreview">preview</label>
+            <label *ngIf="isPreview">back edit</label>
     </button>
     <button md-raised-button color="warn" (click)="reset()">
         <md-icon>refresh</md-icon>Reset</button>

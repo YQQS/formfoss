@@ -1,19 +1,27 @@
+<button md-mini-fab color="warn" (click)="add()" class="main-fab-icon">
+    <md-icon>add</md-icon>
+</button>
 <md-list>
     <h3 md-subheader>Forms</h3>
-    <button md-mini-fab color="primary" (click)="add()" >
-        <md-icon>add</md-icon>
-    </button>
     <md-list-item *ngFor="let question of questionList">
         <md-icon md-list-icon>mail</md-icon>
         <h3 md-line>{{question.title}}</h3>
-        <button md-mini-fab color="accent" (click)="preview(question.formId)">
-            <md-icon>mood</md-icon>
-        </button>
-        <button md-mini-fab color="primary" (click)="edit(question.formId)" >
+        <button md-icon-button color="primary" (click)="edit(question.formId)" >
             <md-icon>edit</md-icon>
         </button>
-        <button md-mini-fab color="warn" (click)="delete(question.formId)">
-            <md-icon>delete</md-icon>
+        <button md-icon-button (click)="stats(question.formId)">
+            <md-icon>info</md-icon>
         </button>
+        <button md-icon-button [mdMenuTriggerFor]="menu"><md-icon>more_vert</md-icon></button>
+        <md-menu #menu="mdMenu">
+            <button md-menu-item color="accent" (click)="preview(question.formId)">
+                <md-icon>mood</md-icon>
+                preview
+            </button>
+            <button md-menu-item color="warn" (click)="delete(question.formId)">
+                <md-icon>delete</md-icon>
+                delete
+            </button>
+        </md-menu>
     </md-list-item>
 </md-list>

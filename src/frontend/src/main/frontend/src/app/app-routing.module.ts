@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { LoginComponent } from './component/login/login.component';
-import { RegisterComponent } from './component/register/register.component';
+import { LoginComponent } from './component/users/login/login.component';
+import { RegisterComponent } from './component/users/register/register.component';
 import { UsersComponent } from './component/users/users.component';
 import {UserDetailComponent} from "./component/users/user-detail/user-detail.component";
 import {FormPrototypeComponent} from "./component/form-prototype/form-prototype.component";
@@ -11,6 +11,7 @@ import {DynamicEditComponent} from "./component/questions/dynamic-edit/dynamic-e
 import {QuestionListComponent} from './component/questions/question-list/question-list.component';
 import {FormPreviewComponent} from './component/questions/dynamic-form/form-preview/form-preview.component';
 import {FormEditComponent} from './component/questions/dynamic-edit/form-edit/form-edit.component';
+import {FormNewComponent} from './component/questions/dynamic-edit/form-new/form-new.component';
 
 const routes:Routes = [
     {path: "", redirectTo: '/questionList', pathMatch: 'full'},
@@ -21,6 +22,7 @@ const routes:Routes = [
     {path: "users/:id", component: UserDetailComponent},
     {path: 'questionList', component: QuestionListComponent},
     {path: 'questions/edit/:id', component: FormEditComponent},
+    {path: 'questions/new', component: FormNewComponent},
     {path: 'questions/:id', component: FormPreviewComponent}
 ];
 
