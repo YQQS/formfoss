@@ -31,7 +31,8 @@ export class DynamicFormComponent implements OnInit {
     }
 
     save() {
-
+        this.qtService.saveAnswer(this.form, this.formObject)
+            .subscribe(res => alert(res.message));
     }
 
 }

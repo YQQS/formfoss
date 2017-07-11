@@ -25,16 +25,15 @@ export class QuestionListComponent implements OnInit {
         this.getAll();
     }
 
-    delete(id: number) {
+    deleteForm(id: number) {
         this.qtService.delete(id)
             .subscribe(res => {
                 if (res.message) {
                     alert(res.message);
                 }
+                this.getAll();
             }, error => alert(error))
 
-        //refresh
-        this.getAll();
     }
 
     edit(id: number) {
