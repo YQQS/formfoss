@@ -25,8 +25,9 @@ export class FormPreviewComponent implements OnInit {
                 return this.qtService.getForm(+params.get('id'))
             })
             .subscribe((form: DynamicFormModel) => {
-                this.formObject = form
+                this.formObject = form;
                 this.form = this.qtService.toFormGroup(this.formObject.formItems);
+                console.log(this.formObject);
             });
     }
 

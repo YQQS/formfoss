@@ -202,13 +202,21 @@ export class QuestionService {
         });
     }
 
-    save(form: DynamicFormModel) {
-        return this.http.post(this.url, JSON.stringify(form), {headers: this.jsonHeader})
-            .map(res =>  res.json())
-            .catch(this.handleError);
+    saveOrUpdate(form: DynamicFormModel) {
+        if (form.formId) {
+            return this.http.put(this.url, JSON.stringify(form), {headers: this.jsonHeader})
+                .map(res => res.json())
+                .catch(this.handleError)
+        } else {
+            return this.http.post(this.url, JSON.stringify(form), {headers: this.jsonHeader})
+                .map(res => res.json())
+                .catch(this.handleError);
+        }
     }
 
-    saveAnswer(answer: AnswerModel) {
+    saveAnswer(formGroup: FormGroup, formObj: DynamicFormModel) {
+        let answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
+        console.log(answer);
         return this.http.post(this.answerUrl, JSON.stringify(answer), {headers: this.jsonHeader})
             .map(res => res.json())
             .catch(this.handleError)
@@ -222,7 +230,7 @@ export class QuestionService {
 
     getForm(id: number): Observable<DynamicFormModel> {
         return this.http.get(this.url + '/' + id)
-            .map(res => res.json() as DynamicFormModel)
+            .map(res => QuestionBuilder.buildDynamicForm(res.json()))
             .catch(this.handleError)
     }
 

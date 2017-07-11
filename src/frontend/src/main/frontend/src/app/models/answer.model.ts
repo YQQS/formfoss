@@ -13,7 +13,7 @@ export class AnswerModel {
     }) {
         this.formId = input.formId;
         this.userId = input.userId || null;
-        this.answerId = input.answerId || null;
+        this.answerId = input.answerId;
         this.answers = input.answers || [];
     }
 }

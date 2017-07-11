@@ -82,10 +82,12 @@ export class DynamicEditComponent implements OnInit {
         this.form = this.qtService.toFormGroup(this.formObject.formItems);
     }
 
-    save() {
-        this.qtService.save(this.formObject)
+    saveOrUpdate() {
+        if (!this.isPreview) {
+            this.sync();
+        }
+        this.qtService.saveOrUpdate(this.formObject)
             .subscribe(res => {
-                console.log('saved');
                 alert(res.message);
             }, error => {
                 alert(error);
