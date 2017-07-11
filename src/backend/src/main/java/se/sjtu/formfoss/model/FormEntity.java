@@ -18,6 +18,7 @@ import java.util.Map;
 //@Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Document(collection = "FormEntity")
 public class FormEntity {
     @Id
     @GeneratedValue
