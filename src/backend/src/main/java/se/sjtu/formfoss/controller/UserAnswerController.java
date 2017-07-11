@@ -10,16 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.ls.LSException;
 import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.exception.GlobalException;
-import se.sjtu.formfoss.model.IdCount;
-import se.sjtu.formfoss.model.UserAnswerEntity;
-import se.sjtu.formfoss.model.FormDataEntity;
-import se.sjtu.formfoss.model.UserEntity;
+import se.sjtu.formfoss.model.*;
 import se.sjtu.formfoss.repository.CountRepository;
+import se.sjtu.formfoss.repository.FormRepository;
 import se.sjtu.formfoss.repository.UserAnswerRepository;
 import se.sjtu.formfoss.repository.FormDataRepository;
 
 import java.io.IOException;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,8 @@ public class UserAnswerController {
     private CountRepository countRepository;
     @Autowired
     private FormDataRepository formDataRepository;
-
+    @Autowired
+    private FormRepository formRepository;
 
     @GetMapping("/useranswers")
     public @ResponseBody
@@ -84,6 +84,7 @@ public class UserAnswerController {
             idCount.setFormAnswerIdCount(answerId);
             countRepository.save(idCount);
         }
+        userAnswer.setCommitflag(true);
         userAnswerRepository.save(userAnswer);
         int formId=userAnswer.getFormId();
         List<Map<String,Object>> answers = userAnswer.getAnswers();
@@ -93,7 +94,7 @@ public class UserAnswerController {
         for(Map<String,Object> map : answers){
             String ansKey = (String) map.get("key");
             String anstype =(String) map.get("type");
-            if(anstype.equals("string")){
+            if(anstype.equals("textbox")){
                 String answer = (String) map.get("answer");
                 for(Map<String,Object> map1 : data){
                     String dataKey = (String) map1.get("key");
@@ -141,7 +142,7 @@ public class UserAnswerController {
                     }
                 }
             }
-            else if(anstype.equals("singleChoice")){
+            else if(anstype.equals("dropdown")){
                 String answer = (String) map.get("answer");
                 for(Map<String,Object> map1 : data){
                     String dataKey = (String) map1.get("key");
@@ -193,6 +194,7 @@ public class UserAnswerController {
         userAnswer.setAnswerId(answerId);
         idCount.setFormAnswerIdCount(answerId);
         countRepository.save(idCount);
+        userAnswer.setCommitflag(false);
         userAnswerRepository.save(userAnswer);
         return new ResponseEntity<String>("{\"message\": \"Save answer successfully\"}",HttpStatus.OK);
     }
@@ -209,11 +211,23 @@ public class UserAnswerController {
     }
 
     @PutMapping("/useranswers")
+
     public @ResponseBody
+
     ResponseEntity<String> updateUserAnswer(@RequestBody UserAnswerEntity userAnswer) throws IOException{
-        userAnswerRepository.save(userAnswer);
-        return new ResponseEntity<String>("{\"message\": \"Update answer successfully\"}",HttpStatus.OK);
+
+        if(userAnswer.getCommitflag() == false){
+
+            userAnswerRepository.save(userAnswer);
+
+            return new ResponseEntity<String>("{\"message\": \"Update answer successfully\"}",HttpStatus.OK);
+
+        }
+
+        return new ResponseEntity<String>("{\"error\": \"Can't update committed answer\"}",HttpStatus.FORBIDDEN);
+
     }
+
 
     @DeleteMapping("/useranswers")
     public @ResponseBody
@@ -226,6 +240,33 @@ public class UserAnswerController {
         }
         return new ResponseEntity<String>("{\"message\": \"Nothing to delete\"}",HttpStatus.FORBIDDEN);
     }
+
+    @GetMapping("/users/{userid}/answerforms")
+
+    public @ResponseBody
+
+    ResponseEntity<List<FormEntity>> getAnswerforms(@PathVariable Integer userid) throws Exception{
+
+        List<UserAnswerEntity> userAnswers = userAnswerRepository.findByUserId(userid);
+
+        List<FormEntity> answerforms = new ArrayList<FormEntity>();
+
+        FormEntity form;
+
+        for(int i = 0 ; i < userAnswers.size(); i++){
+
+            form = formRepository.findOne(userAnswers.get(i).getFormId());
+
+            answerforms.add(form);
+
+        }
+
+        return new ResponseEntity<List<FormEntity>>(answerforms,HttpStatus.OK);
+
+
+
+    }
+
 
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<Error> FormNotFound(GlobalException e){
