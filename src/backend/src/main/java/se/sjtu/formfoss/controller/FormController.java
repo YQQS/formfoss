@@ -9,12 +9,17 @@ import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.exception.GlobalException;
 import se.sjtu.formfoss.model.FormEntity;
+import se.sjtu.formfoss.model.FormDataEntity;
 import se.sjtu.formfoss.model.IdCount;
 import se.sjtu.formfoss.repository.FormRepository;
 import se.sjtu.formfoss.repository.CountRepository;
+import se.sjtu.formfoss.repository.FormDataRepository;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 86506 on 2017/6/29.
@@ -25,6 +30,8 @@ public class FormController {
     private FormRepository formRepository;
     @Autowired
     private CountRepository countRepository;
+    @Autowired
+    private FormDataRepository formDataRepository;
 
     //OK
     @GetMapping(path = "/forms")
@@ -55,6 +62,7 @@ public class FormController {
         return new ResponseEntity<FormEntity>(result.get(0), status);
     }
 
+
     @PostMapping(path = "/forms")
     public synchronized @ResponseBody
     ResponseEntity<String> formAdd(@RequestBody FormEntity form) throws IOException {
@@ -65,6 +73,33 @@ public class FormController {
         countRepository.save(idCount);
         form.setFormId(formId);
         formRepository.save(form);
+        FormDataEntity formData=new FormDataEntity();
+        formData.setFormId(formId);
+        formData.setAnswerCount(0);
+        List<Map<String,Object>> data=new ArrayList<Map<String, Object>>(),questions=form.getFormItems();
+        for(int i=0;i<questions.size();i++){
+            Map<String,Object> datai=new HashMap<String, Object>();
+            datai.put("key",questions.get(i).get("key"));
+            datai.put("type",questions.get(i).get("controlType"));
+            if(questions.get(i).get("controlType").equals("dropdown")){
+                List<Map<String,Object>> choice=new ArrayList<Map<String, Object>>();
+                List<Map<String,Object>> options=(List<Map<String,Object>>) questions.get(i).get("options");
+                for(int j=0;j<options.size();j++){
+                    Map<String,Object> choiceData=new HashMap<String, Object>();
+                    choiceData.put("choiceName",options.get(j).get("key"));
+                    choiceData.put("choiceCount",0);
+                    choice.add(choiceData);
+                }
+                datai.put("result",choice);
+            }else{
+                List<Object> res=new ArrayList<Object>();
+                datai.put("result",res);
+            }
+            data.add(datai);
+        }
+
+        formData.setData(data);
+        formDataRepository.save(formData);
         return new ResponseEntity<String>("{\"message\": \"Create new form successfully\"}", HttpStatus.OK);
     }
 
