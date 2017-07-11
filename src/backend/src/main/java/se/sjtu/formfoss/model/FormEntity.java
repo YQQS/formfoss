@@ -84,7 +84,7 @@ public class FormEntity {
     }
 
     public void setFormItems(List<Map<String,Object>> formItems) {
-        this.formItems = formItems;
+        this.formItems= formItems;
     }
 
 

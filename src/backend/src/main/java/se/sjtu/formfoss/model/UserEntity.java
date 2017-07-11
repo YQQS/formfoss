@@ -3,6 +3,7 @@ package se.sjtu.formfoss.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.management.relation.RoleNotFoundException;
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "user")
+@Document(collection = "UserAnswerEntity")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
