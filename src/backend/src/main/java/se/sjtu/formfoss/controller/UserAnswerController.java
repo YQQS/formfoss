@@ -91,13 +91,13 @@ public class UserAnswerController {
         formData.setAnswerCount(formData.getAnswerCount()+1);
         List<Map<String,Object>> data = formData.getData();
         for(Map<String,Object> map : answers){
-            Integer ansid = (Integer) map.get("id");
+            String ansKey = (String) map.get("key");
             String anstype =(String) map.get("type");
             if(anstype.equals("string")){
                 String answer = (String) map.get("answer");
                 for(Map<String,Object> map1 : data){
-                    Integer dataid = (Integer) map1.get("id");
-                    if(dataid.equals(ansid)){
+                    String dataKey = (String) map1.get("key");
+                    if(dataKey.equals(ansKey)){
                         List<String> result = (List<String>) map1.get("result");
                         result.add(answer);
                         map1.put("result",result);
@@ -108,8 +108,8 @@ public class UserAnswerController {
             else if(anstype.equals("number")){
                 Integer answer = (Integer) map.get("answer");
                 for(Map<String,Object> map1 : data){
-                    Integer dataid = (Integer) map1.get("id");
-                    if(dataid.equals(ansid)){
+                    String dataKey = (String) map1.get("key");
+                    if(dataKey.equals(ansKey)){
                         List<Integer> result = (List<Integer>) map1.get("result");
                         result.add(answer);
                         map1.put("result",result);
@@ -120,8 +120,8 @@ public class UserAnswerController {
             else if(anstype.equals("Time")){
                 Time answer = (Time) map.get("answer");
                 for(Map<String,Object> map1 : data){
-                    Integer dataid = (Integer) map1.get("id");
-                    if(dataid.equals(ansid)){
+                    String dataKey = (String) map1.get("key");
+                    if(dataKey.equals(ansKey)){
                         List<Time> result = (List<Time>) map1.get("result");
                         result.add(answer);
                         map1.put("result",result);
@@ -132,8 +132,8 @@ public class UserAnswerController {
             else if(anstype.equals("Date")){
                 Date answer = (Date) map.get("answer");
                 for(Map<String,Object> map1 : data) {
-                    Integer dataid = (Integer) map1.get("id");
-                    if (dataid.equals(ansid)) {
+                    String dataKey = (String) map1.get("key");
+                    if (dataKey.equals(ansKey)) {
                         List<Date> result = (List<Date>) map1.get("result");
                         result.add(answer);
                         map1.put("result", result);
@@ -144,8 +144,8 @@ public class UserAnswerController {
             else if(anstype.equals("singleChoice")){
                 String answer = (String) map.get("answer");
                 for(Map<String,Object> map1 : data){
-                    Integer dataid = (Integer) map1.get("id");
-                    if(dataid.equals(ansid)){
+                    String dataKey = (String) map1.get("key");
+                    if(dataKey.equals(ansKey)){
                         List<Map<String,Object>> result = (List<Map<String,Object>>) map1.get("result");
                         for(Map<String,Object> map2 :result){
                             String choiceName = (String) map2.get("choiceName");
@@ -162,8 +162,8 @@ public class UserAnswerController {
             else if(anstype.equals("multiChoice")) {
                 List<String> answerlist = (List<String>) map.get("answer");
                 for (Map<String, Object> map1 : data) {
-                    Integer dataid = (Integer) map1.get("id");
-                    if (dataid.equals(ansid)) {
+                    String dataKey = (String) map1.get("key");
+                    if (dataKey.equals(ansKey)) {
                         List<Map<String, Object>> result = (List<Map<String, Object>>) map1.get("result");
                         for (Map<String, Object> map2 : result) {
                             String choiceName = (String) map2.get("choiceName");
