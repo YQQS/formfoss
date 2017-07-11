@@ -133,12 +133,10 @@ export class QuestionService {
             .sort((a, b) => a.order - b.order);
     }
 
-    getOneQuestion(order?: number) {
+    getOneQuestion(key: string, order: number) {
         let question: QuestionBase<any> =  QuestionBuilder.buildQuestion(this.questionTemp);
-        if (order) {
-            question.order = order ;
-            question.key = `question${ order }`;
-        }
+        question.order = order ;
+        question.key = key;
         return question;
     }
 
@@ -184,23 +182,22 @@ export class QuestionService {
 
     }
 
-    toFromEditGroup(form: DynamicFormModel) {
+    toEditFromGroup(form: DynamicFormModel): FormGroup {
         let questions = form.formItems;
-        let group: FormGroup = new FormGroup({});
-
-        questions.forEach(question => {
-            group.addControl(question.key, new FormGroup({
-                'title-edit': new FormControl(question.title, Validators.required),
-                'controlType-edit': new FormControl(question.controlType, Validators.required)
-            }) );
-        });
-
-        return new FormGroup({
+        let group: FormGroup = new FormGroup({
             'title': new FormControl(form.title, Validators.required),
             'desc':  new FormControl(form.desc),
-            'formItems': group
         });
+
+
+        questions.forEach(question => {
+            QuestionBuilder.addEditFormControl(group, question);
+        });
+
+        return group;
     }
+
+
 
     saveOrUpdate(form: DynamicFormModel) {
         if (form.formId) {
@@ -216,7 +213,6 @@ export class QuestionService {
 
     saveAnswer(formGroup: FormGroup, formObj: DynamicFormModel) {
         let answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
-        console.log(answer);
         return this.http.post(this.answerUrl, JSON.stringify(answer), {headers: this.jsonHeader})
             .map(res => res.json())
             .catch(this.handleError)
