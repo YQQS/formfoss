@@ -1,5 +1,7 @@
 package se.sjtu.formfoss.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import se.sjtu.formfoss.exception.GlobalException;
 import se.sjtu.formfoss.model.IdCount;
 import se.sjtu.formfoss.model.UserAnswerEntity;
 import se.sjtu.formfoss.model.FormDataEntity;
+import se.sjtu.formfoss.model.UserEntity;
 import se.sjtu.formfoss.repository.CountRepository;
 import se.sjtu.formfoss.repository.UserAnswerRepository;
 import se.sjtu.formfoss.repository.FormDataRepository;
@@ -73,12 +76,14 @@ public class UserAnswerController {
     @PostMapping("/useranswers")
     public @ResponseBody
     ResponseEntity<String> createUserAnswer(@RequestBody UserAnswerEntity userAnswer) throws Exception{
-        IdCount idCount=countRepository.findOne("1");
-        Integer answerId = idCount.getFormAnswerIdCount();
-        answerId +=1;
-        userAnswer.setAnswerId(answerId);
-        idCount.setFormAnswerIdCount(answerId);
-        countRepository.save(idCount);
+        if(userAnswer.getAnswerId() == null){
+            IdCount idCount=countRepository.findOne("1");
+            Integer answerId = idCount.getFormAnswerIdCount();
+            answerId +=1;
+            userAnswer.setAnswerId(answerId);
+            idCount.setFormAnswerIdCount(answerId);
+            countRepository.save(idCount);
+        }
         userAnswerRepository.save(userAnswer);
         int formId=userAnswer.getFormId();
         List<Map<String,Object>> answers = userAnswer.getAnswers();
@@ -86,13 +91,13 @@ public class UserAnswerController {
         formData.setAnswerCount(formData.getAnswerCount()+1);
         List<Map<String,Object>> data = formData.getData();
         for(Map<String,Object> map : answers){
-            Integer ansid = (Integer) map.get("id");
+            String ansKey = (String) map.get("key");
             String anstype =(String) map.get("type");
             if(anstype.equals("string")){
                 String answer = (String) map.get("answer");
                 for(Map<String,Object> map1 : data){
-                    Integer dataid = (Integer) map1.get("id");
-                    if(dataid.equals(ansid)){
+                    String dataKey = (String) map1.get("key");
+                    if(dataKey.equals(ansKey)){
                         List<String> result = (List<String>) map1.get("result");
                         result.add(answer);
                         map1.put("result",result);
@@ -103,8 +108,8 @@ public class UserAnswerController {
             else if(anstype.equals("number")){
                 Integer answer = (Integer) map.get("answer");
                 for(Map<String,Object> map1 : data){
-                    Integer dataid = (Integer) map1.get("id");
-                    if(dataid.equals(ansid)){
+                    String dataKey = (String) map1.get("key");
+                    if(dataKey.equals(ansKey)){
                         List<Integer> result = (List<Integer>) map1.get("result");
                         result.add(answer);
                         map1.put("result",result);
@@ -115,8 +120,8 @@ public class UserAnswerController {
             else if(anstype.equals("Time")){
                 Time answer = (Time) map.get("answer");
                 for(Map<String,Object> map1 : data){
-                    Integer dataid = (Integer) map1.get("id");
-                    if(dataid.equals(ansid)){
+                    String dataKey = (String) map1.get("key");
+                    if(dataKey.equals(ansKey)){
                         List<Time> result = (List<Time>) map1.get("result");
                         result.add(answer);
                         map1.put("result",result);
@@ -127,8 +132,8 @@ public class UserAnswerController {
             else if(anstype.equals("Date")){
                 Date answer = (Date) map.get("answer");
                 for(Map<String,Object> map1 : data) {
-                    Integer dataid = (Integer) map1.get("id");
-                    if (dataid.equals(ansid)) {
+                    String dataKey = (String) map1.get("key");
+                    if (dataKey.equals(ansKey)) {
                         List<Date> result = (List<Date>) map1.get("result");
                         result.add(answer);
                         map1.put("result", result);
@@ -139,8 +144,8 @@ public class UserAnswerController {
             else if(anstype.equals("singleChoice")){
                 String answer = (String) map.get("answer");
                 for(Map<String,Object> map1 : data){
-                    Integer dataid = (Integer) map1.get("id");
-                    if(dataid.equals(ansid)){
+                    String dataKey = (String) map1.get("key");
+                    if(dataKey.equals(ansKey)){
                         List<Map<String,Object>> result = (List<Map<String,Object>>) map1.get("result");
                         for(Map<String,Object> map2 :result){
                             String choiceName = (String) map2.get("choiceName");
@@ -157,8 +162,8 @@ public class UserAnswerController {
             else if(anstype.equals("multiChoice")) {
                 List<String> answerlist = (List<String>) map.get("answer");
                 for (Map<String, Object> map1 : data) {
-                    Integer dataid = (Integer) map1.get("id");
-                    if (dataid.equals(ansid)) {
+                    String dataKey = (String) map1.get("key");
+                    if (dataKey.equals(ansKey)) {
                         List<Map<String, Object>> result = (List<Map<String, Object>>) map1.get("result");
                         for (Map<String, Object> map2 : result) {
                             String choiceName = (String) map2.get("choiceName");
@@ -177,6 +182,30 @@ public class UserAnswerController {
         formData.setData(data);
         formDataRepository.save(formData);
         return new ResponseEntity<String>("{\"message\": \"Create new answer successfully\"}",HttpStatus.OK);
+    }
+
+    @PostMapping("/useranswers/tempsave")
+    public @ResponseBody
+    ResponseEntity<String> tempsaveUserAnswer(@RequestBody UserAnswerEntity userAnswer) throws Exception{
+        IdCount idCount=countRepository.findOne("1");
+        Integer answerId = idCount.getFormAnswerIdCount();
+        answerId +=1;
+        userAnswer.setAnswerId(answerId);
+        idCount.setFormAnswerIdCount(answerId);
+        countRepository.save(idCount);
+        userAnswerRepository.save(userAnswer);
+        return new ResponseEntity<String>("{\"message\": \"Save answer successfully\"}",HttpStatus.OK);
+    }
+
+    @GetMapping("/useranswers/keepanswer/{userid}/{formid}")
+    public @ResponseBody
+    ResponseEntity<UserAnswerEntity> keepanswer(@PathVariable Integer userid,@PathVariable Integer formid){
+        List<UserAnswerEntity> userAnswers = userAnswerRepository.findByFormIdAndUserId(formid,userid);
+        HttpStatus status = (userAnswers.iterator().hasNext()!=false)?HttpStatus.OK:HttpStatus.NOT_FOUND;
+        if(userAnswers.iterator().hasNext() == false)
+            throw new GlobalException(HttpStatus.NOT_FOUND);
+        UserAnswerEntity userAnswer = userAnswers.get(0);
+        return new ResponseEntity<UserAnswerEntity>(userAnswer,status);
     }
 
     @PutMapping("/useranswers")
