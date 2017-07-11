@@ -5,7 +5,7 @@ import { QuestionDropDown } from '../models/question-dropdown';
 import { QuestionValidator } from '../models/question-validator';
 import {DynamicFormModel}  from '../models/dynamic-form.model';
 import {AnswerModel} from "../models/answer.model";
-import {FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AnswerBase} from "../models/answer-base";
 import {AnswerTextbox} from "../models/answer-textbox";
 import {AnswerSlider} from "../models/answer-slider";
@@ -81,8 +81,21 @@ export class QuestionBuilder {
         }
         else {
             return null;
-
         }
     }
 
+    static addEditFormControl(formGroup: FormGroup, question: QuestionBase<any>) {
+        formGroup.addControl(question.key, new FormGroup({
+            'title-edit': new FormControl(question.title, Validators.required),
+            'controlType-edit': new FormControl(question.controlType, Validators.required),
+            'options-edit': new FormControl(question['options'] || [] ),
+            'required-edit': new FormControl(question.validator.required || false),
+            'min-edit': new FormControl(question.validator.min || 0),
+            'max-edit': new FormControl(question.validator.max || 100),
+            'minLength-edit': new FormControl(question.validator.minLength || 10),
+            'maxLength-edit': new FormControl(question.validator.maxLength || 255),
+            'type-edit': new FormControl(question.validator.type || 'text'),
+            'pattern-edit': new FormControl(question.validator.pattern || '')
+        }));
+    }
 }

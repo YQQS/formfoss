@@ -6,6 +6,8 @@ import {QuestionService} from "../../../services/question.service";
 import {QuestionBase} from "../../../models/question-base";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import 'rxjs/add/operator/switchMap';
+import {QuestionBuilder} from "../../../services/question-builder";
+import {QuestionDropDown} from "../../../models/question-dropdown";
 
 @Component({
     selector: 'dynamic-edit',
@@ -13,14 +15,17 @@ import 'rxjs/add/operator/switchMap';
     styleUrls: ['./dynamic-edit.component.scss']
 })
 export class DynamicEditComponent implements OnInit {
-    // going deprecated
     isPreview: boolean = false;
 
+    // the formControlGroup for edit
     @Input() formGroup: FormGroup;
 
     @Input() formObject: DynamicFormModel;
 
+    // the FormControlGroup for preview
     form: FormGroup;
+
+    checked: boolean;
 
     controlTypes = ['textbox', 'dropdown', 'slider'];
 
@@ -33,36 +38,41 @@ export class DynamicEditComponent implements OnInit {
 
     }
 
+    trackByKey(index: number, question: QuestionBase<any>) {
+        return question.key;
+    }
+
+    // add a new question behind the given question
     addQuestion(question: QuestionBase<any>) {
         this.sync();
 
+        // get a new question with unique key
+        let pos = this.formObject.formItems.indexOf(question);
         let order = question.order;
-        let newQuestion: QuestionBase<any> = this.qtService.getOneQuestion(order + 1);
+        let length = this.formObject.formItems.length;
+        let newQuestion: QuestionBase<any> = this.qtService
+            .getOneQuestion(`question${this.formObject.formItems[length - 1].order + 1}`, order + 1);
+
+        // add a new formControl for the new question
+        QuestionBuilder.addEditFormControl(this.formGroup, newQuestion);
+
+        // update question order, the order will change while the key never change
         this.formObject.formItems.forEach((question, index) => {
-            if (index >= order ) {
+            if (index > pos ) {
                 question.order = question.order + 1;
-                question.key = 'question' + question.order;
             }
         });
-        this.formObject.formItems.splice(order , 0, newQuestion);
-
-        /*
-        let questionsList = this.formGroup.get('questions');
-        if (questionsList instanceof FormGroup) {
-            questionsList.addControl(newQuestion.key, new FormGroup({
-                'title-edit': new FormControl(newQuestion.title, Validators.required),
-                'controlType-edit': new FormControl(newQuestion.controlType, Validators.required)
-            }));
-        }
-        this.formGroup.setControl('questions', questionsList);
-        */
-        this.formGroup = this.qtService.toFromEditGroup(this.formObject);
-        console.log(this.formGroup.controls.questions)
+        this.formObject.formItems.splice(pos + 1 , 0, newQuestion);
 
     }
 
     delQuestion(question: QuestionBase<any>) {
+        this.sync();
 
+        // remove formControl in formGroup
+        let index = this.formObject.formItems.indexOf(question);
+        this.formObject.formItems.splice(index, 1);
+        this.formGroup.removeControl(question.key);
     }
 
     onSubmit() {
@@ -96,8 +106,26 @@ export class DynamicEditComponent implements OnInit {
 
     private sync() {
         this.formObject.formItems.forEach((question, index) => {
-            question.title = this.formGroup.get('formItems').get(question.key).value['title-edit'];
-            question.controlType = this.formGroup.get('formItems').get(question.key).value['controlType-edit']
+            let values = this.formGroup.get(question.key).value;
+            question.title = values['title-edit'];
+            question.controlType = values['controlType-edit']
+
+            question.validator = {};
+            question.validator.required = values['required-edit'];
+            switch (question.controlType) {
+                case 'textbox':
+                    question.validator.minLength = values['minLength-edit'];
+                    question.validator.maxLength = values['maxLength-edit'];
+                    question.validator.pattern = values['pattern-edit'];
+                    break;
+                case 'slider':
+                    question.validator.min = values['min-edit'];
+                    question.validator.max = values['max-edit'];
+                    break;
+                case 'dropdown':
+                    (<QuestionDropDown> question).options = values['options-edit'];
+                    break;
+            }
         })
     }
 }
