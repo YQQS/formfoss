@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
+import { UserService } from '../../../services/user.service';
 import {FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
-import {FossValidators} from "../validator/validator";
+import {FossValidators} from "../../../validator/validator";
 
 @Component({
     selector: 'app-register',
@@ -23,14 +23,10 @@ export class RegisterComponent implements OnInit {
         return this.userService.add(this.registerForm.value.userName,
             this.registerForm.value.userPassword,
             this.registerForm.value.userEmail)
-            .then(response => {
-                if (response.errorMsg) {
-                    alert(response.errorMsg);
-                } else {
-                    alert(response.message);
-                    this.router.navigate(['/list']);
-                }
-            })
+            .subscribe(response => {
+                alert(response.message);
+                this.router.navigate(['/list']);
+            }, error2 => alert(error2))
     }
 
 

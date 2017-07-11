@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { UserService } from '../services/user.service';
+import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
 
@@ -17,13 +17,9 @@ export class LoginComponent implements OnInit {
 
     login(input: any) {
         return this.userService.login(input.userName, input.userPassword)
-            .then(res => {
-                if (res == 401 ) {
-                    alert(res.errorMsg);
-                } else {
-                    this.router.navigate(['/list']);
-                }
-                return res;
+            .subscribe(res => {
+                alert(res['message']);
+                this.router.navigate(['/list']);
             });
     }
     ngOnInit() {
