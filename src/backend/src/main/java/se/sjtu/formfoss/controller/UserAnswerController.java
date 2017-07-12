@@ -12,9 +12,9 @@ import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.exception.GlobalException;
 import se.sjtu.formfoss.model.*;
 import se.sjtu.formfoss.repository.CountRepository;
-import se.sjtu.formfoss.repository.FormRepository;
 import se.sjtu.formfoss.repository.UserAnswerRepository;
 import se.sjtu.formfoss.repository.FormDataRepository;
+import se.sjtu.formfoss.repository.FormRepository;
 
 import java.io.IOException;
 import java.sql.Time;
@@ -142,7 +142,7 @@ public class UserAnswerController {
                     }
                 }
             }
-            else if(anstype.equals("dropdown")){
+            else if(anstype.equals("singleChoice")){
                 String answer = (String) map.get("answer");
                 for(Map<String,Object> map1 : data){
                     String dataKey = (String) map1.get("key");
@@ -185,6 +185,20 @@ public class UserAnswerController {
         return new ResponseEntity<String>("{\"message\": \"Create new answer successfully\"}",HttpStatus.OK);
     }
 
+    @GetMapping("/users/{userid}/answerforms")
+    public @ResponseBody
+    ResponseEntity<List<FormEntity>> getAnswerforms(@PathVariable Integer userid) throws Exception{
+        List<UserAnswerEntity> userAnswers = userAnswerRepository.findByUserId(userid);
+        List<FormEntity> answerforms = new ArrayList<FormEntity>();
+        FormEntity form;
+        for(int i = 0 ; i < userAnswers.size(); i++){
+            form = formRepository.findOne(userAnswers.get(i).getFormId());
+            answerforms.add(form);
+        }
+        return new ResponseEntity<List<FormEntity>>(answerforms,HttpStatus.OK);
+
+    }
+
     @PostMapping("/useranswers/tempsave")
     public @ResponseBody
     ResponseEntity<String> tempsaveUserAnswer(@RequestBody UserAnswerEntity userAnswer) throws Exception{
@@ -192,9 +206,9 @@ public class UserAnswerController {
         Integer answerId = idCount.getFormAnswerIdCount();
         answerId +=1;
         userAnswer.setAnswerId(answerId);
+        userAnswer.setCommitflag(false);
         idCount.setFormAnswerIdCount(answerId);
         countRepository.save(idCount);
-        userAnswer.setCommitflag(false);
         userAnswerRepository.save(userAnswer);
         return new ResponseEntity<String>("{\"message\": \"Save answer successfully\"}",HttpStatus.OK);
     }
@@ -211,23 +225,14 @@ public class UserAnswerController {
     }
 
     @PutMapping("/useranswers")
-
     public @ResponseBody
-
     ResponseEntity<String> updateUserAnswer(@RequestBody UserAnswerEntity userAnswer) throws IOException{
-
         if(userAnswer.getCommitflag() == false){
-
             userAnswerRepository.save(userAnswer);
-
             return new ResponseEntity<String>("{\"message\": \"Update answer successfully\"}",HttpStatus.OK);
-
         }
-
         return new ResponseEntity<String>("{\"error\": \"Can't update committed answer\"}",HttpStatus.FORBIDDEN);
-
     }
-
 
     @DeleteMapping("/useranswers")
     public @ResponseBody
@@ -236,37 +241,126 @@ public class UserAnswerController {
         HttpStatus status=(userAnswer.iterator().hasNext()!=false)?HttpStatus.NON_AUTHORITATIVE_INFORMATION:HttpStatus.NOT_FOUND;
         if(userAnswer.iterator().hasNext() != false){
             userAnswerRepository.deleteByFormIdAndUserId(form_id,user_id);
+            Integer formId = userAnswer.get(0).getFormId();
+            List<Map<String,Object>> answers = userAnswer.get(0).getAnswers();
+            FormDataEntity formData = formDataRepository.findOne(formId);
+            formData.setAnswerCount(formData.getAnswerCount() - 1);
+            List<Map<String,Object>> data = formData.getData();
+            for(Map<String,Object> map : answers){
+                String ansKey = (String) map.get("key");
+                String anstype =(String) map.get("type");
+                if(anstype.equals("textbox")){
+                    String answer = (String) map.get("answer");
+                    for(Map<String,Object> map1 : data){
+                        String dataKey = (String) map1.get("key");
+                        if(dataKey.equals(ansKey)){
+                            List<String> result = (List<String>) map1.get("result");
+                            for(int i = 0;i< result.size();i++){
+                                if(result.get(i).equals(answer)){
+                                    result.remove(i);
+                                    break;
+                                }
+                            }
+                            map1.put("result",result);
+                            break;
+                        }
+                    }
+                }
+                else if(anstype.equals("number")){
+                    Integer answer = (Integer) map.get("answer");
+                    for(Map<String,Object> map1 : data){
+                        String dataKey = (String) map1.get("key");
+                        if(dataKey.equals(ansKey)){
+                            List<Integer> result = (List<Integer>) map1.get("result");
+                            for(int i = 0;i< result.size();i++){
+                                if(result.get(i).equals(answer)){
+                                    result.remove(i);
+                                    break;
+                                }
+                            }
+                            map1.put("result",result);
+                            break;
+                        }
+                    }
+                }
+                else if(anstype.equals("Time")){
+                    Time answer = (Time) map.get("answer");
+                    for(Map<String,Object> map1 : data){
+                        String dataKey = (String) map1.get("key");
+                        if(dataKey.equals(ansKey)){
+                            List<Time> result = (List<Time>) map1.get("result");
+                            for(int i = 0;i< result.size();i++){
+                                if(result.get(i).equals(answer)){
+                                    result.remove(i);
+                                    break;
+                                }
+                            }
+                            map1.put("result",result);
+                            break;
+                        }
+                    }
+                }
+                else if(anstype.equals("Date")){
+                    Date answer = (Date) map.get("answer");
+                    for(Map<String,Object> map1 : data) {
+                        String dataKey = (String) map1.get("key");
+                        if (dataKey.equals(ansKey)) {
+                            List<Date> result = (List<Date>) map1.get("result");
+                            for(int i = 0;i< result.size();i++){
+                                if(result.get(i).equals(answer)){
+                                    result.remove(i);
+                                    break;
+                                }
+                            }
+                            map1.put("result", result);
+                            break;
+                        }
+                    }
+                }
+                else if(anstype.equals("singleChoice")){
+                    String answer = (String) map.get("answer");
+                    for(Map<String,Object> map1 : data){
+                        String dataKey = (String) map1.get("key");
+                        if(dataKey.equals(ansKey)){
+                            List<Map<String,Object>> result = (List<Map<String,Object>>) map1.get("result");
+                            for(Map<String,Object> map2 :result){
+                                String choiceName = (String) map2.get("choiceName");
+                                Integer choiceCount = (Integer) map2.get("choiceCount");
+                                if(choiceName.equals(answer)){
+                                    choiceCount -= 1;
+                                    map2.put("choiceCount",choiceCount);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                else if(anstype.equals("multiChoice")) {
+                    List<String> answerlist = (List<String>) map.get("answer");
+                    for (Map<String, Object> map1 : data) {
+                        String dataKey = (String) map1.get("key");
+                        if (dataKey.equals(ansKey)) {
+                            List<Map<String, Object>> result = (List<Map<String, Object>>) map1.get("result");
+                            for (Map<String, Object> map2 : result) {
+                                String choiceName = (String) map2.get("choiceName");
+                                Integer choiceCount = (Integer) map2.get("choiceCount");
+                                for(String answer : answerlist){
+                                    if (choiceName.equals(answer)) {
+                                        choiceCount -= 1;
+                                        map2.put("choiceCount", choiceCount);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            formData.setData(data);
+            formDataRepository.save(formData);
             return  new ResponseEntity<String>("{\"message\": \"Delete successfully\"}",status);
         }
         return new ResponseEntity<String>("{\"message\": \"Nothing to delete\"}",HttpStatus.FORBIDDEN);
     }
-
-    @GetMapping("/users/{userid}/answerforms")
-
-    public @ResponseBody
-
-    ResponseEntity<List<FormEntity>> getAnswerforms(@PathVariable Integer userid) throws Exception{
-
-        List<UserAnswerEntity> userAnswers = userAnswerRepository.findByUserId(userid);
-
-        List<FormEntity> answerforms = new ArrayList<FormEntity>();
-
-        FormEntity form;
-
-        for(int i = 0 ; i < userAnswers.size(); i++){
-
-            form = formRepository.findOne(userAnswers.get(i).getFormId());
-
-            answerforms.add(form);
-
-        }
-
-        return new ResponseEntity<List<FormEntity>>(answerforms,HttpStatus.OK);
-
-
-
-    }
-
 
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<Error> FormNotFound(GlobalException e){

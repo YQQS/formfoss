@@ -213,6 +213,13 @@ export class QuestionService {
 
     saveAnswer(formGroup: FormGroup, formObj: DynamicFormModel) {
         let answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
+        return this.http.post(this.answerUrl + '/tempsave', JSON.stringify(answer), {headers: this.jsonHeader})
+            .map(res => res.json())
+            .catch(this.handleError)
+    }
+
+    submitAnswer(formGroup: FormGroup, formObj: DynamicFormModel) {
+        let answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
         return this.http.post(this.answerUrl, JSON.stringify(answer), {headers: this.jsonHeader})
             .map(res => res.json())
             .catch(this.handleError)
