@@ -11,7 +11,6 @@ import {Router} from "@angular/router";
 export class UsersComponent implements OnInit {
     users: User[];
     selectedUser: User;
-    errorMsg: any;
 
     constructor(private userService: UserService,
                 private router: Router) { }
@@ -20,7 +19,7 @@ export class UsersComponent implements OnInit {
         this.userService.getAll()
             .subscribe(users => {
                 this.users = users;
-            }, error => this.errorMsg =error);
+            }, error => alert(error));
     }
 
     onSelect(user: User) : void {
@@ -28,10 +27,16 @@ export class UsersComponent implements OnInit {
     }
 
     deleteUser(id: number): void {
-        this.userService.deleteUser(id).subscribe();
-        this.selectedUser = null;
-        this.getAll();
-        this.router.navigate(['/list']);
+        this.userService.deleteUser(id).subscribe(
+            res => {
+                console.log(res.message);
+
+                this.selectedUser = null;
+                this.getAll();
+                this.router.navigate(['/list']);
+            },
+            error => alert(error)
+        );
     }
 
     gotoDetail() {

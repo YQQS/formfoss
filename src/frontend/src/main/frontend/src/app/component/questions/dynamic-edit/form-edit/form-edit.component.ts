@@ -4,6 +4,7 @@ import {FormGroup} from "@angular/forms";
 import {QuestionService} from "../../../../services/question.service";
 import {ActivatedRoute, ParamMap} from "@angular/router";
 import {Location} from '@angular/common';
+import {QuestionBuilder} from "../../../../services/question-builder";
 
 @Component({
     selector: 'app-form-edit',
@@ -26,7 +27,7 @@ export class FormEditComponent implements OnInit {
             })
             .subscribe((form: DynamicFormModel) => {
                 this.formObject = form;
-                this.formGroup = this.qtService.toEditFromGroup(this.formObject);
+                this.formGroup = QuestionBuilder.toEditFromGroup(this.formObject);
             })
     }
 

@@ -2,15 +2,13 @@ import { QuestionBase } from '../models/question-base';
 import { QuestionTextbox } from '../models/question-textbox';
 import { QuestionSlider } from '../models/question-slider';
 import { QuestionDropDown } from '../models/question-dropdown';
-import { QuestionValidator } from '../models/question-validator';
 import {DynamicFormModel}  from '../models/dynamic-form.model';
 import {AnswerModel} from "../models/answer.model";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AnswerBase} from "../models/answer-base";
+import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AnswerTextbox} from "../models/answer-textbox";
 import {AnswerSlider} from "../models/answer-slider";
-import {AnswerDropdown} from "../models/anwser-dropdown";
-import {instantiateSupportedAnimationDriver} from "@angular/platform-browser/animations/src/providers";
+import {AnswerSingleChoice} from "../models/answer-singleChoice";
+import {AnswerMultiChoice} from "../models/answer-multiChoice";
 
 export class QuestionBuilder {
     static buildQuestion(input: any): QuestionBase<any> {
@@ -66,17 +64,17 @@ export class QuestionBuilder {
         }
         else if (question instanceof QuestionDropDown) {
             if (question.multiple) {
-                return new AnswerDropdown({
-                    type: "multiChoice",
+                return new AnswerMultiChoice({
+                    key: question.key,
+                    answer: (formGroup.value[question.key] as any[])
+                        .filter((item) => item != false)
+                })
+            }
+            else {
+                return new AnswerSingleChoice({
                     key: question.key,
                     answer: formGroup.value[question.key]
-                });
-            } else {
-                return new AnswerDropdown({
-                    type: 'singleChoice',
-                    key: question.key,
-                    answer: formGroup.value[question.key]
-                });
+                })
             }
         }
         else {
@@ -102,7 +100,67 @@ export class QuestionBuilder {
             'maxLength-edit': new FormControl(question.validator.maxLength || 255),
             'type-edit': new FormControl(question.validator.type || 'text'),
             'pattern-edit': new FormControl(question.validator.pattern || ''),
+            'multiple-edit': new FormControl(question['multiple'] || false),
             'options-edit': group
         }));
+    }
+
+    static toFormGroup(questions: QuestionBase<any>[]) {
+        let group = new FormGroup({});
+
+        questions.forEach(question => {
+            let validatorsList: any[] = question.validator.required ?
+                [Validators.required] : [];
+
+            if (question instanceof QuestionTextbox) {
+                if (question.validator.minLength) {
+                    validatorsList.push(Validators.minLength(question.validator.minLength));
+                }
+                if (question.validator.maxLength) {
+                    validatorsList.push(Validators.maxLength(question.validator.maxLength));
+                }
+                if (question.validator.pattern) {
+                    validatorsList.push(Validators.pattern(question.validator.pattern));
+                }
+                if (question.validator.type === 'email') {
+                    validatorsList.push(Validators.email);
+                }
+            }
+            else if (question instanceof QuestionSlider) {
+                if (question.validator.min) {
+                    validatorsList.push(Validators.min(question.validator.min));
+                }
+                if (question.validator.max) {
+                    validatorsList.push(Validators.max(question.validator.max));
+                }
+            }
+
+            let questionFormControl;
+            if (question instanceof QuestionDropDown && question.multiple) {
+                questionFormControl = new FormArray(question.options
+                    .map(opt => new FormControl(opt.key)) );
+            } else {
+                questionFormControl = new FormControl(question.value, validatorsList);
+            }
+            group.addControl(question.key, questionFormControl);
+        });
+
+        return group;
+
+    }
+
+    static toEditFromGroup(form: DynamicFormModel): FormGroup {
+        let questions = form.formItems;
+        let group: FormGroup = new FormGroup({
+            'title': new FormControl(form.title, Validators.required),
+            'desc':  new FormControl(form.desc),
+        });
+
+
+        questions.forEach(question => {
+            QuestionBuilder.addEditFormControl(group, question);
+        });
+
+        return group;
     }
 }

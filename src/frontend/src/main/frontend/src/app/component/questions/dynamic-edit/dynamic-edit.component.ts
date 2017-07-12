@@ -143,7 +143,7 @@ export class DynamicEditComponent implements OnInit {
             this.sync();
         }
         this.isPreview = !this.isPreview;
-        this.form = this.qtService.toFormGroup(this.formObject.formItems);
+        this.form = QuestionBuilder.toFormGroup(this.formObject.formItems);
     }
 
     saveOrUpdate() {
@@ -177,6 +177,7 @@ export class DynamicEditComponent implements OnInit {
                     question.validator.max = values['max-edit'];
                     break;
                 case 'dropdown':
+                    (question as QuestionDropDown).multiple = values['multiple-edit'];
                     let keys: string[] = Object.keys(values['options-edit']);
                     (question as QuestionDropDown).options = [];
                     keys.forEach(key => {

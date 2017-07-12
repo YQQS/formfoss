@@ -3,6 +3,7 @@ import {QuestionService} from "../../../../services/question.service";
 import {FormGroup} from "@angular/forms";
 import {DynamicFormModel} from "../../../../models/dynamic-form.model";
 import {Location} from "@angular/common";
+import {QuestionBuilder} from "../../../../services/question-builder";
 
 @Component({
     selector: 'app-form-new',
@@ -18,7 +19,7 @@ export class FormNewComponent implements OnInit {
 
     ngOnInit() {
         this.formObject = this.qtService.getStartForm();
-        this.formGroup = this.qtService.toEditFromGroup(this.formObject);
+        this.formGroup = QuestionBuilder.toEditFromGroup(this.formObject);
     }
 
     goBack() {
