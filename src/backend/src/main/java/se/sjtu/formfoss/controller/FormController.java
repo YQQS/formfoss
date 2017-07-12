@@ -1,12 +1,12 @@
 package se.sjtu.formfoss.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.exception.Error;
+
 import se.sjtu.formfoss.exception.GlobalException;
 import se.sjtu.formfoss.model.FormEntity;
 import se.sjtu.formfoss.model.FormDataEntity;

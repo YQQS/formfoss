@@ -1,6 +1,5 @@
 package se.sjtu.formfoss.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,7 +81,6 @@ public class UserController {
             return new ResponseEntity<String>("{\"code\": 404,\"message\": \"Delete successfully\"}",status);
         return new ResponseEntity<String>("{\"message\": \"Delete successfully\"}",status);
     }
-
 
     //create a user
     @PostMapping(path="/users")

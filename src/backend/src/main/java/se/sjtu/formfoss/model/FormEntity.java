@@ -21,7 +21,10 @@ import java.util.Map;
 @Document(collection = "FormEntity")
 public class FormEntity {
     @Id
+<<<<<<< HEAD
+=======
     @GeneratedValue
+>>>>>>> d327addc45247d271260f12f39c96431feb6b418
     private Integer formId;
     private Integer userId;
     private String title;

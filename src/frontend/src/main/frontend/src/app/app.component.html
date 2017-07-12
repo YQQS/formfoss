@@ -14,6 +14,7 @@
         <button md-button (click)="sidebar.toggle()">
             <md-icon>dehaze</md-icon>
         </button>
+
         
         <md-nav-list>
             <button md-button color="" routerLink="/prototype" routerLinkActive="active">
@@ -26,12 +27,12 @@
             </button>
         </md-nav-list>
         
+
         <button md-button class="example-button-login" routerLink="/login" color="accent" routerLinkActive="active">
             <md-icon>person</md-icon>
             Login
         </button>
     </md-toolbar>
-    
-    
+
     <router-outlet></router-outlet>
 </md-sidenav-container>

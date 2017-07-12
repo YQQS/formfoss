@@ -28,6 +28,7 @@ export class UsersComponent implements OnInit {
     }
 
     deleteUser(id: number): void {
+
         this.userService.deleteUser(id).subscribe();
         this.selectedUser = null;
         this.getAll();
