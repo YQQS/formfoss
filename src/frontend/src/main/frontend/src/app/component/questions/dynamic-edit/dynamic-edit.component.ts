@@ -75,13 +75,67 @@ export class DynamicEditComponent implements OnInit {
         this.formGroup.removeControl(question.key);
     }
 
+    buildQuestion(question: QuestionBase<any>) {
+        let pos = this.formObject.formItems.indexOf(question);
+        this.formObject.formItems[pos] =
+            QuestionBuilder.buildQuestion(question);
+
+        // restore options from formGroup
+        if (this.formObject.formItems[pos] instanceof QuestionDropDown) {
+            (this.formObject.formItems[pos] as QuestionDropDown).options = [];
+            let options = this.formGroup.get(question.key).value['options-edit'];
+            Object.keys(options).forEach(
+               key => {
+                   (this.formObject.formItems[pos] as QuestionDropDown)
+                       .options.push({
+                            key: key,
+                            value: options[key]
+                   })
+               }
+           )
+        }
+    }
+
     onSubmit() {
 
     }
 
+    addOption(question: QuestionDropDown) {
+        let index: number = this.formObject.formItems.indexOf(question);
+        let size: number = (<QuestionDropDown> this.formObject.formItems[index]).options.length;
+        let newKey: number;
+        if (size === 0) {
+            newKey = 1;
+        } else {
+            newKey = parseInt((<QuestionDropDown> this.formObject.formItems[index]).options[size - 1]
+                .key.replace(/[^0-9]/g, '')) + 1;
+        }
+        let keyStr: string = `option${newKey}`;
+
+        (this.formGroup.get(question.key).get('options-edit') as FormGroup)
+            .addControl(keyStr, new FormControl('Option Description'));
+
+        (<QuestionDropDown> (this.formObject.formItems[index])).options.push({
+            key: keyStr,
+            value: 'Option Description'
+        });
+
+    }
+
+    delOption(question: QuestionBase<any>, pos: number) {
+        let index = this.formObject.formItems.indexOf(question);
+        let optKey = (<QuestionDropDown> question).options[pos].key;
+
+        (<QuestionDropDown> this.formObject.formItems[index]).options.splice(pos, 1);
+        (this.formGroup.get(question.key).get('options-edit') as FormGroup)
+            .removeControl(optKey);
+    }
+
+    trackOption(index: number, option: {key: string, value: string}) {
+        return option.key;
+    }
+
     reset() {
-        this.formObject = null;
-        this.ngOnInit();
     }
 
     preview(){
@@ -123,7 +177,14 @@ export class DynamicEditComponent implements OnInit {
                     question.validator.max = values['max-edit'];
                     break;
                 case 'dropdown':
-                    (<QuestionDropDown> question).options = values['options-edit'];
+                    let keys: string[] = Object.keys(values['options-edit']);
+                    (question as QuestionDropDown).options = [];
+                    keys.forEach(key => {
+                        (question as QuestionDropDown).options.push({
+                            key: key,
+                            value: values['options-edit'][key]
+                        });
+                    });
                     break;
             }
         })

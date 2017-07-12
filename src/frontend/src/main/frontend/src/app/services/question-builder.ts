@@ -85,17 +85,24 @@ export class QuestionBuilder {
     }
 
     static addEditFormControl(formGroup: FormGroup, question: QuestionBase<any>) {
+        let group: FormGroup = new FormGroup({});
+        if (question.controlType === 'dropdown') {
+            (question as QuestionDropDown).options.forEach(option => {
+                group.addControl(option.key, new FormControl(option.value || '', Validators.required));
+            })
+        }
+
         formGroup.addControl(question.key, new FormGroup({
             'title-edit': new FormControl(question.title, Validators.required),
             'controlType-edit': new FormControl(question.controlType, Validators.required),
-            'options-edit': new FormControl(question['options'] || [] ),
             'required-edit': new FormControl(question.validator.required || false),
             'min-edit': new FormControl(question.validator.min || 0),
             'max-edit': new FormControl(question.validator.max || 100),
             'minLength-edit': new FormControl(question.validator.minLength || 10),
             'maxLength-edit': new FormControl(question.validator.maxLength || 255),
             'type-edit': new FormControl(question.validator.type || 'text'),
-            'pattern-edit': new FormControl(question.validator.pattern || '')
+            'pattern-edit': new FormControl(question.validator.pattern || ''),
+            'options-edit': group
         }));
     }
 }
