@@ -1,7 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {CdkTableModule} from '@angular/cdk';
+import {MdTableModule} from '@angular/material';
 
-import { AppComponent } from './app.component';
+import {AppComponent } from './app.component';
 import {UserService} from './services/user.service';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
@@ -32,7 +34,6 @@ import { DynamicFormComponent } from './questions/dynamic-form/dynamic-form.comp
 import { DynamicQuestionComponent } from './questions/dynamic-question/dynamic-question.component';
 import { MyformComponent } from './myform/myform.component';
 import { DynamicEditComponent } from './questions/dynamic-edit/dynamic-edit.component';
-import {QuestionService} from "./services/question.service";
 
 @NgModule({
     declarations: [
@@ -45,10 +46,13 @@ import {QuestionService} from "./services/question.service";
         FormPrototypeComponent,
         DynamicFormComponent,
         DynamicQuestionComponent,
-        MyformComponent
+        MyformComponent,
         DynamicEditComponent
+
     ],
     imports: [
+        CdkTableModule,
+        MdTableModule,
         BrowserModule,
         HttpModule,
         AppRoutingModule,
@@ -80,7 +84,7 @@ import {QuestionService} from "./services/question.service";
         MdTooltipModule,
         MdSnackBarModule
     ],
-    providers: [UserService, QuestionService],
+    providers: [UserService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
