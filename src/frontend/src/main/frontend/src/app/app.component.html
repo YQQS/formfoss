@@ -1,5 +1,5 @@
 <md-sidenav-container>
-    <md-sidenav #sidebar class="example-side" mode="push">
+    <md-sidenav #sidebar class="example-side" mode="side">
         <button md-button class="example-button" >
             <md-icon>build</md-icon>
             frontend test
@@ -9,27 +9,30 @@
             backend test
         </button>
     </md-sidenav>
-
+    
     <md-toolbar color="primary">
         <button md-button (click)="sidebar.toggle()">
             <md-icon>dehaze</md-icon>
         </button>
-        <span>Hi {{title}} start here!!</span>
+
+        
+        <md-nav-list>
+            <button md-button color="" routerLink="/prototype" routerLinkActive="active">
+                <md-icon>stars</md-icon>
+                prototype
+            </button>
+            <button md-button color="" routerLink="/questionList" routerLinkActive="active">
+                <md-icon>cloud</md-icon>
+                questions
+            </button>
+        </md-nav-list>
+        
+
         <button md-button class="example-button-login" routerLink="/login" color="accent" routerLinkActive="active">
             <md-icon>person</md-icon>
             Login
         </button>
     </md-toolbar>
 
-    <nav>
-        <button md-button routerLink="/form" routerLinkActive="active">
-            <md-icon>history</md-icon>
-            Example Form
-        </button>
-        <button md-button color="warn" routerLink="/prototype" routerLinkActive="active">
-            <md-icon>stars</md-icon>
-            prototype
-        </button>
-    </nav>
     <router-outlet></router-outlet>
 </md-sidenav-container>

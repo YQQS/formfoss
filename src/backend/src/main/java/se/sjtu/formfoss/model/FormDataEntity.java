@@ -3,6 +3,7 @@ package se.sjtu.formfoss.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 import java.util.Map;
@@ -11,9 +12,11 @@ import java.util.Map;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Document(collection = "FormDataEntity")
 public class FormDataEntity {
     @Id
     int formId;
+    int answerCount;
     List<Map<String,Object>> data;
 
     public void setData(List<Map<String, Object>> data) {
@@ -30,6 +33,14 @@ public class FormDataEntity {
 
     public List<Map<String, Object>> getData() {
         return data;
+    }
+
+    public int getAnswerCount() {
+        return answerCount;
+    }
+
+    public void setAnswerCount(int answerCount) {
+        this.answerCount = answerCount;
     }
 
     @Override

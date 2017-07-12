@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {User} from "../models/user";
-import {UserService} from "../services/user.service";
+import {User} from "../../models/user";
+import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -11,15 +11,16 @@ import {Router} from "@angular/router";
 export class UsersComponent implements OnInit {
     users: User[];
     selectedUser: User;
+    errorMsg: any;
 
     constructor(private userService: UserService,
                 private router: Router) { }
 
     getAll(): void {
         this.userService.getAll()
-            .then(users => {
+            .subscribe(users => {
                 this.users = users;
-            });
+            }, error => this.errorMsg =error);
     }
 
     onSelect(user: User) : void {
@@ -27,7 +28,8 @@ export class UsersComponent implements OnInit {
     }
 
     deleteUser(id: number): void {
-        this.userService.deleteUser(id);
+
+        this.userService.deleteUser(id).subscribe();
         this.selectedUser = null;
         this.getAll();
         this.router.navigate(['/list']);

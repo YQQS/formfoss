@@ -1,0 +1,23 @@
+<div align="center">
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+        <md-toolbar color="warn" align="center" class="question-header">
+            <p class="header-title">{{formObject.title}}</p>
+        </md-toolbar>
+        <p class="header-desc">{{formObject.desc}}</p>
+
+        <div *ngFor="let question of formObject.formItems" class="form-row">
+            <dynamic-question [question]="question" [form]="form"></dynamic-question>
+        </div>
+
+        <div class="form-row">
+            <button md-raised-button color="primary" type="submit" [disabled]="form.invalid">Submit</button>
+            <button md-raised-button color="accent" (click)="save()" [disabled]="form.pristine">Save</button>
+            <button md-raised-button color="warn" type="reset" [disabled]="form.untouched">Reset</button>
+        </div>
+    </form>
+
+    <div *ngIf="payLoad" class="form-row">
+        <strong>Saved the following values</strong><br>{{payLoad}}
+    </div>
+
+</div>

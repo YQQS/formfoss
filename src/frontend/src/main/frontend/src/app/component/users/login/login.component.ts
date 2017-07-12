@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { UserService } from '../services/user.service';
+import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
 
@@ -15,16 +15,11 @@ export class LoginComponent implements OnInit {
                 private router: Router
                ) { }
 
-    login(username: string, password: string) {
-        return this.userService.login(username, password)
-            .toPromise()
-            .then(res => {
-                if (res.errorMsg) {
-                    alert(res.errorMsg);
-                } else {
-                    this.router.navigate(['/list']);
-                }
-                return res;
+    login(input: any) {
+        return this.userService.login(input.userName, input.userPassword)
+            .subscribe(res => {
+                alert(res['message']);
+                this.router.navigate(['/list']);
             });
     }
     ngOnInit() {

@@ -1,0 +1,83 @@
+<div class="container" align="center">
+    <h1>Create Your Account</h1>
+    <form novalidate [formGroup]="registerForm" (ngSubmit)="register()">
+        <div class="form-group">
+            <md-input-container>
+                <input formControlName="userName"
+                        mdInput placeholder="username"
+                        type="text" class="form-control"/><br>
+            </md-input-container>
+            <div class="alter alter-warn"
+                 *ngIf="registerForm.get('userName').errors && !registerForm.get('userName').pristine">
+                <div *ngIf="registerForm.get('userName').hasError('required')">
+                    username required.
+                </div>
+                <div *ngIf="registerForm.get('userName').hasError('minlength')">
+                    username no less than 3 bytes
+                </div>
+                <div *ngIf="registerForm.get('userName').hasError('maxlength')">
+                    username no more than 32 bytes
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <md-input-container>
+                <input mdInput placeholder="password"
+                       formControlName="userPassword"
+                       type="password" class="form-control" required />
+            </md-input-container>
+            <div class="alter alter-warn"
+                 *ngIf="registerForm.get('userPassword').errors && !registerForm.get('userPassword').pristine">
+                <div *ngIf="registerForm.get('userPassword').hasError('required')">
+                    password required
+                </div>
+                <div *ngIf="registerForm.get('userPassword').hasError('minlength')">
+                    password no less than 8 bytes
+                </div>
+                <div *ngIf="registerForm.get('userPassword').hasError('maxlength')">
+                    password no more than 64 bytes
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <md-input-container>
+                <input mdInput placeholder="repeat your password"
+                       formControlName="userPasswordRepeat"
+                       type="password" class="form-control"><br>
+            </md-input-container>
+            <div class="alter alter-warn"
+                 *ngIf="registerForm.get('userPasswordRepeat').hasError('required') &&
+                 !registerForm.get('userPasswordRepeat').pristine">
+                please repeat your password
+            </div>
+            <div class="alter alter-warn"
+                 *ngIf="registerForm.hasError('mismatch')">
+                password not match
+            </div>
+        </div>
+        <div class="form-group">
+            <md-input-container>
+                <input mdInput placeholder="email"
+                       formControlName="userEmail"
+                       type="email" class="form-control" />
+            </md-input-container>
+            <div class="alter alter-warn"
+                    *ngIf="registerForm.get('userEmail').errors && !registerForm.get('userEmail').pristine">
+                <div *ngIf="registerForm.get('userEmail').hasError('required')">
+                    email address required
+                </div>
+                <div *ngIf="registerForm.get('userEmail').hasError('email') && registerForm.get('userEmail').value.length > 0 ">
+                    not a valid email address
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <button md-raised-button color="primary" type="submit" class="btn btn-success"
+                    [disabled]="registerForm.invalid">
+                register</button>
+            <a routerLink="/login" md-button >have a accout?login</a>
+        </div>
+    </form>
+</div>
