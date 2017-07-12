@@ -50,21 +50,20 @@
                         </md-input-container><br>
                     </div><br>
                     
-                    <div class="edit-select">
-                        <p class="edit-type-text">question type</p>
-                        <md-select formControlName="controlType-edit" >
-                            <md-option *ngFor="let opt of controlTypes" [value]="opt">{{opt}}</md-option>
-                        </md-select>
-                    </div>
-                    <div class="selection-required">
-                        <md-slide-toggle color="primary" formControlName="required-edit"
-                        >required</md-slide-toggle>
-                        <md-slide-toggle color="accent" >extra validator</md-slide-toggle>
-                    </div>
-                    
                     <div [ngSwitch]="question.controlType" >
-                        <div *ngSwitchCase="'dropdown'">
-                            hello
+                        <div *ngSwitchCase="'dropdown'" formGroupName="options-edit">
+                            <button md-icon-button (click)="addOption(question)" >
+                                <md-icon>add</md-icon>
+                            </button>
+                            <div *ngFor="let opt of question?.options; let i = index">
+                                <md-input-container>
+                                    <span mdPrefix >{{i+1}}. </span>
+                                    <input mdInput [placeholder]="opt?.key" [value]="opt.value" [formControlName]="opt.key">
+                                    <button mdSuffix md-icon-button (click)="delOption(question, i)">
+                                        <md-icon>delete</md-icon>
+                                    </button>
+                                </md-input-container>
+                            </div>
                         </div>
                         
                         <div *ngSwitchCase="'slider'" class="validator number">
@@ -92,6 +91,18 @@
                                        formControlName="pattern-edit">
                             </md-input-container>
                         </div>
+                    </div>
+                    
+                    <div class="edit-select">
+                        <p class="edit-type-text">question type</p>
+                        <md-select formControlName="controlType-edit" [(ngModel)]="question.controlType" (change)="buildQuestion(question)">
+                            <md-option *ngFor="let opt of controlTypes" [value]="opt">{{opt}}</md-option>
+                        </md-select>
+                    </div>
+                    <div class="selection-required">
+                        <md-slide-toggle color="primary" formControlName="required-edit"
+                        >required</md-slide-toggle>
+                        <md-slide-toggle color="accent" >extra validator</md-slide-toggle>
                     </div>
                 
                 </md-card-content>

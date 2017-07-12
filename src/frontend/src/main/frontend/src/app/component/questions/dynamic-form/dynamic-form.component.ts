@@ -28,11 +28,15 @@ export class DynamicFormComponent implements OnInit {
 
     onSubmit() {
         this.payLoad = JSON.stringify(this.form.value);
+        this.qtService.submitAnswer(this.form, this.formObject)
+            .subscribe(res => alert(res.message),
+                error => alert(error))
     }
 
     save() {
         this.qtService.saveAnswer(this.form, this.formObject)
-            .subscribe(res => alert(res.message));
+            .subscribe(res => alert(res.message),
+                error => alert(error));
     }
 
 }
