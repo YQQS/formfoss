@@ -37,10 +37,12 @@
                     <md-card-title>
                         the {{question.order}}th question
                     </md-card-title>
+                    <!--
                     <md-card-subtitle>
                         {{question.key}}
                         {{formGroup.get(question.key).value | json}}
                     </md-card-subtitle>
+                    -->
                 </md-card-header>
                 <md-card-content>
                     <div class="edit-question-title">
@@ -51,11 +53,12 @@
                     </div><br>
                     
                     <div [ngSwitch]="question.controlType" >
-                        <div *ngSwitchCase="'dropdown'" formGroupName="options-edit">
+                        <div *ngSwitchCase="'dropdown'" >
                             <button md-icon-button (click)="addOption(question)" >
                                 <md-icon>add</md-icon>
                             </button>
-                            <div *ngFor="let opt of question?.options; let i = index">
+                            <md-slide-toggle formControlName="multiple-edit">allow multi select</md-slide-toggle>
+                            <div *ngFor="let opt of question?.options; let i = index" formGroupName="options-edit">
                                 <md-input-container>
                                     <span mdPrefix >{{i+1}}. </span>
                                     <input mdInput [placeholder]="opt?.key" [value]="opt.value" [formControlName]="opt.key">
@@ -113,10 +116,12 @@
             </md-card>
         </div>
         
+        <!--
         <div>
             <p>things from fromObject</p>
             {{formObject | json}}
         </div>
+        -->
     
     </form>
 </div>

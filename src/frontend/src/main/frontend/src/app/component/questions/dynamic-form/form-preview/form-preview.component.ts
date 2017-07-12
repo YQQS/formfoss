@@ -5,6 +5,7 @@ import {ActivatedRoute, ParamMap} from "@angular/router";
 import {DynamicFormModel} from "../../../../models/dynamic-form.model";
 import {QuestionService} from "../../../../services/question.service";
 import {FormGroup} from "@angular/forms";
+import {QuestionBuilder} from "../../../../services/question-builder";
 
 @Component({
     selector: 'app-form-preview',
@@ -26,8 +27,7 @@ export class FormPreviewComponent implements OnInit {
             })
             .subscribe((form: DynamicFormModel) => {
                 this.formObject = form;
-                this.form = this.qtService.toFormGroup(this.formObject.formItems);
-                console.log(this.formObject);
+                this.form = QuestionBuilder.toFormGroup(this.formObject.formItems);
             });
     }
 

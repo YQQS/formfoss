@@ -23,3 +23,20 @@
 .question-slider {
     width: 50%;
 }
+
+.multi-select {
+    display: flex;
+    flex-flow: column;
+    align-content: center;
+    align-items: center;
+    height: auto;
+}
+
+.single-select {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.radio-button {
+    margin: 5px;
+}
