@@ -18,11 +18,10 @@ e.g:
     },
     "questions": [
         {
-            "id": 1,
             "key": "keyname",
             "title": "item title",
             "desc": "item description",
-            "type": "textbox",
+            "controlType": "textbox",
             "inputType": "text",
             "order": 1,
             "validator": {
@@ -33,11 +32,10 @@ e.g:
             }
         },
         {
-            "id": 2,
             "key": "score",
             "title": "another item title",
             "desc": "another item description",
-            "type": "slider",
+            "controlType": "slider",
             "order": 2,
             "validator": {
                 "min": 2,
@@ -46,11 +44,10 @@ e.g:
             }
         },
         {
-            "id": 3,
             "key": "select",
             "title": "yet another title",
             "desc": "yet another descript",
-            "type": "dropdown",
+            "controlType": "dropdown",
             "order": 3,
             "validator": {
                 "required": true
@@ -60,10 +57,8 @@ e.g:
 }
 ```
 ### description
-- id: the unique id for the form
-  + type: number
 
-- key: the key name maped by Angular FormGroup
+- key: the key name maped by Angular FormGroup, should be unique
     + type: string
 
 - title: form title
@@ -128,17 +123,17 @@ e.g:
     "answerCount": 40,
     "data": [
         {
-            "id": 1,
+            "key": "question1",
             "type": "string",
             "result": ["ace","jack","mac","linus"]
         },
         {
-            "id": 2,
+            "key": "question2",
             "type": "number",
             "result": [1,2,3]
         },
         {
-            "id": 3,
+            "key":"question3",
             "type": "multiChoice",
             "result": [
                 {
@@ -155,8 +150,8 @@ e.g:
 }
 ```
 ### description
-- id: the id match corresponding formObject
-  + type: number
+- key: the unique key match corresponding formObject
+  + type: string
 - answerCount: how many times the form has been answered
   + type: number
   + default: 0
@@ -178,36 +173,36 @@ this json object represent answers for a specified form inputed by a specified u
 e.g :
 ```json
 {
-    "id": 1,
+    "answerId": 1,
     "user_id": 2,
     "answers": [
         {
-            "id": 1,
+            "key": "question1",
             "type": "string",
             "answer": "ace"
         },
         {
-            "id": 2,
+            "key": "question2",
             "type": "number",
             "answer": 2
         },
         {
-            "id": 3,
+            "key": "question3",
             "type": "multiChoice",
-            "answer": "choice1"
+            "answer": ["choice1"]
         }
     ]
 }
 ```
 ### description
-+ id: the corresponding form
++ answerId: the corresponding form
     - type: number
 + user_id: the corresponding user id to this userAnswer
     - type: number
 + answers: answers user input for a corresponding form
-    - id: the form item id
-        + type: number
-    - type: the input type
+    - key: the form item key
+        + type: string
+    - type: the input type(controlType)
         + type: string
         + valid type: "string" | "number" | "Time" | "Date" | "multiChoice" | "singleChoice"
 

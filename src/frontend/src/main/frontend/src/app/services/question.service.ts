@@ -1,11 +1,17 @@
 import {Injectable} from "@angular/core";
-import {QuestionBase} from "../questions/question-base";
-import {QuestionDropDown} from "../questions/question-dropdown";
-import {QuestionTextbox} from '../questions/question-textbox'
-import {QuestionSlider} from "../questions/question-slider";
+import {QuestionBase} from "../models/question-base";
+import {QuestionDropDown} from "../models/question-dropdown";
+import {QuestionTextbox} from '../models/question-textbox'
+import {QuestionSlider} from "../models/question-slider";
 import { QuestionBuilder } from './question-builder';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {DynamicFormModel} from "../questions/dynamic-form.model";
+import {DynamicFormModel} from "../models/dynamic-form.model";
+import {Http, Headers, RequestOptions, Response, RequestOptionsArgs} from '@angular/http';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/observable/throw';
+import {AnswerModel} from "../models/answer.model";
 
 @Injectable()
 export class QuestionService {
@@ -13,7 +19,7 @@ export class QuestionService {
         title: 'Title',
         desc: 'Put your description here',
         settings: {},
-        questions: [
+        formItems: [
             {
                 key: 'question1',
                 controlType: 'textbox',
@@ -33,7 +39,7 @@ export class QuestionService {
         controlType: 'textbox',
         title: 'Template Title',
         value: '',
-        order: 1,
+        order: -1,
         inputType: 'text',
         validator: {}
     };
@@ -42,7 +48,7 @@ export class QuestionService {
         title: 'the first dynamic form',
         desc: 'welcome here',
         settings: {},
-        questions: [
+        formItems: [
             {
                 key: 'brave',
                 title: 'Bravery Rating',
@@ -109,23 +115,28 @@ export class QuestionService {
         ]
     };
 
+    private url = '/forms';
+    private answerUrl = '/useranswers';
+    private dataUrl = '/formdata';
+    private jsonHeader = new Headers({'Content-Type': 'application/json'});
+
+    constructor(private http: Http) {}
+
     getDynamicFormModel() {
         return QuestionBuilder.buildDynamicForm(this.dynamicForm);
     }
 
     getQuestions() {
 //        return this.questions.sort((a,b) => a.order - b.order)
-        return this.dynamicForm.questions
+        return this.dynamicForm.formItems
             .map(qust => QuestionBuilder.buildQuestion(qust))
             .sort((a, b) => a.order - b.order);
     }
 
-    getOneQuestion(order?: number) {
+    getOneQuestion(key: string, order: number) {
         let question: QuestionBase<any> =  QuestionBuilder.buildQuestion(this.questionTemp);
-        if (order) {
-            question.order = order + 1;
-            question.key = `question${ order+1 }`;
-        }
+        question.order = order ;
+        question.key = key;
         return question;
     }
 
@@ -171,22 +182,77 @@ export class QuestionService {
 
     }
 
-    toFromEditGroup(form: DynamicFormModel) {
-        let questions = form.questions;
-        let group: FormGroup = new FormGroup({});
-        let count: number = 0;
-
-        questions.forEach(question => {
-            group.addControl(question.key, new FormGroup({
-                'title-edit': new FormControl(question.title, Validators.required),
-                'controlType-edit': new FormControl('dropdown', Validators.required)
-            }) );
-        });
-
-        return new FormGroup({
+    toEditFromGroup(form: DynamicFormModel): FormGroup {
+        let questions = form.formItems;
+        let group: FormGroup = new FormGroup({
             'title': new FormControl(form.title, Validators.required),
             'desc':  new FormControl(form.desc),
-            'questions': group
         });
+
+
+        questions.forEach(question => {
+            QuestionBuilder.addEditFormControl(group, question);
+        });
+
+        return group;
+    }
+
+
+
+    saveOrUpdate(form: DynamicFormModel) {
+        if (form.formId) {
+            return this.http.put(this.url, JSON.stringify(form), {headers: this.jsonHeader})
+                .map(res => res.json())
+                .catch(this.handleError)
+        } else {
+            return this.http.post(this.url, JSON.stringify(form), {headers: this.jsonHeader})
+                .map(res => res.json())
+                .catch(this.handleError);
+        }
+    }
+
+    saveAnswer(formGroup: FormGroup, formObj: DynamicFormModel) {
+        let answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
+        return this.http.post(this.answerUrl + '/tempsave', JSON.stringify(answer), {headers: this.jsonHeader})
+            .map(res => res.json())
+            .catch(this.handleError)
+    }
+
+    submitAnswer(formGroup: FormGroup, formObj: DynamicFormModel) {
+        let answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
+        return this.http.post(this.answerUrl, JSON.stringify(answer), {headers: this.jsonHeader})
+            .map(res => res.json())
+            .catch(this.handleError)
+    }
+
+    getAll() {
+        return this.http.get(this.url)
+            .map(res => res.json() as DynamicFormModel[])
+            .catch(this.handleError)
+    }
+
+    getForm(id: number): Observable<DynamicFormModel> {
+        return this.http.get(this.url + '/' + id)
+            .map(res => QuestionBuilder.buildDynamicForm(res.json()))
+            .catch(this.handleError)
+    }
+
+    delete(id: number) {
+        return this.http.delete(this.url + '/' + id)
+            .map(res => res.json())
+            .catch(this.handleError)
+    }
+
+    private handleError(error: Response | any)  {
+        let errMsg: string;
+        if (error instanceof Response) {
+            console.error(error.text());
+            const body = error.json() || '';
+            const err = body.errorMsg || JSON.stringify(error);
+            errMsg =`${error.status} - ${error.statusText || ''}: ${err}`;
+        } else {
+            errMsg = error.message ? error.message : error.toString();
+        }
+        return Observable.throw(errMsg);
     }
 }

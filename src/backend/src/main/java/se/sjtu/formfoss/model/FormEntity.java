@@ -2,6 +2,7 @@ package se.sjtu.formfoss.model;
 
 import com.fasterxml.jackson.annotation.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -17,6 +18,7 @@ import java.util.Map;
 //@Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Document(collection = "FormEntity")
 public class FormEntity {
     @Id
     @GeneratedValue
@@ -82,7 +84,7 @@ public class FormEntity {
     }
 
     public void setFormItems(List<Map<String,Object>> formItems) {
-        this.formItems = formItems;
+        this.formItems= formItems;
     }
 
 

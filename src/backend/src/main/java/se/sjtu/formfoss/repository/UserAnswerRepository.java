@@ -12,5 +12,6 @@ import java.util.List;
 public interface UserAnswerRepository extends MongoRepository<UserAnswerEntity,Integer>{
     List<UserAnswerEntity> findByFormIdAndUserId(Integer formid, Integer userid);
     List<UserAnswerEntity> findByFormId(Integer formid);
+    List<UserAnswerEntity> findByUserId(Integer id);
     void deleteByFormIdAndUserId(Integer form_id, Integer user_id);
 }
