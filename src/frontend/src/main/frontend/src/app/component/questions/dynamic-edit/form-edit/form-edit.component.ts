@@ -26,7 +26,7 @@ export class FormEditComponent implements OnInit {
             })
             .subscribe((form: DynamicFormModel) => {
                 this.formObject = form;
-                this.formGroup = this.qtService.toFromEditGroup(this.formObject);
+                this.formGroup = this.qtService.toEditFromGroup(this.formObject);
             })
     }
 

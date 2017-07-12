@@ -1,16 +1,19 @@
-<md-toolbar>
-    <button md-raised-button color="primary" (click)="saveOrUpdate()">
-        <md-icon>save</md-icon>
-        Save
-    </button>
-    <button  md-raised-button color="accent" (click)="preview()" >
+<div>
+    <md-toolbar>
+        <button md-raised-button color="primary" (click)="saveOrUpdate()">
+            <md-icon>save</md-icon>
+            Save
+        </button>
+        <button  md-raised-button color="accent" (click)="preview()" >
             <md-icon>visibility</md-icon>
             <label *ngIf="!isPreview">preview</label>
             <label *ngIf="isPreview">back edit</label>
-    </button>
-    <button md-raised-button color="warn" (click)="reset()">
-        <md-icon>refresh</md-icon>Reset</button>
-</md-toolbar>
+        </button>
+        <button md-raised-button color="warn" (click)="reset()">
+            <md-icon>refresh</md-icon>Reset</button>
+    </md-toolbar>
+</div>
+
 <div align="center" *ngIf="!isPreview">
     <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
         <div>
@@ -27,30 +30,70 @@
             </div>
         </div>
         
-        <div formGroupName="formItems">
-            <md-card *ngFor="let question of formObject.formItems; let i = index"
+        <div>
+            <md-card *ngFor="let question of formObject.formItems; trackBy: trackByKey"
                      [formGroupName]="question.key" class="edit-question">
                 <md-card-header>
                     <md-card-title>
                         the {{question.order}}th question
                     </md-card-title>
                     <md-card-subtitle>
-                        {{formGroup.get('formItems').get(question.key).value | json}}
+                        {{question.key}}
+                        {{formGroup.get(question.key).value | json}}
                     </md-card-subtitle>
                 </md-card-header>
                 <md-card-content>
                     <div class="edit-question-title">
                         <md-input-container class="edit-question-title-input">
-                            <input mdInput formControlName="title-edit" [value]="question.title" placeholder="put a title">
+                            <input mdInput formControlName="title-edit"
+                                   [value]="question.title" placeholder="put a title">
                         </md-input-container><br>
                     </div><br>
                     
                     <div class="edit-select">
                         <p class="edit-type-text">question type</p>
-                        <md-select formControlName="controlType-edit" #typeTag>
+                        <md-select formControlName="controlType-edit" >
                             <md-option *ngFor="let opt of controlTypes" [value]="opt">{{opt}}</md-option>
                         </md-select>
                     </div>
+                    <div class="selection-required">
+                        <md-slide-toggle color="primary" formControlName="required-edit"
+                        >required</md-slide-toggle>
+                        <md-slide-toggle color="accent" >extra validator</md-slide-toggle>
+                    </div>
+                    
+                    <div [ngSwitch]="question.controlType" >
+                        <div *ngSwitchCase="'dropdown'">
+                            hello
+                        </div>
+                        
+                        <div *ngSwitchCase="'slider'" class="validator number">
+                            <md-input-container>
+                                <input mdInput formControlName="min-edit"
+                                       placeholder="min value">
+                            </md-input-container>
+                            <md-input-container>
+                                <input mdInput formControlName="max-edit"
+                                       placeholder="max value">
+                            </md-input-container>
+                        </div>
+                        
+                        <div *ngSwitchCase="'textbox'" class="validator textbox">
+                            <md-input-container>
+                                <input mdInput placeholder="min Length"
+                                       formControlName="minLength-edit">
+                            </md-input-container>
+                            <md-input-container>
+                                <input mdInput placeholder="max Length"
+                                       formControlName="maxLength-edit">
+                            </md-input-container>
+                            <md-input-container>
+                                <input mdInput placeholder="pattern to match"
+                                       formControlName="pattern-edit">
+                            </md-input-container>
+                        </div>
+                    </div>
+                
                 </md-card-content>
                 <md-card-actions>
                     <button md-raised-button color="primary" (click)="addQuestion(question)">Add question</button>
@@ -60,8 +103,8 @@
         </div>
         
         <div>
-            <p>things from fromGroup</p>
-            {{formGroup.getRawValue() | json}}
+            <p>things from fromObject</p>
+            {{formObject | json}}
         </div>
     
     </form>
