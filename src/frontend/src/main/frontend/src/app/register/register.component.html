@@ -1,0 +1,38 @@
+<div class="container">
+    <h1>Create Your Account</h1>
+    <form #register-form="ngForm" (ngSubmit)="register()">
+        <div class="form-group">
+            <md-input-container>
+                <input #userName [(ngModel)]="username" mdInput placeholder="username"
+                       (keyup)="validUserName()" type="text" class="form-control" required /><br>
+            </md-input-container>
+            <div [hidden]="valid || pristine" class="alter alter-danger">
+                Oops, someone else used this username
+            </div>
+        </div>
+        <div class="form-group">
+            <md-input-container>
+                <input #userPassword [(ngModel)]="password" mdInput placeholder="password"
+                       type="password" class="form-control" required />
+            </md-input-container>
+        </div>
+        <div class="form-group">
+            <md-input-container>
+                <input [(ngModel)]="passwordRepeat" mdInput placeholder="repeat your password"
+                       type="password" class="form-control" required><br>
+            </md-input-container>
+        </div>
+        <div class="form-group">
+            <md-input-container>
+                <input #userEmail [(ngModel)]="email" mdInput placeholder="email"
+                       type="email" class="form-control" required />
+            </md-input-container>
+        </div>
+
+        <div>
+            <button md-raised-button color="primary" type="submit"
+                    (click)="register()" [diabled]="!valid" >register</button>
+            <a routerLink="/login" md-button >have a accout?login</a>
+        </div>
+    </form>
+</div>

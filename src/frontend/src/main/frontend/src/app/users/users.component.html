@@ -1,0 +1,27 @@
+<h2>edit registered users</h2>
+<ul class="users">
+    <li *ngFor="let user of users" (click)="onSelect(user)"
+        [class.selected]="user === selectedUser" >
+    <span class="badge">{{user.userId}}</span>
+    <span>{{user.userName}}</span>
+    <button md-raised-button color="primary" class="example-button" (click)="gotoDetail()">detail</button>
+    <button md-button class="delete-button" color="warn" (click)="deleteUser(user.userId)" >delete</button>
+    </li>
+</ul>
+
+<div *ngIf="selectedUser">
+    <md-card class="example-card" align="center">
+        <md-card-header>
+            <md-card-title>{{selectedUser.userName}}</md-card-title>
+            <md-card-subtitle>{{selectedUser.userEmail}}</md-card-subtitle>
+        </md-card-header>
+        <md-card-content>
+            <p>this is a user</p>
+            <p>password: {{selectedUser.userPassword}}</p>
+            <p>phone: {{selectedUser.userPhone || "nothing"}}</p>
+        </md-card-content>
+        <md-card-actions>
+            <button md-raised-button (click)="deleteUser(selectedUser.userId)">delete</button>
+        </md-card-actions>
+    </md-card>
+</div>

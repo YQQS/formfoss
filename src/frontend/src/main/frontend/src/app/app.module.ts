@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {UserService} from './services/user.service';
+
 import {LoginComponent} from './component/users/login/login.component';
 import {RegisterComponent} from './component/users/register/register.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -25,6 +26,7 @@ import {
     MdTabsModule,
     MdToolbarModule, MdTooltipModule
 } from '@angular/material';
+
 import 'hammerjs';
 import { FormPrototypeComponent } from './component/form-prototype/form-prototype.component';
 import { DynamicFormComponent } from './component/questions/dynamic-form/dynamic-form.component';

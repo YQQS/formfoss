@@ -19,7 +19,10 @@ public class UserAnswerEntity {
     private Integer formId;
     private Integer userId;
     List<Map<String,Object>> answers;
+<<<<<<< HEAD
+=======
     private  Boolean commitflag;
+>>>>>>> d327addc45247d271260f12f39c96431feb6b418
 
     public UserAnswerEntity(){};
 
@@ -28,7 +31,10 @@ public class UserAnswerEntity {
         this.formId = form_id;
         this.userId = user_id;
         this.answers = answers;
+<<<<<<< HEAD
+=======
         this.commitflag=false;
+>>>>>>> d327addc45247d271260f12f39c96431feb6b418
     }
 
     public Integer getAnswerId() {
@@ -62,6 +68,8 @@ public class UserAnswerEntity {
     public void setAnswers(List<Map<String, Object>> answers) {
         this.answers = answers;
     }
+<<<<<<< HEAD
+=======
 
     public void setCommitflag(Boolean commitflag) {
         this.commitflag = commitflag;
@@ -70,4 +78,5 @@ public class UserAnswerEntity {
     public Boolean getCommitflag() {
         return commitflag;
     }
+>>>>>>> d327addc45247d271260f12f39c96431feb6b418
 }
