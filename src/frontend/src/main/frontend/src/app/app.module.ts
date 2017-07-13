@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {CdkTableModule} from '@angular/cdk';
+import {MdTableModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
 import {UserService} from './services/user.service';
@@ -27,6 +29,8 @@ import {
 } from '@angular/material';
 import 'hammerjs';
 import { FormPrototypeComponent } from './component/form-prototype/form-prototype.component';
+
+import { MyformComponent } from './myform/myform.component';
 import { DynamicFormComponent } from './component/questions/dynamic-form/dynamic-form.component';
 import { DynamicQuestionComponent } from './component/questions/dynamic-question/dynamic-question.component';
 import { DynamicEditComponent } from './component/questions/dynamic-edit/dynamic-edit.component';
@@ -46,14 +50,18 @@ import { FormNewComponent } from './component/questions/dynamic-edit/form-new/fo
         FormPrototypeComponent,
         DynamicFormComponent,
         DynamicQuestionComponent,
+        MyformComponent,
         DynamicEditComponent,
         QuestionListComponent,
         QuestionListComponent,
         FormPreviewComponent,
         FormEditComponent,
         FormNewComponent
+
     ],
     imports: [
+        CdkTableModule,
+        MdTableModule,
         BrowserModule,
         HttpModule,
         AppRoutingModule,

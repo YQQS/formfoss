@@ -1,4 +1,5 @@
 <h2>edit registered users</h2>
+
 <ul class="users">
     <li *ngFor="let user of users" (click)="onSelect(user)"
         [class.selected]="user === selectedUser" >

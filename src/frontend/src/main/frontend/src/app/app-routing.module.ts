@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { LoginComponent } from './component/users/login/login.component';
+import {MyformComponent} from './myform/myform.component'
 import { RegisterComponent } from './component/users/register/register.component';
 import { UsersComponent } from './component/users/users.component';
 import {UserDetailComponent} from "./component/users/user-detail/user-detail.component";
@@ -15,6 +16,7 @@ import {FormNewComponent} from './component/questions/dynamic-edit/form-new/form
 
 const routes:Routes = [
     {path: "", redirectTo: '/questionList', pathMatch: 'full'},
+    {path: 'forms', component: MyformComponent},
     {path: "prototype", component: FormPrototypeComponent},
     {path: "login", component: LoginComponent},
     {path: "register", component: RegisterComponent},
