@@ -1,6 +1,9 @@
 # fromfoss
 Simple online form survey from SJTU SE2017
 
+### Build status
+[![Build Status](https://travis-ci.org/YQQS/formfoss.svg?branch=master)](https://travis-ci.org/YQQS/formfoss)
+
 **To start this project, you need**
 + maven3
 + java
