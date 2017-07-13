@@ -1,10 +1,10 @@
 <div>
     <md-toolbar>
-        <button md-raised-button color="primary" (click)="saveOrUpdate()">
+        <button md-raised-button color="primary" [disabled]="formGroup.invalid" (click)="saveOrUpdate()">
             <md-icon>save</md-icon>
             Save
         </button>
-        <button  md-raised-button color="accent" (click)="preview()" >
+        <button  md-raised-button color="accent" [disabled]="formGroup.invalid" (click)="preview()" >
             <md-icon>visibility</md-icon>
             <label *ngIf="!isPreview">preview</label>
             <label *ngIf="isPreview">back edit</label>
@@ -57,7 +57,7 @@
                             <button md-icon-button (click)="addOption(question)" >
                                 <md-icon>add</md-icon>
                             </button>
-                            <md-slide-toggle formControlName="multiple-edit">allow multi select</md-slide-toggle>
+                            <md-slide-toggle formControlName="multiple-edit" [(ngModel)]="question.multiple">allow multi select</md-slide-toggle>
                             <div *ngFor="let opt of question?.options; let i = index" formGroupName="options-edit">
                                 <md-input-container>
                                     <span mdPrefix >{{i+1}}. </span>
@@ -66,6 +66,21 @@
                                         <md-icon>delete</md-icon>
                                     </button>
                                 </md-input-container>
+                            </div>
+                            <div *ngIf="question.multiple">
+                                <md-input-container>
+                                    <input mdInput placeholder="min Select" formControlName="minSelect-edit">
+                                    <md-hint class="alter" *ngIf="formGroup.get(question.key).errors?.noLarger">
+                                        min select should not large than max select
+                                    </md-hint>
+                                </md-input-container>
+                                
+                                <md-input-container>
+                                    <input mdInput placeholder="max Select" formControlName="maxSelect-edit">
+                                    <md-hint class="alter" *ngIf="formGroup.get(question.key).errors?.editMaxSelect">
+                                        this should not larger than {{question?.options.length}}</md-hint>
+                                </md-input-container>
+                                
                             </div>
                         </div>
                         
@@ -96,6 +111,7 @@
                         </div>
                     </div>
                     
+                    <br>
                     <div class="edit-select">
                         <p class="edit-type-text">question type</p>
                         <md-select formControlName="controlType-edit" [(ngModel)]="question.controlType" (change)="buildQuestion(question)">

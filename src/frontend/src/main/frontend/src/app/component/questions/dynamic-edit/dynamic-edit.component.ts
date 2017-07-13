@@ -82,6 +82,9 @@ export class DynamicEditComponent implements OnInit {
 
         // restore options from formGroup
         if (this.formObject.formItems[pos] instanceof QuestionDropDown) {
+            (this.formObject.formItems[pos] as QuestionDropDown).multiple =
+                this.formGroup.get(question.key).value['multiple-edit'];
+
             (this.formObject.formItems[pos] as QuestionDropDown).options = [];
             let options = this.formGroup.get(question.key).value['options-edit'];
             Object.keys(options).forEach(
@@ -177,6 +180,8 @@ export class DynamicEditComponent implements OnInit {
                     question.validator.max = values['max-edit'];
                     break;
                 case 'dropdown':
+                    question.validator.minSelect = values['minSelect-edit'];
+                    question.validator.maxSelect = values['maxSelect-edit'];
                     (question as QuestionDropDown).multiple = values['multiple-edit'];
                     let keys: string[] = Object.keys(values['options-edit']);
                     (question as QuestionDropDown).options = [];

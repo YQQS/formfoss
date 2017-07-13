@@ -9,6 +9,7 @@ import {AnswerTextbox} from "../models/answer-textbox";
 import {AnswerSlider} from "../models/answer-slider";
 import {AnswerSingleChoice} from "../models/answer-singleChoice";
 import {AnswerMultiChoice} from "../models/answer-multiChoice";
+import {FossValidators} from "../validator/validator";
 
 export class QuestionBuilder {
     static buildQuestion(input: any): QuestionBase<any> {
@@ -89,13 +90,31 @@ export class QuestionBuilder {
         }
     }
 
+    static toEditFromGroup(form: DynamicFormModel): FormGroup {
+        let questions = form.formItems;
+        let group: FormGroup = new FormGroup({
+            'title': new FormControl(form.title, Validators.required),
+            'desc':  new FormControl(form.desc),
+        });
+
+        questions.forEach(question => {
+            QuestionBuilder.addEditFormControl(group, question);
+        });
+
+        return group;
+    }
+
     static addEditFormControl(formGroup: FormGroup, question: QuestionBase<any>) {
         let group: FormGroup = new FormGroup({});
-        if (question.controlType === 'dropdown') {
-            (question as QuestionDropDown).options.forEach(option => {
+        let optLength: number = 0;
+
+        if (question instanceof QuestionDropDown) {
+            question.options.forEach(option => {
                 group.addControl(option.key, new FormControl(option.value || '', Validators.required));
-            })
+            });
+            optLength = question.options.length;
         }
+
 
         formGroup.addControl(question.key, new FormGroup({
             'title-edit': new FormControl(question.title, Validators.required),
@@ -108,8 +127,13 @@ export class QuestionBuilder {
             'type-edit': new FormControl(question.validator.type || 'text'),
             'pattern-edit': new FormControl(question.validator.pattern || ''),
             'multiple-edit': new FormControl(question['multiple'] || false),
+            'minSelect-edit': new FormControl(question.validator.minSelect || (question.validator.required ? 1: 0),
+                                Validators.min(0)),
+            'maxSelect-edit': new FormControl(question.validator.maxSelect || optLength,
+                                Validators.min(0)),
             'options-edit': group
-        }));
+        }, Validators.compose([FossValidators.noLargerValidator, FossValidators.editMaxSelect])
+        ));
     }
 
     static toFormGroup(questions: QuestionBase<any>[]) {
@@ -144,8 +168,12 @@ export class QuestionBuilder {
 
             let questionFormControl;
             if (question instanceof QuestionDropDown && question.multiple) {
-                questionFormControl = new FormArray(question.options
-                    .map(opt => new FormControl(opt.key)) );
+                questionFormControl = new FormArray(
+                    question.options.map(opt => new FormControl(opt.key)),
+                    Validators.compose([
+                        FossValidators.maxSelect(question.validator.maxSelect),
+                        FossValidators.minSelect(question.validator.minSelect)
+                    ]) );
             } else {
                 questionFormControl = new FormControl(question.value, validatorsList);
             }
@@ -156,18 +184,5 @@ export class QuestionBuilder {
 
     }
 
-    static toEditFromGroup(form: DynamicFormModel): FormGroup {
-        let questions = form.formItems;
-        let group: FormGroup = new FormGroup({
-            'title': new FormControl(form.title, Validators.required),
-            'desc':  new FormControl(form.desc),
-        });
 
-
-        questions.forEach(question => {
-            QuestionBuilder.addEditFormControl(group, question);
-        });
-
-        return group;
-    }
 }
