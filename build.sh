@@ -2,4 +2,4 @@
 set -ev
 
 cd src/
-mvn clean build
+mvn clean package
