@@ -67,7 +67,14 @@ export class QuestionBuilder {
                 return new AnswerMultiChoice({
                     key: question.key,
                     answer: (formGroup.value[question.key] as any[])
-                        .filter((item) => item != false)
+                        .map((item,i) => {
+                            if (item != false) {
+                                return question.options[i].key;
+                            } else {
+                                return '';
+                            }
+                        })
+                        .filter(item => item != '')
                 })
             }
             else {

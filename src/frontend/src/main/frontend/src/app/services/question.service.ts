@@ -158,6 +158,7 @@ export class QuestionService {
 
     saveAnswer(formGroup: FormGroup, formObj: DynamicFormModel) {
         let answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
+        answer.commitflag = false;
         return this.http.post(this.answerUrl + '/tempsave', JSON.stringify(answer), {headers: this.jsonHeader})
             .map(res => res.json())
             .catch(this.handleError)
@@ -165,6 +166,7 @@ export class QuestionService {
 
     submitAnswer(formGroup: FormGroup, formObj: DynamicFormModel) {
         let answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
+        answer.commitflag = true;
         return this.http.post(this.answerUrl, JSON.stringify(answer), {headers: this.jsonHeader})
             .map(res => res.json())
             .catch(this.handleError)
