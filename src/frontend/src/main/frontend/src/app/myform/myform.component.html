@@ -22,7 +22,13 @@
 
 <div class="example-container mat-elevation-z8">
     <md-table #table [dataSource]="dataSource">
-
+        <li *ngFor="let user of displayedColumns " (click)="onSelect(user)"
+            [class.selected]="user === selectedUser" >
+            <span class="badge">{{user.userId}}</span>
+            <span>{{user.userName}}</span>
+            <button md-raised-button color="primary" class="example-button" (click)="gotoDetail()">detail</button>
+            <button md-button class="delete-button" color="warn" (click)="deleteUser(user.userId)" >delete</button>
+        </li>
         <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
 
