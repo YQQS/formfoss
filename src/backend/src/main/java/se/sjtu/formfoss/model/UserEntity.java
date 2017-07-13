@@ -18,7 +18,6 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "user")
-@Document(collection = "UserAnswerEntity")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
