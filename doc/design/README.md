@@ -48,9 +48,22 @@ e.g:
             "title": "yet another title",
             "desc": "yet another descript",
             "controlType": "dropdown",
+            "multiple": true,
             "order": 3,
+            "options": [
+                {
+                    "key": "option1",
+                    "title": "selection1"
+                },
+                {
+                    "key": "option2"
+                    "title": "selection2"
+                }
+            ],
             "validator": {
                 "required": true
+                "minSelect": 1,
+                "maxSelect": 2
             }
         }
     ]
@@ -97,19 +110,26 @@ for each formItem:
   + order: the formItem order front page should display
       - type: number
 
+  + options: the select options in a array list only for controlType 'dropdown'
+
+  + multiple: allow multi select for controlType 'dropdown'
 
   + validator: valid of the input data
       - required: the questioin of the formItem should  not be empty
 
-      - type = 'slider' has another extra options:
+      - controlType = 'slider' has another extra options:
          + min: min value
          + max: max value
 
-      - type = 'textbox' has another extra options
+      - controlType = 'textbox' has another extra options
          + minLength: min length of the input string
          + maxLength: max length of the input string
          + type: input string type validator, current only type = 'email' is supported
          + pattern: input string must match the pattern
+
+     - controlType = 'dropdown' && multiple = true: 
+         + minSelect: min number of selected options for multi select question
+         + maxSelect: max number of selected options for multi select question, no more than total question number
 
       - any other options don't match will be ignored
 

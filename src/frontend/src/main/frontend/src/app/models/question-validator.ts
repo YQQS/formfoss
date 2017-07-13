@@ -10,4 +10,7 @@ export interface QuestionValidator {
     minLength?: number;
     maxLength?: number;
 
+    // designed for multi select question (controlType === 'dropdown')
+    minSelect?: number;
+    maxSelect?: number;
 }
