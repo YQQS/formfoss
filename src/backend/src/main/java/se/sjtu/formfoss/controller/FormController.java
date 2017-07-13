@@ -9,17 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.exception.GlobalException;
 import se.sjtu.formfoss.model.FormEntity;
-import se.sjtu.formfoss.model.FormDataEntity;
 import se.sjtu.formfoss.model.IdCount;
+import se.sjtu.formfoss.model.FormDataEntity;
 import se.sjtu.formfoss.repository.FormRepository;
 import se.sjtu.formfoss.repository.CountRepository;
 import se.sjtu.formfoss.repository.FormDataRepository;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by 86506 on 2017/6/29.
@@ -36,32 +33,21 @@ public class FormController {
     //OK
     @GetMapping(path = "/forms")
     public @ResponseBody
-    ResponseEntity<Iterable<FormEntity>> getAllForm() {
-
-        Iterable<FormEntity> allForm = formRepository.findAll();
-        HttpStatus status;
-        if (!allForm.iterator().hasNext()) {
-            status = HttpStatus.NOT_FOUND;
-            throw new GlobalException(status);
-        }
-        status = HttpStatus.OK;
-        return new ResponseEntity<Iterable<FormEntity>>(allForm, status);
+    ResponseEntity<List<FormEntity>> getAllForm() {
+        List<FormEntity> allForm = formRepository.findAll();
+        return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
     }
 
     //OK
     @GetMapping(path = "/forms/{formId}")
     public @ResponseBody
     ResponseEntity<FormEntity> searchById(@PathVariable Integer formId) {
-        List<FormEntity> result = formRepository.findByFormId(formId);
-        HttpStatus status = (result.iterator().hasNext() != false) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-        if (result.iterator().hasNext() == false)
+        FormEntity result = formRepository.findOne(formId);
+        HttpStatus status = (result != null) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        if (result == null)
             throw new GlobalException(HttpStatus.NOT_FOUND);
-        if (result.size() != 1) {
-            throw  new GlobalException(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<FormEntity>(result.get(0), status);
+        return new ResponseEntity<FormEntity>(result, status);
     }
-
 
     @PostMapping(path = "/forms")
     public synchronized @ResponseBody
@@ -188,6 +174,27 @@ public class FormController {
         return new ResponseEntity<String>("{\n" +
             "    \"message\": \"Delete successfully\"\n" +
             "}", status);
+    }
+
+    //backup mongodb QuestionSurver database to local file.
+    @GetMapping(path = "/backup")
+    public @ResponseBody
+    ResponseEntity<String> backupDB() throws IOException {
+        Runtime runtime = Runtime.getRuntime();
+        runtime.exec("D:\\MongoDB\\bin\\mongodump -h 127.0.0.1:27017 -d QuestionSurvey -o D:\\MongoDB");
+        return new ResponseEntity<String>("{\n" +
+                "    \"message\": \"Backup successfully\"\n" +
+                "}", HttpStatus.OK);
+    }
+
+    //restore mongodb QuestionSurvey database from local file
+    @GetMapping(path = "/restore")
+    ResponseEntity<String> restoreDB() throws IOException {
+        Runtime runtime = Runtime.getRuntime();
+        runtime.exec("D:\\MongoDB\\bin\\mongorestore -h 127.0.0.1:27017 -d QuestionSurvey D:\\MongoDB\\QuestionSurvey");
+        return new ResponseEntity<String>("{\n" +
+                "    \"message\": \"Restore successfully\"\n" +
+                "}", HttpStatus.OK);
     }
 
     @PutMapping(path = "/users/{userId}/forms")
