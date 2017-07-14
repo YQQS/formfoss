@@ -17,17 +17,16 @@ export class UserService {
     constructor(private http: Http) { }
 
     getAll(userName?: string, userEmail?: string, fuzzy: boolean = false) : Observable<User[]> {
-        let urlParam = new URLSearchParams();
-        urlParam.append('fuzzy', fuzzy.toString());
+        let url: string = this.userUrl + `?fuzzy=${fuzzy}`;
         if (userName) {
-            urlParam.append('userName', userName);
+            url += `&userName=${userName}`;
         }
         if (userEmail) {
-            urlParam.append('userEmail', userEmail);
+            url += `&userEmail=${userEmail}`;
         }
-        let rOptArgs: RequestOptionsArgs = {params: urlParam};
-        return this.http.get(this.userUrl, rOptArgs)
+        return this.http.get(url)
             .map(response => {
+                console.log(url);
                 return response.json() as User[];
                 }
             )
