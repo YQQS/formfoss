@@ -11,6 +11,9 @@
         </button>
         <button md-raised-button color="warn" (click)="reset()">
             <md-icon>refresh</md-icon>Reset</button>
+        <button md-icon-button (click)="settings()" >
+            <md-icon>settings</md-icon>
+        </button>
     </md-toolbar>
 </div>
 
@@ -27,6 +30,12 @@
                     <textarea mdInput mdTextareaAutosize formControlName="desc"
                               [(ngModel)]="formObject.desc" placeholder="description"></textarea>
                 </md-input-container>
+            </div>
+            <div *ngIf="formObject.formItems.length === 0">
+                <button md-icon-button color="warn" (click)="addQuestion()">
+                    <md-icon>add_circle</md-icon>
+                    Add Question
+                </button>
             </div>
         </div>
         

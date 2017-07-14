@@ -35,6 +35,7 @@ import { QuestionListComponent } from './component/questions/question-list/quest
 import { FormPreviewComponent } from './component/questions/dynamic-form/form-preview/form-preview.component';
 import { FormEditComponent } from './component/questions/dynamic-edit/form-edit/form-edit.component';
 import { FormNewComponent } from './component/questions/dynamic-edit/form-new/form-new.component';
+import { FormSettingsComponent } from './component/questions/dynamic-edit/form-settings/form-settings.component';
 
 @NgModule({
     declarations: [
@@ -51,7 +52,8 @@ import { FormNewComponent } from './component/questions/dynamic-edit/form-new/fo
         QuestionListComponent,
         FormPreviewComponent,
         FormEditComponent,
-        FormNewComponent
+        FormNewComponent,
+        FormSettingsComponent
     ],
     imports: [
         BrowserModule,
