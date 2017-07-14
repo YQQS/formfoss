@@ -8,8 +8,10 @@ import java.util.List;
  * Created by ace on 6/28/17.
  */
 public interface UserRepository extends CrudRepository<UserEntity, Integer> {
+    List<UserEntity> findByUserName(String userName);
     List<UserEntity> findByUserNameIgnoreCase(String userName);
     List<UserEntity> findByUserNameContainingIgnoreCase(String userName);
+    List<UserEntity> findByUserEmail(String userEmail);
     List<UserEntity> findByUserEmailIgnoreCase(String userEamil);
     List<UserEntity> findByUserEmailContainingIgnoreCase(String userEmail);
     List<UserEntity> findByUserPhoneContainingIgnoreCase(String userPhone);
