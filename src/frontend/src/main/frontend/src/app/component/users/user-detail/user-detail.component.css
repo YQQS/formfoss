@@ -7,3 +7,11 @@ button {
     border-radius: 4px;
     cursor: pointer; cursor: hand;
 }
+
+.userCard {
+    width: 70%;
+}
+
+.userEdit {
+    width: 80%;
+}

@@ -1,22 +1,35 @@
-<div *ngIf="user">
-    <h2>Detail of userid = {{user.userId}}</h2>
-    <div>
-        <label>username</label>
-        <input [(ngModel)]="user.userName" placeholder="userName" />
-    </div>
-    <div>
-        <label>password</label>
-        <input [(ngModel)]="user.userPassword" />
-    </div>
-    <div>
-        <label>email</label>
-        <input [(ngModel)]="user.userEmail" />
-    </div>
-    <div>
-        <label>phone</label>
-        <input [(ngModel)]="user.userPhone" />
-    </div>
-
-    <button (click)="save()" >Save</button>
-    <button (click)="goBack()">Back</button>
+<div *ngIf="user" align="center">
+    <md-card class="userCard">
+        <md-card-header>
+            <h2>Detail of User</h2>
+        </md-card-header>
+        
+        <md-card-content>
+            <div>
+                <md-input-container class="userEdit">
+                    <input mdInput [(ngModel)]="user.userName" placeholder="username" />
+                </md-input-container>
+            </div>
+            <div>
+                <md-input-container class="userEdit">
+                    <input mdInput [(ngModel)]="user.userPassword" placeholder="password" />
+                </md-input-container>
+            </div>
+            <div>
+                <md-input-container class="userEdit">
+                    <input mdInput [(ngModel)]="user.userEmail" placeholder="email" />
+                </md-input-container>
+            </div>
+            <div>
+                <md-input-container class="userEdit">
+                    <input mdInput [(ngModel)]="user.userPhone" placeholder="Phone" />
+                </md-input-container>
+            </div>
+        </md-card-content>
+        
+        <md-card-actions>
+            <button md-raised-button color="primary" (click)="save()" >Save</button>
+            <button md-button (click)="goBack()">Back</button>
+        </md-card-actions>
+    </md-card>
 </div>

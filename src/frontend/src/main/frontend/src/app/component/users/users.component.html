@@ -1,27 +1,31 @@
-<h2>edit registered users</h2>
-<ul class="users">
-    <li *ngFor="let user of users" (click)="onSelect(user)"
-        [class.selected]="user === selectedUser" >
-    <span class="badge">{{user.userId}}</span>
-    <span>{{user.userName}}</span>
-    <button md-raised-button color="primary" class="example-button" (click)="gotoDetail()">detail</button>
-    <button md-button class="delete-button" color="warn" (click)="deleteUser(user.userId)" >delete</button>
-    </li>
-</ul>
+<div class="userList" align="center">
+    <h2>Registered Users</h2>
+    <div class="searchBar" align="right">
+        <md-input-container>
+            <input mdInput #searchBox (keyup)="search(searchBox.value)" placeholder="Search" >
+        </md-input-container>
+    </div>
+    <div class="users" align="left">
+        <md-list class="users">
+            <md-list-item *ngFor="let user of users">
+                <md-icon md-list-icon>face</md-icon>
+                <h3 md-line>{{user.userId}}  {{user.userName}}</h3>
+                
+                <div align="right">
+                    <button md-icon-button [mdMenuTriggerFor]="menu"><md-icon>more_vert</md-icon></button>
+                    <md-menu #menu="mdMenu">
+                        <button md-menu-item color="accent" (click)="gotoDetail(user.userId)">
+                            <md-icon>edit</md-icon>
+                            edit
+                        </button>
+                        <button md-menu-item color="warn" (click)="deleteUser(user.userId)">
+                            <md-icon>delete</md-icon>
+                            delete
+                        </button>
+                    </md-menu>
+                </div>
+            </md-list-item>
+        </md-list>
+    </div>
 
-<div *ngIf="selectedUser" align="center">
-    <md-card class="example-card" align="center">
-        <md-card-header>
-            <md-card-title>{{selectedUser.userName}}</md-card-title>
-            <md-card-subtitle>{{selectedUser.userEmail}}</md-card-subtitle>
-        </md-card-header>
-        <md-card-content>
-            <p>this is a user</p>
-            <p>password: {{selectedUser.userPassword}}</p>
-            <p>phone: {{selectedUser.userPhone || "nothing"}}</p>
-        </md-card-content>
-        <md-card-actions>
-            <button md-raised-button (click)="deleteUser(selectedUser.userId)">delete</button>
-        </md-card-actions>
-    </md-card>
 </div>

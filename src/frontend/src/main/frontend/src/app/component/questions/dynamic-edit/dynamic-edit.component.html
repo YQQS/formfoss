@@ -1,10 +1,10 @@
 <div>
     <md-toolbar>
-        <button md-raised-button color="primary" [disabled]="formGroup.invalid" (click)="saveOrUpdate()">
+        <button md-raised-button color="primary" [disabled]="formGroup.errors" (click)="saveOrUpdate()">
             <md-icon>save</md-icon>
             Save
         </button>
-        <button  md-raised-button color="accent" [disabled]="formGroup.invalid" (click)="preview()" >
+        <button  md-raised-button color="accent" [disabled]="formGroup.errors" (click)="preview()" >
             <md-icon>visibility</md-icon>
             <label *ngIf="!isPreview">preview</label>
             <label *ngIf="isPreview">back edit</label>

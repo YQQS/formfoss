@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DynamicFormModel} from "../../../models/dynamic-form.model";
 import {QuestionService} from "../../../services/question.service";
 import {Router} from "@angular/router";
+import {Subject} from 'rxjs/Subject';
 
 
 @Component({
@@ -19,6 +20,10 @@ export class QuestionListComponent implements OnInit {
         this.qtService.getAll()
             .subscribe( res => this.questionList = res,
                         error => alert(error));
+    }
+
+    search(str: string) {
+
     }
 
     ngOnInit() {
