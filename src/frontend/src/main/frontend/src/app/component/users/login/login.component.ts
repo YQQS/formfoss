@@ -16,7 +16,8 @@ export class LoginComponent implements OnInit {
                ) { }
 
     login(input: any) {
-        return this.userService.login(input.userName, input.userPassword)
+        return this.userService.login(input.userName.trim().toLowerCase(),
+                input.userPassword)
             .subscribe(res => {
                 alert(res['message']);
                 this.router.navigate(['/list']);

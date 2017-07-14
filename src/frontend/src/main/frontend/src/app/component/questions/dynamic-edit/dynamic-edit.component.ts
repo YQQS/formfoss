@@ -43,15 +43,16 @@ export class DynamicEditComponent implements OnInit {
     }
 
     // add a new question behind the given question
-    addQuestion(question: QuestionBase<any>) {
+    addQuestion(question?: QuestionBase<any>) {
         this.sync();
 
         // get a new question with unique key
         let pos = this.formObject.formItems.indexOf(question);
-        let order = question.order;
+        let order = question ? question.order : 0;
         let length = this.formObject.formItems.length;
+        let maxOrder = length ? this.formObject.formItems[length-1].order : 0;
         let newQuestion: QuestionBase<any> = this.qtService
-            .getOneQuestion(`question${this.formObject.formItems[length - 1].order + 1}`, order + 1);
+            .getOneQuestion(`question${maxOrder + 1}`, order + 1);
 
         // add a new formControl for the new question
         QuestionBuilder.addEditFormControl(this.formGroup, newQuestion);
@@ -132,6 +133,10 @@ export class DynamicEditComponent implements OnInit {
         (<QuestionDropDown> this.formObject.formItems[index]).options.splice(pos, 1);
         (this.formGroup.get(question.key).get('options-edit') as FormGroup)
             .removeControl(optKey);
+    }
+
+    settings() {
+
     }
 
     trackOption(index: number, option: {key: string, value: string}) {

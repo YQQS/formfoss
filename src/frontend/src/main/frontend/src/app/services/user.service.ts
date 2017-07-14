@@ -5,6 +5,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/delay'
 import {Observable} from 'rxjs/Observable';
 import { User } from '../models/user';
 
@@ -31,6 +32,22 @@ export class UserService {
                 }
             )
             .catch(this.handleError);
+    }
+
+    nameConflict(name: string): Observable<boolean> {
+        const url = this.userUrl + `validate?userName=${name}`;
+        return this.http.get(url)
+            .debounceTime(1000)
+            .distinctUntilChanged()
+            .map(res => res.json() as boolean)
+    }
+
+    emailConflict(email: string): Observable<boolean> {
+        const url = this.userUrl + `validate?userEmail=${email}`;
+        return this.http.get(url)
+            .debounceTime(1000)
+            .distinctUntilChanged()
+            .map(res => res.json() as boolean)
     }
 
     getUser(id: number) : Observable<User> {
