@@ -13,7 +13,9 @@ import se.sjtu.formfoss.repository.RoleRepository;
 import se.sjtu.formfoss.repository.UserRepository;
 import se.sjtu.formfoss.exception.GlobalException;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 /**
  * Created by ace on 6/28/17.
@@ -26,10 +28,7 @@ public class UserController {
     private RoleRepository roleRepository;
 
     @GetMapping(path="/users")
-    public @ResponseBody Iterable<UserEntity> getAllUser(@RequestParam(defaultValue = "") String userName,
-                                                         @RequestParam(defaultValue = "") String userEmail,
-                                                         @RequestParam(defaultValue = "false") Boolean fuzzy)  {
-
+    public @ResponseBody Iterable<UserEntity> getAllUser(@RequestParam(defaultValue = "") String userName,@RequestParam(defaultValue = "") String userEmail, @RequestParam(defaultValue = "false") Boolean fuzzy)  {
 
         Iterable<UserEntity> allUser =  userRepository.findAll();
         HttpStatus status;
@@ -41,34 +40,67 @@ public class UserController {
         if(userName.length()==0 && userEmail.length()==0){
             return allUser;
         }
-        else if(userName.length() > 0 && userEmail.length() == 0) {
-            if(fuzzy) {
-                return userRepository.findByUserNameContainingIgnoreCase(userName);
+        else if(userName.length()>0 && userEmail.length()==0){
+            if(fuzzy){
+                allUser= userRepository.findByUserNameContainingIgnoreCase(userName);
+                return allUser;
             }
-            return userRepository.findByUserNameIgnoreCase(userName);
+            allUser =userRepository.findByUserNameIgnoreCase(userName);
+            return allUser;
         }
         else if(userEmail.length()>0 &&userName.length()==0){
             if(fuzzy){
-                return userRepository.findByUserEmailContainingIgnoreCase(userEmail);
+                allUser=userRepository.findByUserEmailContainingIgnoreCase(userEmail);
+                return allUser;
             }
-            return userRepository.findByUserEmailIgnoreCase(userEmail);
+            allUser=userRepository.findByUserEmailIgnoreCase(userEmail);
+            return allUser;
         }
 
         if(fuzzy){
-            return userRepository.findByUserNameContainingIgnoreCaseAndUserEmailContainingIgnoreCase(userName, userEmail);
+            allUser=userRepository.findByUserNameContainingIgnoreCaseAndUserEmailContainingIgnoreCase(userName,userEmail);
+            return allUser;
         }
-        return userRepository.findByUserNameIgnoreCaseAndUserEmailIgnoreCase(userName, userEmail);
+        allUser =userRepository.findByUserNameIgnoreCaseAndUserEmailIgnoreCase(userName, userEmail);
+        return allUser;
     }
 
+
+    @GetMapping(path="/users/validate")
+    public @ResponseBody ResponseEntity<Boolean> validateRegister(@RequestParam(defaultValue = "") String userName,@RequestParam(defaultValue = "") String userEmail){
+        Iterable<UserEntity> users =userRepository.findAll();
+        if(users.iterator().hasNext() == false) return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+        if(userName.length() != 0 && userEmail.length() ==0){
+            users = userRepository.findByUserName(userName);
+            if(users.iterator().hasNext() == false) return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+            return new ResponseEntity<Boolean>(false,HttpStatus.OK);
+        }
+        if(userName.length() == 0 && userEmail.length() != 0 ){
+            users = userRepository.findByUserEmail(userEmail);
+            if(users.iterator().hasNext() == false) return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+            return new ResponseEntity<Boolean>(false,HttpStatus.NO_CONTENT);
+        }
+        if(userName.length() != 0 && userEmail.length() != 0 ){
+            users = userRepository.findByUserName(userName);
+            if(users.iterator().hasNext() == false){
+                users = userRepository.findByUserEmail(userEmail);
+                if(users.iterator().hasNext() == false){
+                    return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+                }
+                return new ResponseEntity<Boolean>(false,HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<Boolean>(false,HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+    }
 
     //search by id
     @GetMapping(path="/users/{id}")
     public @ResponseBody ResponseEntity<UserEntity> searchById(@PathVariable Integer id) {
-
-        UserEntity result = userRepository.findOne(id);
-        HttpStatus status = result!=null ? HttpStatus.OK : HttpStatus.NO_CONTENT;
-        if(result == null)
-            throw new GlobalException(HttpStatus.NO_CONTENT);
+        UserEntity result=userRepository.findOne(id);
+        HttpStatus status=result!=null?HttpStatus.OK: HttpStatus.NOT_FOUND;
+        if(result==null)
+            throw new GlobalException(status);
         return new ResponseEntity<UserEntity>(result,status);
     }
 
@@ -90,30 +122,27 @@ public class UserController {
         userRepository.save(user);
         HttpStatus status=HttpStatus.OK;
         return new ResponseEntity<String>("{\"message\": \"Add new user successfully\"}",status);
-
     }
 
     //update a user
     @PutMapping(path = "/users")
     public @ResponseBody ResponseEntity<String> userUpdate(@RequestBody UserEntity user) throws IOException {
         userRepository.save(user);
-        return new ResponseEntity<String>("{\"message\": \"Updated\"}", HttpStatus.OK);
+        return new ResponseEntity<String>("{\"message\": \"Update user successfully\"}",HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/users/login", method = RequestMethod.POST)
+    @RequestMapping(path = "/users/login")
     public @ResponseBody ResponseEntity<String> login(@RequestParam String userName,
-                                                      @RequestParam String userPassword) {
+                                                      @RequestParam String userPassword, HttpSession httpSession) {
         List<UserEntity> users= userRepository.findByUserNameIgnoreCase(userName);
         HttpStatus status;
         if (users.size() == 1 && users.get(0).getUserPassword().equals(userPassword)) {
             status=HttpStatus.OK;
-
-            String message = "{\"message\": \"Login Success\"}";
-            return new ResponseEntity<String>(message, status);
+            httpSession.setAttribute("userId",users.get(0).getUserId());
+            return new ResponseEntity<String>("{\"message\": \"Login success\"}",status);
         }
         status=HttpStatus.UNAUTHORIZED;
-        String errorMsg = "{\"errorMsg\": \"username or password not match\"}";
-        return new ResponseEntity<String>(errorMsg, status);
+        return new ResponseEntity<String>("{\"message\": \"username or pass word not match\"}",status);
     }
 
     @ExceptionHandler(GlobalException.class)
