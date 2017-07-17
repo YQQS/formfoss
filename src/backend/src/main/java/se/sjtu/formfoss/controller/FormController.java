@@ -8,13 +8,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.exception.GlobalException;
-import se.sjtu.formfoss.model.FormEntity;
-import se.sjtu.formfoss.model.IdCount;
-import se.sjtu.formfoss.model.FormDataEntity;
+import se.sjtu.formfoss.model.*;
+import se.sjtu.formfoss.repository.UserRepository;
 import se.sjtu.formfoss.repository.FormRepository;
 import se.sjtu.formfoss.repository.CountRepository;
 import se.sjtu.formfoss.repository.FormDataRepository;
+import se.sjtu.formfoss.repository.UserAnswerRepository;
 
+import javax.servlet.http.HttpSession;
+import javax.xml.ws.Response;
 import java.io.IOException;
 import java.util.*;
 
@@ -29,11 +31,21 @@ public class FormController {
     private CountRepository countRepository;
     @Autowired
     private FormDataRepository formDataRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private  UserAnswerRepository userAnswerRepository;
 
     //OK
     @GetMapping(path = "/forms")
     public @ResponseBody
-    ResponseEntity<List<FormEntity>> getAllForm() {
+    ResponseEntity<List<FormEntity>> getAllForm(HttpSession httpSession) {
+        Integer userid = (Integer)httpSession.getAttribute("userId");
+        String role = userRepository.findOne(userid).getUserRole();
+        if(role.equals("user")){
+            List<FormEntity> allForm = formRepository.findByUserId(userid);
+            return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
+        }
         List<FormEntity> allForm = formRepository.findAll();
         return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
     }
@@ -51,13 +63,15 @@ public class FormController {
 
     @PostMapping(path = "/forms")
     public synchronized @ResponseBody
-    ResponseEntity<String> formAdd(@RequestBody FormEntity form) throws IOException {
+    ResponseEntity<String> formAdd(@RequestBody FormEntity form,HttpSession httpSession) throws IOException {
         IdCount idCount = countRepository.findOne("1");
         Integer formId = idCount.getFormIdCount();
         formId = formId + 1;
         idCount.setFormIdCount(formId);
         countRepository.save(idCount);
         form.setFormId(formId);
+        Integer userid = (Integer) httpSession.getAttribute("userId");
+        form.setUserId(userid);
         formRepository.save(form);
         FormDataEntity formData=new FormDataEntity();
         formData.setFormId(formId);
@@ -176,27 +190,6 @@ public class FormController {
             "}", status);
     }
 
-    //backup mongodb QuestionSurver database to local file.
-    @GetMapping(path = "/backup")
-    public @ResponseBody
-    ResponseEntity<String> backupDB() throws IOException {
-        Runtime runtime = Runtime.getRuntime();
-        runtime.exec("D:\\MongoDB\\bin\\mongodump -h 127.0.0.1:27017 -d QuestionSurvey -o D:\\MongoDB");
-        return new ResponseEntity<String>("{\n" +
-                "    \"message\": \"Backup successfully\"\n" +
-                "}", HttpStatus.OK);
-    }
-
-    //restore mongodb QuestionSurvey database from local file
-    @GetMapping(path = "/restore")
-    ResponseEntity<String> restoreDB() throws IOException {
-        Runtime runtime = Runtime.getRuntime();
-        runtime.exec("D:\\MongoDB\\bin\\mongorestore -h 127.0.0.1:27017 -d QuestionSurvey D:\\MongoDB\\QuestionSurvey");
-        return new ResponseEntity<String>("{\n" +
-                "    \"message\": \"Restore successfully\"\n" +
-                "}", HttpStatus.OK);
-    }
-
     @PutMapping(path = "/users/{userId}/forms")
     public @ResponseBody
     ResponseEntity<String> updateForm(@RequestBody FormEntity form) throws IOException {
@@ -205,6 +198,35 @@ public class FormController {
             "    \"message\": \"Update form successfully\"\n" +
             "}", HttpStatus.OK);
     }
+
+    @GetMapping(path = "/form/answers/{formid}")
+    public @ResponseBody
+    ResponseEntity<List<Map<String,Object>>> getFormanswers(@PathVariable Integer formid){
+        HttpStatus status = HttpStatus.OK;
+        List<Map<String,Object>> result = new ArrayList<Map<String, Object>>();
+
+        List<UserAnswerEntity> answers = userAnswerRepository.findByFormId(formid);
+        if(answers.iterator().hasNext() == false){
+            status = HttpStatus.NOT_FOUND;
+            throw new GlobalException(status);
+        }
+        for(int i = 0;i < answers.size(); i++){
+            Map<String,Object> map = new HashMap<String, Object>();
+            Integer userid = answers.get(i).getUserId();
+            Integer answerid=answers.get(i).getAnswerId();
+            if(userid == null){
+                map.put("userid",0);
+                map.put("answerid",answers.get(i).getAnswerId());
+                result.add(map);
+                continue;
+            }
+            map.put("userid",answers.get(i).getUserId());
+            map.put("answerid",answers.get(i).getAnswerId());
+            result.add(map);
+        }
+        return new ResponseEntity<List<Map<String, Object>>>(result,status);
+    }
+
 
 
     @ExceptionHandler(GlobalException.class)
