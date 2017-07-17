@@ -39,13 +39,7 @@ public class FormController {
     //OK
     @GetMapping(path = "/forms")
     public @ResponseBody
-    ResponseEntity<List<FormEntity>> getAllForm(HttpSession httpSession) {
-        Integer userid = (Integer)httpSession.getAttribute("userId");
-        String role = userRepository.findOne(userid).getUserRole();
-        if(role.equals("user")){
-            List<FormEntity> allForm = formRepository.findByUserId(userid);
-            return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
-        }
+    ResponseEntity<List<FormEntity>> getAllForm() {
         List<FormEntity> allForm = formRepository.findAll();
         return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
     }
