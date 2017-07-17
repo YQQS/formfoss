@@ -11,6 +11,10 @@ import se.sjtu.formfoss.repository.FormDataRepository;
 import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.exception.GlobalException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by QHZ on 2017/7/4.
@@ -38,12 +42,37 @@ public class FormDataController {
     @GetMapping(path="/formdata/{fid}")
     public @ResponseBody
     ResponseEntity<FormDataEntity> getFormDataById(@PathVariable int fid){
-        FormDataEntity result=formDataRepository.findOne(fid);
-        if(result==null){
+        FormDataEntity formData=formDataRepository.findOne(fid);
+        if(formData==null){
             throw new GlobalException(HttpStatus.NOT_FOUND);
         }
+        FormDataEntity result=new FormDataEntity();
+        result.setFormId(formData.getFormId());
+        result.setAnswerCount(formData.getAnswerCount());
+        result.setData(formData.getData());
+        List<Map<String,Object>> data=formData.getData();
+        List<Map<String,Object>> subData=new ArrayList<Map<String, Object>>(formData.getData());
+        for(int i=0;i<data.size();i++){
+            Map<String,Object> answer=data.get(i);
+            if(answer.get("type").equals("textbox")){
+                List<String> textResult= (List<String>) answer.get("result");
+                if(textResult.size()>15){
+                    Map<String,Object> subAnswer=new HashMap<String, Object>(answer);
+                    answer.put("hasRestAnswer",true);
+                    data.set(i,answer);
+                    List<String> subTextResult=textResult.subList(0,15);
+                    subAnswer.put("result",subTextResult);
+                    subData.set(i,subAnswer);
+                }
+            }
+        }
+        formData.setData(data);
+        formDataRepository.save(formData);
+        result.setData(subData);
         return new ResponseEntity<FormDataEntity>(result,HttpStatus.OK);
     }
+
+
 
     //Delete form data by formId
     @DeleteMapping(path="/formdata/{fid}")
@@ -67,6 +96,7 @@ public class FormDataController {
         return new ResponseEntity<String>("{\"message\": \"Create form data successfully\"}",status);
 
     }
+
 
     //Update from data
     @PutMapping(path="/formdata")
