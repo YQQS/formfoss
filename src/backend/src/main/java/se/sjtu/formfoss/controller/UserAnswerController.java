@@ -16,6 +16,7 @@ import se.sjtu.formfoss.repository.UserAnswerRepository;
 import se.sjtu.formfoss.repository.FormDataRepository;
 import se.sjtu.formfoss.repository.FormRepository;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -51,6 +52,21 @@ public class UserAnswerController {
         return new ResponseEntity<Iterable<UserAnswerEntity>>(allUserAnswers,status);
     }
 
+    @GetMapping("/useranswers/answer/{answerid}")
+    public @ResponseBody
+    ResponseEntity<UserAnswerEntity> getUserAnswer(@PathVariable Integer answerid){
+
+        UserAnswerEntity userAnswer = userAnswerRepository.findOne(answerid);
+        HttpStatus status = HttpStatus.OK;
+        if(userAnswer == null){
+            status=HttpStatus.NOT_FOUND;
+            throw new GlobalException(status);
+        }
+        return new ResponseEntity<UserAnswerEntity>(userAnswer,status);
+
+    }
+
+
     @GetMapping("/useranswers/{user_id}/{form_id}")
     public @ResponseBody
     ResponseEntity<List<UserAnswerEntity>> getUserAnswer(@PathVariable Integer user_id,@PathVariable Integer form_id){
@@ -75,7 +91,7 @@ public class UserAnswerController {
 
     @PostMapping("/useranswers")
     public @ResponseBody
-    ResponseEntity<String> createUserAnswer(@RequestBody UserAnswerEntity userAnswer) throws Exception{
+    ResponseEntity<String> createUserAnswer(@RequestBody UserAnswerEntity userAnswer, HttpSession httpSession) throws Exception{
         if(userAnswer.getAnswerId() == null){
             IdCount idCount=countRepository.findOne("1");
             Integer answerId = idCount.getFormAnswerIdCount();
@@ -85,6 +101,8 @@ public class UserAnswerController {
             countRepository.save(idCount);
         }
         userAnswer.setCommitflag(true);
+        Integer userid = (Integer) httpSession.getAttribute("userId");
+        userAnswer.setUserId(userid);
         userAnswerRepository.save(userAnswer);
         int formId=userAnswer.getFormId();
         List<Map<String,Object>> answers = userAnswer.getAnswers();
@@ -361,6 +379,7 @@ public class UserAnswerController {
         }
         return new ResponseEntity<String>("{\"message\": \"Nothing to delete\"}",HttpStatus.FORBIDDEN);
     }
+
 
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<Error> FormNotFound(GlobalException e){
