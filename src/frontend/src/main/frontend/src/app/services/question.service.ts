@@ -44,94 +44,13 @@ export class QuestionService {
         validator: {}
     };
 
-    private dynamicForm = {
-        title: 'the first dynamic form',
-        desc: 'welcome here',
-        settings: {},
-        formItems: [
-            {
-                key: 'brave',
-                title: 'Bravery Rating',
-                controlType: 'dropdown',
-                multiple: true,
-                options: [
-                    {key: 'solid', value: 'solid'},
-                    {key: 'great', value: 'Great'},
-                    {key: 'good', value: 'Good'},
-                    {key: 'unproven', value: 'Unproven'}
-                ],
-                order: 3,
-                validator: {
-                    required: true
-                }
-            },
-            {
-                key: 'firstName',
-                title: 'First name',
-                controlType: 'textbox',
-                value: 'Bombasto',
-                inputType: 'text',
-                order: 1,
-                validator: {
-                    required: true,
-                    minLength: 3
-                }
-            },
-            {
-                key: 'emailAddress',
-                title: 'Email',
-                controlType: 'textbox',
-                inputType: 'email',
-                order: 2,
-                validator: {
-                    required: true,
-                    type: 'email'
-                }
-            },
-            {
-                key: 'password',
-                inputType: 'password',
-                title: 'the password',
-                controlType: 'textbox',
-                type: 'password',
-                order: 4,
-                validator: {
-                    required: true,
-                    minLength: 8
-                }
-            },
-            {
-                key: 'score',
-                title: 'score',
-                controlType: 'slider',
-                value: 55,
-                order: 5,
-                validator: {
-                    min: 0,
-                    max: 99,
-                    required: true
-                }
-            }
-        ]
-    };
-
-    private url = '/forms';
+    private formUrl = '/forms';
     private answerUrl = '/useranswers';
     private dataUrl = '/formdata';
     private jsonHeader = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http) {}
 
-    getDynamicFormModel() {
-        return QuestionBuilder.buildDynamicForm(this.dynamicForm);
-    }
-
-    getQuestions() {
-//        return this.questions.sort((a,b) => a.order - b.order)
-        return this.dynamicForm.formItems
-            .map(qust => QuestionBuilder.buildQuestion(qust))
-            .sort((a, b) => a.order - b.order);
-    }
 
     getOneQuestion(key: string, order: number) {
         let question: QuestionBase<any> =  QuestionBuilder.buildQuestion(this.questionTemp);
@@ -146,11 +65,11 @@ export class QuestionService {
 
     saveOrUpdate(form: DynamicFormModel) {
         if (form.formId) {
-            return this.http.put(this.url, JSON.stringify(form), {headers: this.jsonHeader})
+            return this.http.put(this.formUrl, JSON.stringify(form), {headers: this.jsonHeader})
                 .map(res => res.json())
                 .catch(this.handleError)
         } else {
-            return this.http.post(this.url, JSON.stringify(form), {headers: this.jsonHeader})
+            return this.http.post(this.formUrl, JSON.stringify(form), {headers: this.jsonHeader})
                 .map(res => res.json())
                 .catch(this.handleError);
         }
@@ -173,21 +92,26 @@ export class QuestionService {
     }
 
     getAll() {
-        return this.http.get(this.url)
+        return this.http.get(this.formUrl)
             .map(res => res.json() as DynamicFormModel[])
             .catch(this.handleError)
     }
 
     getForm(id: number): Observable<DynamicFormModel> {
-        return this.http.get(this.url + '/' + id)
+        return this.http.get(this.formUrl + '/' + id)
             .map(res => QuestionBuilder.buildDynamicForm(res.json()))
             .catch(this.handleError)
     }
 
     delete(id: number) {
-        return this.http.delete(this.url + '/' + id)
+        return this.http.delete(this.formUrl + '/' + id)
             .map(res => res.json())
             .catch(this.handleError)
+    }
+
+    getUserAnswer(formId: number) {
+        return this.http.get(this.answerUrl + '/' + formId)
+            .map(res => res.json() as )
     }
 
     private handleError(error: Response | any)  {
