@@ -1,27 +1,38 @@
-<h2>edit registered users</h2>
-<ul class="users">
-    <li *ngFor="let user of users" (click)="onSelect(user)"
-        [class.selected]="user === selectedUser" >
-    <span class="badge">{{user.userId}}</span>
-    <span>{{user.userName}}</span>
-    <button md-raised-button color="primary" class="example-button" (click)="gotoDetail()">detail</button>
-    <button md-button class="delete-button" color="warn" (click)="deleteUser(user.userId)" >delete</button>
-    </li>
-</ul>
+<md-toolbar align="center"   color="warn">
+    <md-icon>assignment</md-icon>
+    <span align="center">    My Forms</span>
+</md-toolbar>
+<button md-button (click)="sidebar.toggle()">
+    <md-icon>dehaze</md-icon>
+    Create New Form
+</button>
+<button md-button (click)="sidebar.toggle()">
+    <md-icon>dehaze</md-icon>
+    Edit
+</button>
+<button md-button (click)="sidebar.toggle()">
+    <md-icon>dehaze</md-icon>
+    Get Result
+</button>
+<button md-button (click)="sidebar.toggle()">
+    <md-icon>dehaze</md-icon>
+    Delete
+</button>
 
-<div *ngIf="selectedUser" align="center">
-    <md-card class="example-card" align="center">
-        <md-card-header>
-            <md-card-title>{{selectedUser.userName}}</md-card-title>
-            <md-card-subtitle>{{selectedUser.userEmail}}</md-card-subtitle>
-        </md-card-header>
-        <md-card-content>
-            <p>this is a user</p>
-            <p>password: {{selectedUser.userPassword}}</p>
-            <p>phone: {{selectedUser.userPhone || "nothing"}}</p>
-        </md-card-content>
-        <md-card-actions>
-            <button md-raised-button (click)="deleteUser(selectedUser.userId)">delete</button>
-        </md-card-actions>
-    </md-card>
+
+
+<div class="example-container mat-elevation-z8">
+    <md-table #table [dataSource]="dataSource">
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+        <ng-container cdkColumnDef="UserName11111">
+            <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
+            <md-cell *cdkCellDef="let row"> {{row.id}} </md-cell>
+        </ng-container>
+        <!-- ID Column -->
+
+
+        <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+        <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
+    </md-table>
 </div>

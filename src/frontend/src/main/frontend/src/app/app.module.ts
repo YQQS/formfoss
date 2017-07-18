@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {CdkTableModule} from '@angular/cdk';
+import {MdTableModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
 import {UserService} from './services/user.service';
@@ -54,6 +56,8 @@ import { FormNewComponent } from './component/questions/dynamic-edit/form-new/fo
         FormNewComponent
     ],
     imports: [
+        CdkTableModule,
+        MdTableModule,
         BrowserModule,
         HttpModule,
         AppRoutingModule,
