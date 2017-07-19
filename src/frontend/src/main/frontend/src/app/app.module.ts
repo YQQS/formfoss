@@ -40,6 +40,7 @@ import { FRQuestionComponent } from './component/questions/form-result/frquestio
 import { FRUserComponent } from './component/questions/form-result/fruser/fruser.component';
 import { FRStatComponent } from './component/questions/form-result/frstat/frstat.component';
 import {ChartsModule} from "ng2-charts";
+import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 
 @NgModule({
     declarations: [
@@ -95,7 +96,7 @@ import {ChartsModule} from "ng2-charts";
         MdSnackBarModule,
         ChartsModule
     ],
-    providers: [UserService, QuestionService],
+    providers: [UserService, QuestionService ,{provide: LocationStrategy, useClass: HashLocationStrategy}],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

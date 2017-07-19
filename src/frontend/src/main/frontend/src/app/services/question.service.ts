@@ -45,10 +45,10 @@ export class QuestionService {
         inputType: 'text',
         validator: {}
     };
-
     private formUrl = '/forms';
     private answerUrl = '/useranswers';
     private dataUrl = '/formdata';
+    private userUrl='/users';
     private jsonHeader = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http) {}
@@ -128,6 +128,13 @@ export class QuestionService {
             .map(res => QuestionBuilder.parseResultModel(res.json()) )
             .catch(this.handleError)
     }
+
+    publish(uid:number ,fid:number) {
+        return this.http.patch(this.userUrl+'/'+uid+this.url+'/'+fid,"{}",{headers: this.jsonHeader})
+            .map(res=>res.json())
+            .catch(this.handleError)
+    }
+
 
     private handleError(error: Response | any)  {
         let errMsg: string;
