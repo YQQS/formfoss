@@ -36,6 +36,7 @@ import { FormPreviewComponent } from './component/questions/dynamic-form/form-pr
 import { FormEditComponent } from './component/questions/dynamic-edit/form-edit/form-edit.component';
 import { FormNewComponent } from './component/questions/dynamic-edit/form-new/form-new.component';
 import { FormSettingsComponent } from './component/questions/dynamic-edit/form-settings/form-settings.component';
+import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 
 @NgModule({
     declarations: [
@@ -87,7 +88,7 @@ import { FormSettingsComponent } from './component/questions/dynamic-edit/form-s
         MdTooltipModule,
         MdSnackBarModule
     ],
-    providers: [UserService, QuestionService],
+    providers: [UserService, QuestionService ,{provide: LocationStrategy, useClass: HashLocationStrategy}],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

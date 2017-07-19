@@ -18,6 +18,10 @@
                 <md-icon>mood</md-icon>
                 preview
             </button>
+            <button md-menu-item color="accent" (click)="publish(question.userId,question.formId)">
+                <md-icon>publish</md-icon>
+                publish
+            </button>
             <button md-menu-item color="warn" (click)="deleteForm(question.formId)">
                 <md-icon>delete</md-icon>
                 delete
