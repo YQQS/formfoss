@@ -43,18 +43,27 @@
                     <md-radio-button class="radio-button" *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</md-radio-button>
                 </md-radio-group>
             </div>
-            
+
             <div *ngIf="question?.multiple" class="multi-select" [formArrayName]="question.key">
                 <md-checkbox *ngFor="let opt of question?.options; index as i"
                              [formControlName]="i" [value]="opt.key">{{opt.value}}</md-checkbox>
+                <div class="alert alert-danger">
+                    <div *ngIf="getFormControl().hasError('maxSelect')">
+                        select {{question.validator?.maxSelect}} items at most
+                    </div>
+                    <div *ngIf="getFormControl().hasError('minSelect') && !getFormControl().pristine">
+                        select {{question.validator.minSelect}} items at least
+                    </div>
+                </div>
             </div>
             <div class="alter alter-danger" *ngIf="getErrors()">
                 <div *ngIf="getErrors()?.required && !getFormControl().pristine">
                     {{question?.title}} is required
                 </div>
             </div>
+
         </div>
-        
+
         <div *ngSwitchCase="'multiChoice'">
             <label class="question-desc">{{question.title}}</label>
             <div class="question-choice">

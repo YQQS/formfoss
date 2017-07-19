@@ -43,15 +43,16 @@ export class DynamicEditComponent implements OnInit {
     }
 
     // add a new question behind the given question
-    addQuestion(question: QuestionBase<any>) {
+    addQuestion(question?: QuestionBase<any>) {
         this.sync();
 
         // get a new question with unique key
         let pos = this.formObject.formItems.indexOf(question);
-        let order = question.order;
+        let order = question ? question.order : 0;
         let length = this.formObject.formItems.length;
+        let maxOrder = length ? this.formObject.formItems[length-1].order : 0;
         let newQuestion: QuestionBase<any> = this.qtService
-            .getOneQuestion(`question${this.formObject.formItems[length - 1].order + 1}`, order + 1);
+            .getOneQuestion(`question${maxOrder + 1}`, order + 1);
 
         // add a new formControl for the new question
         QuestionBuilder.addEditFormControl(this.formGroup, newQuestion);
@@ -82,6 +83,9 @@ export class DynamicEditComponent implements OnInit {
 
         // restore options from formGroup
         if (this.formObject.formItems[pos] instanceof QuestionDropDown) {
+            (this.formObject.formItems[pos] as QuestionDropDown).multiple =
+                this.formGroup.get(question.key).value['multiple-edit'];
+
             (this.formObject.formItems[pos] as QuestionDropDown).options = [];
             let options = this.formGroup.get(question.key).value['options-edit'];
             Object.keys(options).forEach(
@@ -131,6 +135,10 @@ export class DynamicEditComponent implements OnInit {
             .removeControl(optKey);
     }
 
+    settings() {
+
+    }
+
     trackOption(index: number, option: {key: string, value: string}) {
         return option.key;
     }
@@ -177,6 +185,8 @@ export class DynamicEditComponent implements OnInit {
                     question.validator.max = values['max-edit'];
                     break;
                 case 'dropdown':
+                    question.validator.minSelect = values['minSelect-edit'];
+                    question.validator.maxSelect = values['maxSelect-edit'];
                     (question as QuestionDropDown).multiple = values['multiple-edit'];
                     let keys: string[] = Object.keys(values['options-edit']);
                     (question as QuestionDropDown).options = [];

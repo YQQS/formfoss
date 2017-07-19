@@ -5,6 +5,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/delay'
 import {Observable} from 'rxjs/Observable';
 import { User } from '../models/user';
 
@@ -17,21 +18,36 @@ export class UserService {
     constructor(private http: Http) { }
 
     getAll(userName?: string, userEmail?: string, fuzzy: boolean = false) : Observable<User[]> {
-        let urlParam = new URLSearchParams();
-        urlParam.append('fuzzy', fuzzy.toString());
+        let url: string = this.userUrl + `?fuzzy=${fuzzy}`;
         if (userName) {
-            urlParam.append('userName', userName);
+            url += `&userName=${userName}`;
         }
         if (userEmail) {
-            urlParam.append('userEmail', userEmail);
+            url += `&userEmail=${userEmail}`;
         }
-        let rOptArgs: RequestOptionsArgs = {params: urlParam};
-        return this.http.get(this.userUrl, rOptArgs)
+        return this.http.get(url)
             .map(response => {
+                console.log(url);
                 return response.json() as User[];
                 }
             )
             .catch(this.handleError);
+    }
+
+    nameConflict(name: string): Observable<boolean> {
+        const url = this.userUrl + `validate?userName=${name}`;
+        return this.http.get(url)
+            .debounceTime(1000)
+            .distinctUntilChanged()
+            .map(res => res.json() as boolean)
+    }
+
+    emailConflict(email: string): Observable<boolean> {
+        const url = this.userUrl + `validate?userEmail=${email}`;
+        return this.http.get(url)
+            .debounceTime(1000)
+            .distinctUntilChanged()
+            .map(res => res.json() as boolean)
     }
 
     getUser(id: number) : Observable<User> {

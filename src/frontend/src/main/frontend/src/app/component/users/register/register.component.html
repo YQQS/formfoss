@@ -9,6 +9,9 @@
             </md-input-container>
             <div class="alter alter-warn"
                  *ngIf="registerForm.get('userName').errors && !registerForm.get('userName').pristine">
+                <div *ngIf="registerForm.get('userName').hasError('nameConflict')">
+                    Oops, {{registerForm.get('userName').value}} is Taken
+                </div>
                 <div *ngIf="registerForm.get('userName').hasError('required')">
                     username required.
                 </div>
@@ -69,6 +72,9 @@
                 </div>
                 <div *ngIf="registerForm.get('userEmail').hasError('email') && registerForm.get('userEmail').value.length > 0 ">
                     not a valid email address
+                </div>
+                <div *ngIf="registerForm.get('userEmail').hasError('emailConflict')">
+                    Oops, {{registerForm.get('userEmail').value}} is taken
                 </div>
             </div>
         </div>

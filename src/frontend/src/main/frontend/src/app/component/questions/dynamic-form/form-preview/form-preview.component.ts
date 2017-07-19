@@ -14,7 +14,7 @@ import {QuestionBuilder} from "../../../../services/question-builder";
 })
 export class FormPreviewComponent implements OnInit {
     formObject: DynamicFormModel;
-    form: FormGroup;
+    formGroup: FormGroup;
 
     constructor(private router: ActivatedRoute,
                 private location: Location,
@@ -27,7 +27,8 @@ export class FormPreviewComponent implements OnInit {
             })
             .subscribe((form: DynamicFormModel) => {
                 this.formObject = form;
-                this.form = QuestionBuilder.toFormGroup(this.formObject.formItems);
+                this.formGroup = QuestionBuilder.toFormGroup(this.formObject.formItems);
+                console.log(this.formGroup.get('question1').errors);
             });
     }
 
