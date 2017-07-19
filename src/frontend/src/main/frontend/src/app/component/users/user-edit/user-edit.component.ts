@@ -5,10 +5,9 @@ import {ActivatedRoute, ParamMap} from "@angular/router";
 import { Location } from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 
-
 @Component({
     selector: 'app-user-edit',
-    templateUrl: './user-edit.component.html',
+    templateUrl: './user-eidt.component.html',
     styleUrls: ['./user-edit.component.css']
 })
 export class UserEditComponent implements OnInit {
