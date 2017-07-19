@@ -10,6 +10,9 @@ import {AnswerSlider} from "../models/answer-slider";
 import {AnswerSingleChoice} from "../models/answer-singleChoice";
 import {AnswerMultiChoice} from "../models/answer-multiChoice";
 import {FossValidators} from "../validator/validator";
+import {ResultModel} from "../models/result/result.model";
+import {ChartModel} from "../models/result/chart.model";
+import {ResultAnswerBase} from "../models/result/result.answer-base";
 
 export class QuestionBuilder {
     static buildQuestion(input: any): QuestionBase<any> {
@@ -42,6 +45,64 @@ export class QuestionBuilder {
             .sort((a,b) => a.order - b.order);
         return dyForm;
     }
+
+    static parseAnswerModel(input: any): AnswerModel {
+        let answerModel: AnswerModel = new AnswerModel(input);
+        answerModel.answers = answerModel.answers.map(item => {
+            switch (item.type) {
+                case 'multiChoice':
+                    return new AnswerMultiChoice(item);
+                case 'singleChoice':
+                    return new AnswerSingleChoice(input);
+                case 'slider':
+                    return new AnswerSlider(input);
+                case 'textbox':
+                    return new AnswerTextbox(input);
+            }
+        });
+
+        return answerModel;
+    }
+
+    static parseResultModel(input: any): ResultModel {
+        let result: ResultModel = new ResultModel(input);
+
+        return result;
+    }
+
+    static toChartModel(questionData: ResultAnswerBase, questionSchema: QuestionBase<any>): ChartModel {
+        let chartModel = new ChartModel();
+        switch (questionData.type) {
+            case 'dropdown':
+                chartModel.type = 'pie';
+                chartModel.title = questionSchema.title;
+                chartModel.label = (questionSchema as QuestionDropDown).options
+                    .map(item => item.value);
+                chartModel.data = questionData.result
+                    .map(item => item.choiceCount);
+                break;
+
+            case 'slider':
+                chartModel.title = questionSchema.title;
+                break;
+        }
+
+        return chartModel;
+    }
+
+    static toChartModels(questionData: ResultModel, questionSechema: DynamicFormModel): ChartModel[] {
+        let charts: ChartModel[] = [];
+        let len: number = questionData.data.length;
+        let i: number = 0;
+        for (i=0;i<len;i++) {
+            charts.push(QuestionBuilder.toChartModel(questionData.data[i],
+                questionSechema.formItems[i]));
+        }
+
+        return charts;
+    }
+
+
 
     static buildAnswerModel(formGroup: FormGroup, formObject: DynamicFormModel){
         let answerModel = new AnswerModel({formId: formObject.formId});

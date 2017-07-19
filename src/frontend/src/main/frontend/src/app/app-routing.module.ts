@@ -13,9 +13,10 @@ import {FormPreviewComponent} from './component/questions/dynamic-form/form-prev
 import {FormEditComponent} from './component/questions/dynamic-edit/form-edit/form-edit.component';
 import {FormNewComponent} from './component/questions/dynamic-edit/form-new/form-new.component';
 import {FRQuestionComponent} from "./component/questions/form-result/frquestion/frquestion.component";
+import {FRStatComponent} from "./component/questions/form-result/frstat/frstat.component";
 
 const routes:Routes = [
-    {path: "", redirectTo: '/questionList', pathMatch: 'full'},
+    {path: "", redirectTo: '/formStat', pathMatch: 'full'},
     {path: "prototype", component: FormPrototypeComponent},
     {path: "login", component: LoginComponent},
     {path: "register", component: RegisterComponent},
@@ -25,7 +26,7 @@ const routes:Routes = [
     {path: 'questions/edit/:id', component: FormEditComponent},
     {path: 'questions/new', component: FormNewComponent},
     {path: 'questions/:id', component: FormPreviewComponent},
-    {path: 'questionResult', component: FRQuestionComponent}
+    {path: 'formStat', component: FRStatComponent}
 ];
 
 @NgModule({

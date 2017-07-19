@@ -12,6 +12,8 @@ import 'rxjs/add/operator/catch';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/observable/throw';
 import {AnswerModel} from "../models/answer.model";
+import {ResultAnswerBase} from "../models/result/result.answer-base";
+import {ResultModel} from "../models/result/result.model";
 
 @Injectable()
 export class QuestionService {
@@ -109,9 +111,22 @@ export class QuestionService {
             .catch(this.handleError)
     }
 
-    getUserAnswer(formId: number) {
-        return this.http.get(this.answerUrl + '/' + formId)
-            .map(res => res.json() as )
+    getUserAnswer(answerId: number): Observable<AnswerModel> {
+        return this.http.get(this.answerUrl + '/answer/' + answerId)
+            .map(res => QuestionBuilder.parseAnswerModel(res.json()) )
+            .catch(this.handleError)
+    }
+
+    getUserAnswerByFormId(userId: number, formId: number): Observable<AnswerModel> {
+        return this.http.get(this.answerUrl + '/' + userId + '/' + formId)
+            .map(res => QuestionBuilder.parseAnswerModel(res.json()) )
+            .catch(this.handleError)
+    }
+
+    getFormData(formId: number): Observable<ResultModel> {
+        return this.http.get(this.dataUrl + '/' + formId)
+            .map(res => QuestionBuilder.parseResultModel(res.json()) )
+            .catch(this.handleError)
     }
 
     private handleError(error: Response | any)  {

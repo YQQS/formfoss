@@ -1,3 +1,8 @@
-<p>
-  frstat works!
-</p>
+<div *ngIf="formData && formModel">
+    <div *ngFor="let chart of chartModels; index as i">
+        <h3>{{i}}th question</h3>
+        <div class="question-graph">
+        <app-frquestion [chartModel]="chart"></app-frquestion>
+        </div>
+    </div>
+</div>
