@@ -19,12 +19,9 @@ export class QuestionListComponent implements OnInit {
     getAll() {
         this.qtService.getAll()
             .subscribe( res => this.questionList = res,
-                        error => alert(error));
+                error => alert(error));
     }
 
-    search(str: string) {
-
-    }
 
     ngOnInit() {
         this.getAll();

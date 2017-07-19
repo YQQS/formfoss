@@ -9,12 +9,12 @@
             backend test
         </button>
     </md-sidenav>
-    
+
     <md-toolbar color="primary">
         <button md-button (click)="sidebar.toggle()">
             <md-icon>dehaze</md-icon>
         </button>
-        
+
         <md-nav-list>
             <button md-button color="" routerLink="/prototype" routerLinkActive="active">
                 <md-icon>stars</md-icon>
@@ -24,19 +24,19 @@
                 <md-icon>cloud</md-icon>
                 Questions
             </button>
-            
+
             <button md-button routerLink="/list" routerLinkActive="active">
                 <md-icon>people</md-icon>
                 Users
             </button>
         </md-nav-list>
-        
+
         <button md-button class="example-button-login" routerLink="/login" color="accent" routerLinkActive="active">
             <md-icon>person</md-icon>
             Login
         </button>
     </md-toolbar>
-    
-    
+
+
     <router-outlet></router-outlet>
 </md-sidenav-container>

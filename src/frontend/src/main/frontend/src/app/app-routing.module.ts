@@ -12,6 +12,7 @@ import {QuestionListComponent} from './component/questions/question-list/questio
 import {FormPreviewComponent} from './component/questions/dynamic-form/form-preview/form-preview.component';
 import {FormEditComponent} from './component/questions/dynamic-edit/form-edit/form-edit.component';
 import {FormNewComponent} from './component/questions/dynamic-edit/form-new/form-new.component';
+import {UserEditComponent} from "./component/users/user-edit/user-edit.component";
 
 const routes:Routes = [
     {path: "", redirectTo: '/questionList', pathMatch: 'full'},
@@ -19,6 +20,7 @@ const routes:Routes = [
     {path: "login", component: LoginComponent},
     {path: "register", component: RegisterComponent},
     {path: "list", component: UsersComponent},
+    {path: "editusers/:id",component: UserEditComponent},
     {path: "users/:id", component: UserDetailComponent},
     {path: 'questionList', component: QuestionListComponent},
     {path: 'questions/edit/:id', component: FormEditComponent},

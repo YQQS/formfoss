@@ -43,7 +43,7 @@
                     <md-radio-button class="radio-button" *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</md-radio-button>
                 </md-radio-group>
             </div>
-            
+
             <div *ngIf="question?.multiple" class="multi-select" [formArrayName]="question.key">
                 <md-checkbox *ngFor="let opt of question?.options; index as i"
                              [formControlName]="i" [value]="opt.key">{{opt.value}}</md-checkbox>
@@ -61,9 +61,9 @@
                     {{question?.title}} is required
                 </div>
             </div>
-            
+
         </div>
-        
+
         <div *ngSwitchCase="'multiChoice'">
             <label class="question-desc">{{question.title}}</label>
             <div class="question-choice">

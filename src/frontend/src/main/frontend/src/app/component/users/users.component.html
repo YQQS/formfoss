@@ -1,31 +1,30 @@
-<div class="userList" align="center">
-    <h2>Registered Users</h2>
-    <div class="searchBar" align="right">
-        <md-input-container>
-            <input mdInput #searchBox (keyup)="search(searchBox.value)" placeholder="Search" >
-        </md-input-container>
-    </div>
-    <div class="users" align="left">
-        <md-list class="users">
-            <md-list-item *ngFor="let user of users">
-                <md-icon md-list-icon>face</md-icon>
-                <h3 md-line>{{user.userId}}  {{user.userName}}</h3>
-                
-                <div align="right">
-                    <button md-icon-button [mdMenuTriggerFor]="menu"><md-icon>more_vert</md-icon></button>
-                    <md-menu #menu="mdMenu">
-                        <button md-menu-item color="accent" (click)="gotoDetail(user.userId)">
-                            <md-icon>edit</md-icon>
-                            edit
-                        </button>
-                        <button md-menu-item color="warn" (click)="deleteUser(user.userId)">
-                            <md-icon>delete</md-icon>
-                            delete
-                        </button>
-                    </md-menu>
-                </div>
-            </md-list-item>
-        </md-list>
-    </div>
+<md-toolbar align="center"   color="warn">
+    <md-icon>assignment</md-icon>
+    <span align="center">    Users</span>
+</md-toolbar>
 
-</div>
+<button md-button (click)="gotoDetail()">
+    <md-icon>dehaze</md-icon>
+    Details
+</button>
+
+<button md-button (click)="gotoEdit()">
+    <md-icon>edit</md-icon>
+    Edit
+</button>
+
+<button md-button (click)="deleteUser(user.userId)">
+    <md-icon>delete</md-icon>
+    Delete
+</button>
+
+
+<ul class="users">
+    <li *ngFor="let user of users" (click)="onSelect(user)"
+        [class.selected]="user === selectedUser" >
+        <span class="badge">{{user.userId}}</span>
+        <span>{{user.userName}}</span>
+    </li>
+</ul>
+
+
