@@ -13,6 +13,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {UsersComponent} from './component/users/users.component';
 import { UserDetailComponent } from './component/users/user-detail/user-detail.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
 import {
     MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdCardModule, MdCheckboxModule, MdDatepickerModule,
     MdDialogModule,
@@ -37,6 +38,8 @@ import { QuestionListComponent } from './component/questions/question-list/quest
 import { FormPreviewComponent } from './component/questions/dynamic-form/form-preview/form-preview.component';
 import { FormEditComponent } from './component/questions/dynamic-edit/form-edit/form-edit.component';
 import { FormNewComponent } from './component/questions/dynamic-edit/form-new/form-new.component';
+import {UserEditComponent} from "./component/users/user-edit/user-edit.component";
+
 
 @NgModule({
     declarations: [
@@ -53,7 +56,8 @@ import { FormNewComponent } from './component/questions/dynamic-edit/form-new/fo
         QuestionListComponent,
         FormPreviewComponent,
         FormEditComponent,
-        FormNewComponent
+        FormNewComponent,
+        UserEditComponent
     ],
     imports: [
         CdkTableModule,

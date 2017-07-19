@@ -1,38 +1,30 @@
 <md-toolbar align="center"   color="warn">
     <md-icon>assignment</md-icon>
-    <span align="center">    My Forms</span>
+    <span align="center">    Users</span>
 </md-toolbar>
-<button md-button (click)="sidebar.toggle()">
+
+<button md-button (click)="gotoDetail()">
     <md-icon>dehaze</md-icon>
-    Create New Form
+    Details
 </button>
-<button md-button (click)="sidebar.toggle()">
-    <md-icon>dehaze</md-icon>
+
+<button md-button (click)="gotoEdit()">
+    <md-icon>edit</md-icon>
     Edit
 </button>
-<button md-button (click)="sidebar.toggle()">
-    <md-icon>dehaze</md-icon>
-    Get Result
-</button>
-<button md-button (click)="sidebar.toggle()">
-    <md-icon>dehaze</md-icon>
+
+<button md-button (click)="deleteUser(user.userId)">
+    <md-icon>delete</md-icon>
     Delete
 </button>
 
 
-
-<div class="example-container mat-elevation-z8">
-    <md-table #table [dataSource]="dataSource">
-        <!--- Note that these columns can be defined in any order.
-              The actual rendered columns are set as a property on the row definition" -->
-        <ng-container cdkColumnDef="UserName11111">
-            <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
-            <md-cell *cdkCellDef="let row"> {{row.id}} </md-cell>
-        </ng-container>
-        <!-- ID Column -->
+<ul class="users">
+    <li *ngFor="let user of users" (click)="onSelect(user)"
+        [class.selected]="user === selectedUser" >
+        <span class="badge">{{user.userId}}</span>
+        <span>{{user.userName}}</span>
+    </li>
+</ul>
 
 
-        <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-        <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
-    </md-table>
-</div>

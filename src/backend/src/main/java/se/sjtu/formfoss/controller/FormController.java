@@ -8,18 +8,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.exception.GlobalException;
-import se.sjtu.formfoss.model.FormEntity;
-import se.sjtu.formfoss.model.FormDataEntity;
-import se.sjtu.formfoss.model.IdCount;
+import se.sjtu.formfoss.model.*;
+import se.sjtu.formfoss.repository.UserRepository;
 import se.sjtu.formfoss.repository.FormRepository;
 import se.sjtu.formfoss.repository.CountRepository;
 import se.sjtu.formfoss.repository.FormDataRepository;
+import se.sjtu.formfoss.repository.UserAnswerRepository;
 
+import javax.servlet.http.HttpSession;
+import javax.xml.ws.Response;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by 86506 on 2017/6/29.
@@ -32,46 +31,41 @@ public class FormController {
     private CountRepository countRepository;
     @Autowired
     private FormDataRepository formDataRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private  UserAnswerRepository userAnswerRepository;
 
     //OK
     @GetMapping(path = "/forms")
     public @ResponseBody
-    ResponseEntity<Iterable<FormEntity>> getAllForm() {
-
-        Iterable<FormEntity> allForm = formRepository.findAll();
-        HttpStatus status;
-        if (!allForm.iterator().hasNext()) {
-            status = HttpStatus.NOT_FOUND;
-            throw new GlobalException(status);
-        }
-        status = HttpStatus.OK;
-        return new ResponseEntity<Iterable<FormEntity>>(allForm, status);
+    ResponseEntity<List<FormEntity>> getAllForm() {
+        List<FormEntity> allForm = formRepository.findAll();
+        return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
     }
 
     //OK
     @GetMapping(path = "/forms/{formId}")
     public @ResponseBody
     ResponseEntity<FormEntity> searchById(@PathVariable Integer formId) {
-        List<FormEntity> result = formRepository.findByFormId(formId);
-        HttpStatus status = (result.iterator().hasNext() != false) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-        if (result.iterator().hasNext() == false)
+        FormEntity result = formRepository.findOne(formId);
+        HttpStatus status = (result != null) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        if (result == null)
             throw new GlobalException(HttpStatus.NOT_FOUND);
-        if (result.size() != 1) {
-            throw  new GlobalException(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<FormEntity>(result.get(0), status);
+        return new ResponseEntity<FormEntity>(result, status);
     }
-
 
     @PostMapping(path = "/forms")
     public synchronized @ResponseBody
-    ResponseEntity<String> formAdd(@RequestBody FormEntity form) throws IOException {
+    ResponseEntity<String> formAdd(@RequestBody FormEntity form,HttpSession httpSession) throws IOException {
         IdCount idCount = countRepository.findOne("1");
         Integer formId = idCount.getFormIdCount();
         formId = formId + 1;
         idCount.setFormIdCount(formId);
         countRepository.save(idCount);
         form.setFormId(formId);
+        Integer userid = (Integer) httpSession.getAttribute("userId");
+        form.setUserId(userid);
         formRepository.save(form);
         FormDataEntity formData=new FormDataEntity();
         formData.setFormId(formId);
@@ -198,6 +192,35 @@ public class FormController {
             "    \"message\": \"Update form successfully\"\n" +
             "}", HttpStatus.OK);
     }
+
+    @GetMapping(path = "/form/answers/{formid}")
+    public @ResponseBody
+    ResponseEntity<List<Map<String,Object>>> getFormanswers(@PathVariable Integer formid){
+        HttpStatus status = HttpStatus.OK;
+        List<Map<String,Object>> result = new ArrayList<Map<String, Object>>();
+
+        List<UserAnswerEntity> answers = userAnswerRepository.findByFormId(formid);
+        if(answers.iterator().hasNext() == false){
+            status = HttpStatus.NOT_FOUND;
+            throw new GlobalException(status);
+        }
+        for(int i = 0;i < answers.size(); i++){
+            Map<String,Object> map = new HashMap<String, Object>();
+            Integer userid = answers.get(i).getUserId();
+            Integer answerid=answers.get(i).getAnswerId();
+            if(userid == null){
+                map.put("userid",0);
+                map.put("answerid",answers.get(i).getAnswerId());
+                result.add(map);
+                continue;
+            }
+            map.put("userid",answers.get(i).getUserId());
+            map.put("answerid",answers.get(i).getAnswerId());
+            result.add(map);
+        }
+        return new ResponseEntity<List<Map<String, Object>>>(result,status);
+    }
+
 
 
     @ExceptionHandler(GlobalException.class)
