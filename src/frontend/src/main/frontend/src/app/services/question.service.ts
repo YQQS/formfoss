@@ -130,7 +130,7 @@ export class QuestionService {
     }
 
     publish(uid:number ,fid:number) {
-        return this.http.patch(this.userUrl+'/'+uid+this.url+'/'+fid,"{}",{headers: this.jsonHeader})
+        return this.http.patch(this.userUrl+'/'+uid+this.formUrl+'/'+fid,"{}",{headers: this.jsonHeader})
             .map(res=>res.json())
             .catch(this.handleError)
     }
