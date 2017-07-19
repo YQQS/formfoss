@@ -22,9 +22,6 @@ export class QuestionListComponent implements OnInit {
                         error => alert(error));
     }
 
-    search(str: string) {
-
-    }
 
     ngOnInit() {
         this.getAll();

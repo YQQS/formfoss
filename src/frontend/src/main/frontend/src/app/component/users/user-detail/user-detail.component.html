@@ -1,35 +1,53 @@
-<div *ngIf="user" align="center">
-    <md-card class="userCard">
-        <md-card-header>
-            <h2>Detail of User</h2>
-        </md-card-header>
-        
-        <md-card-content>
-            <div>
-                <md-input-container class="userEdit">
-                    <input mdInput [(ngModel)]="user.userName" placeholder="username" />
-                </md-input-container>
-            </div>
-            <div>
-                <md-input-container class="userEdit">
-                    <input mdInput [(ngModel)]="user.userPassword" placeholder="password" />
-                </md-input-container>
-            </div>
-            <div>
-                <md-input-container class="userEdit">
-                    <input mdInput [(ngModel)]="user.userEmail" placeholder="email" />
-                </md-input-container>
-            </div>
-            <div>
-                <md-input-container class="userEdit">
-                    <input mdInput [(ngModel)]="user.userPhone" placeholder="Phone" />
-                </md-input-container>
-            </div>
-        </md-card-content>
-        
-        <md-card-actions>
-            <button md-raised-button color="primary" (click)="save()" >Save</button>
-            <button md-button (click)="goBack()">Back</button>
-        </md-card-actions>
-    </md-card>
-</div>
+<ul class="user-detail">
+    <md-toolbar align="center"   color="warn">
+        <md-icon>assignment</md-icon>
+        <span align="center"> Detail of User:{{user.userId}}</span>
+    </md-toolbar>
+
+    <div>
+        <li *ngIf="user">
+            <span class="badge">ID    </span>
+            <span >{{user.userId}}</span>
+
+        </li>
+    </div>
+
+
+    <div>
+        <li *ngIf="user">
+            <span class="badge" badge-positive>Name</span>
+            <span>{{user.userName}}</span>
+
+        </li>
+    </div>
+
+
+    <div>
+        <li *ngIf="user">
+            <span class="badge">Password</span>
+            <span>{{user.userPassword}}</span>
+
+        </li>
+    </div>
+
+
+    <div>
+        <li *ngIf="user">
+            <span class="badge">Email</span>
+            <span>{{user.userEmail}}</span>
+        </li>
+    </div>
+
+
+    <div>
+        <li *ngIf="user">
+            <span class="badge">Phone</span>
+            <span>{{user.userPhone}}</span>
+        </li>
+    </div>
+
+
+
+
+
+</ul>
