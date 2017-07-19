@@ -18,7 +18,7 @@ import java.util.Map;
 //@Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Document(collection = "FormEntity")
+@Document(collection = "formEntity")
 public class FormEntity {
     @Id
     @GeneratedValue
@@ -28,6 +28,7 @@ public class FormEntity {
     private String desc;
     private Map<String,Object> settings;
     private List<Map<String,Object>> formItems;
+    private boolean isPublished;
     public FormEntity() {}
 
     public FormEntity(Integer formId, Integer userId, String title, String desc, Map<String,Object> settings, List<Map<String,Object>> formItems) {
@@ -37,6 +38,7 @@ public class FormEntity {
         this.desc =desc;
         this.settings=settings;
         this.formItems=formItems;
+        this.isPublished=false;
     }
 
     public Integer getFormId() {
@@ -87,6 +89,12 @@ public class FormEntity {
         this.formItems= formItems;
     }
 
+    public boolean isIsPublished() {
+        return isPublished;
+    }
 
+    public void setIsPublished(boolean isPublished) {
+        this.isPublished = isPublished;
+    }
 }
 
