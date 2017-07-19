@@ -38,8 +38,13 @@ import { QuestionListComponent } from './component/questions/question-list/quest
 import { FormPreviewComponent } from './component/questions/dynamic-form/form-preview/form-preview.component';
 import { FormEditComponent } from './component/questions/dynamic-edit/form-edit/form-edit.component';
 import { FormNewComponent } from './component/questions/dynamic-edit/form-new/form-new.component';
+<<<<<<< HEAD
 import {UserEditComponent} from "./component/users/user-edit/user-edit.component";
 
+=======
+import { FormSettingsComponent } from './component/questions/dynamic-edit/form-settings/form-settings.component';
+import {HashLocationStrategy, LocationStrategy} from "@angular/common";
+>>>>>>> de6c0497295ac7dbefff5c4886ba57dcaf869a49
 
 @NgModule({
     declarations: [
@@ -93,7 +98,7 @@ import {UserEditComponent} from "./component/users/user-edit/user-edit.component
         MdTooltipModule,
         MdSnackBarModule
     ],
-    providers: [UserService, QuestionService],
+    providers: [UserService, QuestionService ,{provide: LocationStrategy, useClass: HashLocationStrategy}],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

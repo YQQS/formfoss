@@ -36,6 +36,18 @@ export class QuestionListComponent implements OnInit {
 
     }
 
+    publish(uid:number,fid:number){
+        this.qtService.publish(uid,fid)
+            .subscribe(res=>{
+                if(res.message && res.url) {
+                    alert(res.message+".You can release your form throw url:"+res.url);
+                }
+                else if(res.message){
+                    alert(res.message);
+                }
+            })
+    }
+
     edit(id: number) {
         this.router.navigate(['/questions/edit', id])
     }
