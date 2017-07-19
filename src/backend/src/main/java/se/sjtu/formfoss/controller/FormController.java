@@ -222,6 +222,24 @@ public class FormController {
     }
 
 
+    @PatchMapping(path="/users/{userId}/forms/{formId}")
+    public @ResponseBody
+    ResponseEntity<String> publish(@PathVariable int userId,@PathVariable int formId){
+        List<FormEntity> forms = formRepository.findByFormIdAndUserId(formId, userId);
+        FormEntity form=forms.get(0);
+        form.setIsPublished(!form.isIsPublished());
+        formRepository.save(form);
+        if(form.isIsPublished())
+            return new ResponseEntity<String>(" {\n" +
+                "            \"message\" : \"Publish form successfully\", \n" +
+                "            \"url\" : \"http://localhost:8080/#/questions/"+form.getFormId()+"\"\n" +
+                "        }",HttpStatus.OK);
+        else
+            return new ResponseEntity<String>(" {\n" +
+                "            \"message\" : \"UnPublish form successfully\" \n" +
+                "        }",HttpStatus.OK);
+
+    }
 
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<Error> GlobalExceptionHandler(GlobalException e) {
