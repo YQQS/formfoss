@@ -27,7 +27,6 @@ export class UserService {
         }
         return this.http.get(url)
             .map(response => {
-                console.log(url);
                 return response.json() as User[];
                 }
             )
@@ -56,8 +55,6 @@ export class UserService {
             .map((res: Response) => res.json())
             .catch(this.handleError);
     }
-
-
 
 
     login(userName: string, userPassword: string): Observable<any> {

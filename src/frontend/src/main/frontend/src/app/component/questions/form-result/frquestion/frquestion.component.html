@@ -1,0 +1,13 @@
+<div>
+    <p>{{chartModel.title}}</p>
+    <div style="display: block">
+        <canvas baseChart
+                [chartType]="chartModel.type"
+                [labels]="chartModel.label"
+                [data]="chartModel.data"
+                ></canvas>
+    </div>
+    <md-select [(ngModel)]="chartModel.type">
+        <md-option *ngFor="let opt of chartType" [value]="opt">{{opt}}</md-option>
+    </md-select>
+</div>

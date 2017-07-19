@@ -144,7 +144,7 @@ e.g:
     "data": [
         {
             "key": "question1",
-            "type": "string",
+            "type": "textbox",
             "result": ["ace","jack","mac","linus"]
         },
         {
@@ -182,7 +182,7 @@ for each data item, it represent the data for corresponding form
     - type: string
   + type: the valid input type
     - type: string
-    - valid type: "string" | "number" | "Date" | "Time" | "multiChoice" | "singleChoice"
+    - valid type: "textbox" | "number" | "Date" | "Time" | "multiChoice" | "singleChoice"
   + result: the specified result, it is a array of multi answer
     - if the type above is number/string, the result is a array of number/string, each number represent a answer of a user
     - if the type above is string: the reuslt is a arary of string

@@ -36,6 +36,10 @@ import { FormPreviewComponent } from './component/questions/dynamic-form/form-pr
 import { FormEditComponent } from './component/questions/dynamic-edit/form-edit/form-edit.component';
 import { FormNewComponent } from './component/questions/dynamic-edit/form-new/form-new.component';
 import { FormSettingsComponent } from './component/questions/dynamic-edit/form-settings/form-settings.component';
+import { FRQuestionComponent } from './component/questions/form-result/frquestion/frquestion.component';
+import { FRUserComponent } from './component/questions/form-result/fruser/fruser.component';
+import { FRStatComponent } from './component/questions/form-result/frstat/frstat.component';
+import {ChartsModule} from "ng2-charts";
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 
 @NgModule({
@@ -54,7 +58,10 @@ import {HashLocationStrategy, LocationStrategy} from "@angular/common";
         FormPreviewComponent,
         FormEditComponent,
         FormNewComponent,
-        FormSettingsComponent
+        FormSettingsComponent,
+        FRQuestionComponent,
+        FRUserComponent,
+        FRStatComponent
     ],
     imports: [
         BrowserModule,
@@ -86,7 +93,8 @@ import {HashLocationStrategy, LocationStrategy} from "@angular/common";
         MdProgressSpinnerModule,
         MdDialogModule,
         MdTooltipModule,
-        MdSnackBarModule
+        MdSnackBarModule,
+        ChartsModule
     ],
     providers: [UserService, QuestionService ,{provide: LocationStrategy, useClass: HashLocationStrategy}],
     bootstrap: [AppComponent]

@@ -50,10 +50,4 @@ export class FossValidators {
              } : null;
     }
 
-    // register validator
-    static nameConflict() {
-        return (g: AbstractControl) => {
-
-        }
-    }
 }
