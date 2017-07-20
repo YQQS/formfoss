@@ -14,4 +14,5 @@ public interface FormRepository extends MongoRepository<FormEntity, Integer> {
     List<FormEntity> findByUserId(Integer userId);
     List<FormEntity> findByFormIdAndUserId(Integer formId, Integer userId);
     List<FormEntity> findByFormId(Integer id);
+    List<FormEntity> findByIsPublishedIsTrue();
 }

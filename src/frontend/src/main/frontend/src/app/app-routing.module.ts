@@ -14,9 +14,11 @@ import {FormEditComponent} from './component/questions/dynamic-edit/form-edit/fo
 import {FormNewComponent} from './component/questions/dynamic-edit/form-new/form-new.component';
 import {FRQuestionComponent} from "./component/questions/form-result/frquestion/frquestion.component";
 import {FRStatComponent} from "./component/questions/form-result/frstat/frstat.component";
+import {HomePageComponent} from "./component/questions/homepage/homepage.component";
 
 const routes:Routes = [
-    {path: "", redirectTo: '/formStat', pathMatch: 'full'},
+    {path: "", redirectTo: '/homepage', pathMatch: 'full'},
+    {path: "homepage" ,component:HomePageComponent},
     {path: "prototype", component: FormPrototypeComponent},
     {path: "login", component: LoginComponent},
     {path: "register", component: RegisterComponent},

@@ -49,6 +49,7 @@ export class QuestionService {
     private answerUrl = '/useranswers';
     private dataUrl = '/formdata';
     private userUrl='/users';
+    private publishUrl='/forms/published'
     private jsonHeader = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http) {}
@@ -95,6 +96,12 @@ export class QuestionService {
 
     getAll() {
         return this.http.get(this.formUrl)
+            .map(res => res.json() as DynamicFormModel[])
+            .catch(this.handleError)
+    }
+
+    getPublished(){
+        return this.http.get(this.publishUrl)
             .map(res => res.json() as DynamicFormModel[])
             .catch(this.handleError)
     }
