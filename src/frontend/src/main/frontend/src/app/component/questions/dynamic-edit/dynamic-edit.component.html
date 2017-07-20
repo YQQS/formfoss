@@ -38,7 +38,7 @@
                 </button>
             </div>
         </div>
-        
+
         <div>
             <md-card *ngFor="let question of formObject.formItems; trackBy: trackByKey"
                      [formGroupName]="question.key" class="edit-question">
@@ -60,7 +60,7 @@
                                    [value]="question.title" placeholder="put a title">
                         </md-input-container><br>
                     </div><br>
-                    
+
                     <div [ngSwitch]="question.controlType" >
                         <div *ngSwitchCase="'dropdown'" >
                             <button md-icon-button (click)="addOption(question)" >
@@ -83,16 +83,16 @@
                                         min select should not large than max select
                                     </md-hint>
                                 </md-input-container>
-                                
+
                                 <md-input-container>
                                     <input mdInput placeholder="max Select" formControlName="maxSelect-edit">
                                     <md-hint class="alter" *ngIf="formGroup.get(question.key).errors?.editMaxSelect">
                                         this should not larger than {{question?.options.length}}</md-hint>
                                 </md-input-container>
-                                
+
                             </div>
                         </div>
-                        
+
                         <div *ngSwitchCase="'slider'" class="validator number">
                             <md-input-container>
                                 <input mdInput formControlName="min-edit"
@@ -103,7 +103,7 @@
                                        placeholder="max value">
                             </md-input-container>
                         </div>
-                        
+
                         <div *ngSwitchCase="'textbox'" class="validator textbox">
                             <md-input-container>
                                 <input mdInput placeholder="min Length"
@@ -119,7 +119,7 @@
                             </md-input-container>
                         </div>
                     </div>
-                    
+
                     <br>
                     <div class="edit-select">
                         <p class="edit-type-text">question type</p>
@@ -132,7 +132,7 @@
                         >required</md-slide-toggle>
                         <md-slide-toggle color="accent" >extra validator</md-slide-toggle>
                     </div>
-                
+
                 </md-card-content>
                 <md-card-actions>
                     <button md-raised-button color="primary" (click)="addQuestion(question)">Add question</button>
@@ -140,14 +140,14 @@
                 </md-card-actions>
             </md-card>
         </div>
-        
+
         <!--
         <div>
             <p>things from fromObject</p>
             {{formObject | json}}
         </div>
         -->
-    
+
     </form>
 </div>
 
