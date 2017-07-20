@@ -14,6 +14,7 @@ import se.sjtu.formfoss.repository.FormRepository;
 import se.sjtu.formfoss.repository.CountRepository;
 import se.sjtu.formfoss.repository.FormDataRepository;
 import se.sjtu.formfoss.repository.UserAnswerRepository;
+import se.sjtu.formfoss.service.SystemServices;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.ws.Response;
@@ -39,7 +40,18 @@ public class FormController {
     //OK
     @GetMapping(path = "/forms")
     public @ResponseBody
-    ResponseEntity<List<FormEntity>> getAllForm() {
+    ResponseEntity<List<FormEntity>> getAllForm(HttpSession httpSession) {
+        SystemServices systemServices = new SystemServices();
+        systemServices.backup();
+        Integer userid = (Integer)httpSession.getAttribute("userId");
+        UserEntity user = userRepository.findOne(userid);
+        if(user.getUserRole().equals("user")){
+            List<FormEntity> allForm = formRepository.findByUserId(userid);
+            if(allForm.iterator().hasNext() == false){
+                throw new GlobalException(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
+        }
         List<FormEntity> allForm = formRepository.findAll();
         return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
     }
@@ -220,6 +232,7 @@ public class FormController {
         }
         return new ResponseEntity<List<Map<String, Object>>>(result,status);
     }
+
 
     @PatchMapping(path="/users/{userId}/forms/{formId}")
     public @ResponseBody
