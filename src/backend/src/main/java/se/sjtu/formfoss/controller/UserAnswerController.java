@@ -100,9 +100,15 @@ public class UserAnswerController {
             idCount.setFormAnswerIdCount(answerId);
             countRepository.save(idCount);
         }
+        int fid=userAnswer.getFormId();
+        Integer uid = (Integer) httpSession.getAttribute("userId");
+        List<UserAnswerEntity> answerCheck=userAnswerRepository.findByFormIdAndUserId(fid,uid);
+        if(!answerCheck.isEmpty() && answerCheck.get(0).getCommitflag()){
+            return new ResponseEntity<String>("{\"message\": \"You have already answer the form!\"}",HttpStatus.OK);
+        }
         userAnswer.setCommitflag(true);
-        Integer userid = (Integer) httpSession.getAttribute("userId");
-        userAnswer.setUserId(userid);
+
+        userAnswer.setUserId(uid);
         userAnswerRepository.save(userAnswer);
         int formId=userAnswer.getFormId();
         List<Map<String,Object>> answers = userAnswer.getAnswers();

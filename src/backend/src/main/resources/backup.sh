@@ -7,7 +7,7 @@ MYSQL_DATABASE=FORMFOSS
 MONGO_DATABASE=FORMFOSS
 
 if [ ! -d "$MYSQL_BACK_PATH" ] ; then
-    mdkir -p "$MYSQL_BACK_PATH"
+    mkdir -p "$MYSQL_BACK_PATH"
 fi
 
 if [! -d "$MONGODB_BACK_PATH" ] ; then

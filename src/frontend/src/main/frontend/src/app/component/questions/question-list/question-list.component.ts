@@ -22,9 +22,6 @@ export class QuestionListComponent implements OnInit {
                         error => alert(error));
     }
 
-    search(str: string) {
-
-    }
 
     ngOnInit() {
         this.getAll();
@@ -46,9 +43,13 @@ export class QuestionListComponent implements OnInit {
             .subscribe(res=>{
                 if(res.message && res.url) {
                     alert(res.message+".You can release your form throw url:"+res.url);
+                    var x=document.getElementById(fid.toString());
+                    x.innerHTML="Published";
                 }
                 else if(res.message){
                     alert(res.message);
+                    var x=document.getElementById(fid.toString());
+                    x.innerHTML="Unpublished";
                 }
             })
     }

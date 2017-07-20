@@ -3,7 +3,6 @@ package se.sjtu.formfoss.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.management.relation.RoleNotFoundException;
 import javax.persistence.*;
@@ -39,9 +38,8 @@ public class UserEntity {
     @Column(name = "create_time", insertable = false,updatable = false, nullable = false)
     private Timestamp userCreateTime;
 
-    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<UserRoleEntity> userRoleEntities;
+    @Column(name = "role" ,insertable = false,updatable = false, nullable = false)
+    private String userRole;
 
     public UserEntity() {
     }
@@ -94,12 +92,12 @@ public class UserEntity {
         this.userCreateTime = userCreateTime;
     }
 
-    public Set<UserRoleEntity> getUserRoleEntities() {
-        return userRoleEntities;
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
 
-    public void setUserRoleEntities(Set<UserRoleEntity> userRoleEntities) {
-        this.userRoleEntities = userRoleEntities;
+    public String getUserRole() {
+        return userRole;
     }
 
     @Override
@@ -111,6 +109,7 @@ public class UserEntity {
                 ", userEmail='" + userEmail + '\'' +
                 ", userPhone='" + userPhone + '\'' +
                 ", userCreateTime=" + userCreateTime +
+                ", userRole=" + userRole +
                 '}';
     }
 }

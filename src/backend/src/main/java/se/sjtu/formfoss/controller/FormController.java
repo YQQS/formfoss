@@ -39,9 +39,26 @@ public class FormController {
     //OK
     @GetMapping(path = "/forms")
     public @ResponseBody
-    ResponseEntity<List<FormEntity>> getAllForm() {
+    ResponseEntity<List<FormEntity>> getAllForm(HttpSession httpSession) {
+        Integer userid = (Integer)httpSession.getAttribute("userId");
+        UserEntity user = userRepository.findOne(userid);
+        if(user.getUserRole().equals("user")){
+            List<FormEntity> allForm = formRepository.findByUserId(userid);
+            if(allForm.iterator().hasNext() == false){
+                throw new GlobalException(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
+        }
         List<FormEntity> allForm = formRepository.findAll();
         return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
+    }
+
+    //get published forms and display on the homwpage
+    @GetMapping(path="/forms/published")
+    public @ResponseBody
+    ResponseEntity<List<FormEntity>> getPublicForm(){
+        List<FormEntity> publishedForm = formRepository.findByIsPublishedIsTrue();
+        return new ResponseEntity<List<FormEntity>>(publishedForm,HttpStatus.OK);
     }
 
     //OK
@@ -66,6 +83,7 @@ public class FormController {
         form.setFormId(formId);
         Integer userid = (Integer) httpSession.getAttribute("userId");
         form.setUserId(userid);
+        form.setIsPublished(true);
         formRepository.save(form);
         FormDataEntity formData=new FormDataEntity();
         formData.setFormId(formId);
@@ -220,6 +238,7 @@ public class FormController {
         }
         return new ResponseEntity<List<Map<String, Object>>>(result,status);
     }
+
 
     @PatchMapping(path="/users/{userId}/forms/{formId}")
     public @ResponseBody

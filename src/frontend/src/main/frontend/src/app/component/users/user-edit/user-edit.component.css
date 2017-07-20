@@ -8,12 +8,6 @@ button {
     cursor: pointer; cursor: hand;
 }
 
-li:hover {
-    color: aqua;
-    background-color: transparent;
-    left: .1em;
-}
-
 .badge  {
     width: 1.5cm;
     display: inline-block;
@@ -29,14 +23,4 @@ li:hover {
     right: 3px;
     margin: .4cm;
     border-radius: 4px 0 0 4px;
-}
-
-ul {
-    margin: 0 0 2em 0;
-    list-style-type: none;
-    padding: 0;
-}
-
-.example-card {
-    width: 50%;
 }
