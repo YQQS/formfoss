@@ -62,7 +62,7 @@ export class QuestionListComponent implements OnInit {
     }
 
     stats(id: number) {
-
+        this.router.navigate(['/formStat', id]);
     }
 
     add() {

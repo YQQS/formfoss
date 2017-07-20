@@ -16,21 +16,17 @@ import {QuestionBuilder} from "../../../services/question-builder";
 export class DynamicFormComponent implements OnInit {
     //@Input() questions: QuestionBase<any>[] = [];
     @Input() formObject: DynamicFormModel;
-    @Input() @Output() form: FormGroup;
+    @Input() form: FormGroup;
     payLoad = '';
 
     constructor(private qtService: QuestionService,
-                private router: ActivatedRoute,
-                private location: Location) { }
+                private router: ActivatedRoute) { }
 
     ngOnInit() {
     }
 
 
     onSubmit() {
-        this.payLoad = JSON.stringify(QuestionBuilder.buildAnswerModel(
-            this.form, this.formObject
-        ));
         this.qtService.submitAnswer(this.form, this.formObject)
             .subscribe(res => alert(res.message),
                 error => alert(error))
@@ -39,7 +35,6 @@ export class DynamicFormComponent implements OnInit {
     save() {
         this.qtService.saveAnswer(this.form, this.formObject)
             .subscribe(res => {
-                console.log(res);
                 alert(res.message)
                 },
                 error => alert(error));

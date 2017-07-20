@@ -12,7 +12,8 @@ import {UsersComponent} from './component/users/users.component';
 import { UserDetailComponent } from './component/users/user-detail/user-detail.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-    MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdCardModule, MdCheckboxModule, MdDatepickerModule,
+    MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdCardModule, MdCheckboxModule, MdChipsModule,
+    MdDatepickerModule,
     MdDialogModule,
     MdGridListModule,
     MdIconModule,
@@ -89,6 +90,7 @@ import {HashLocationStrategy, LocationStrategy} from "@angular/common";
         MdCardModule,
         MdTabsModule,
         MdIconModule,
+        MdChipsModule,
         MdProgressBarModule,
         MdProgressSpinnerModule,
         MdDialogModule,

@@ -4,6 +4,9 @@ import {ResultModel} from "../../../../models/result/result.model";
 import {DynamicFormModel} from "../../../../models/dynamic-form.model";
 import {ChartModel} from "../../../../models/result/chart.model";
 import {QuestionBuilder} from "../../../../services/question-builder";
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
+import {Location} from "@angular/common";
+import 'rxjs/add/operator/switchMap';
 
 @Component({
     selector: 'app-frstat',
@@ -15,26 +18,38 @@ export class FRStatComponent implements OnInit {
     formModel: DynamicFormModel;
     chartModels: ChartModel[];
 
-    constructor(private qtService: QuestionService) { }
+    constructor(private qtService: QuestionService,
+                private router: ActivatedRoute,
+                private route: Router,
+                private location: Location) { }
 
     ngOnInit() {
-        this.qtService.getFormData(17)
-            .subscribe(res => {
-                    this.formData = res;
-                    this.qtService.getForm(17)
+        this.router.paramMap
+            .switchMap((params: ParamMap) => {
+                let id: number = +params.get('id');
+                return this.qtService.getFormData(id);
+            })
+            .subscribe((formData) => {
+                    this.formData = formData;
+                    this.qtService.getForm(formData.formId)
                         .subscribe(res => {
-                            this.formModel = res
+                            this.formModel = res;
                             this.chartModels = QuestionBuilder.toChartModels(
                                 this.formData,
                                 this.formModel
                             );
                             console.log(this.chartModels);
                         })
-                    },
-                    error => alert(error));
-
+                },
+                error => alert(error));
     }
 
+    back() {
+        this.location.back();
+    }
 
+    goIndividual() {
+        this.route.navigate(['/formUserStat', this.formModel.formId]);
+    }
 
 }
