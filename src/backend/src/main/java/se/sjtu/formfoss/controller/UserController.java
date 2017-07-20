@@ -143,6 +143,12 @@ public class UserController {
         return new ResponseEntity<String>("{\"message\": \"username or pass word not match\"}",status);
     }
 
+    @RequestMapping(path="/users/logout")
+    public @ResponseBody ResponseEntity<String> logout(HttpSession httpSession){
+        httpSession.removeAttribute("userId");
+        return new ResponseEntity<String>("{\"message\": \"Logout success\"}",HttpStatus.OK);
+    }
+
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<Error> UserNotFound(GlobalException e){
         Error error=new Error();
