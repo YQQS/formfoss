@@ -14,7 +14,6 @@ import se.sjtu.formfoss.repository.FormRepository;
 import se.sjtu.formfoss.repository.CountRepository;
 import se.sjtu.formfoss.repository.FormDataRepository;
 import se.sjtu.formfoss.repository.UserAnswerRepository;
-import se.sjtu.formfoss.service.SystemServices;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.ws.Response;
@@ -41,8 +40,6 @@ public class FormController {
     @GetMapping(path = "/forms")
     public @ResponseBody
     ResponseEntity<List<FormEntity>> getAllForm(HttpSession httpSession) {
-        SystemServices systemServices = new SystemServices();
-        systemServices.backup();
         Integer userid = (Integer)httpSession.getAttribute("userId");
         UserEntity user = userRepository.findOne(userid);
         if(user.getUserRole().equals("user")){
