@@ -39,7 +39,16 @@ public class FormController {
     //OK
     @GetMapping(path = "/forms")
     public @ResponseBody
-    ResponseEntity<List<FormEntity>> getAllForm() {
+    ResponseEntity<List<FormEntity>> getAllForm(HttpSession httpSession) {
+        Integer userid = (Integer)httpSession.getAttribute("userId");
+        UserEntity user = userRepository.findOne(userid);
+        if(user.getUserRole().equals("user")){
+            List<FormEntity> allForm = formRepository.findByUserId(userid);
+            if(allForm.iterator().hasNext() == false){
+                throw new GlobalException(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
+        }
         List<FormEntity> allForm = formRepository.findAll();
         return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
     }
@@ -220,6 +229,7 @@ public class FormController {
         }
         return new ResponseEntity<List<Map<String, Object>>>(result,status);
     }
+
 
     @PatchMapping(path="/users/{userId}/forms/{formId}")
     public @ResponseBody
