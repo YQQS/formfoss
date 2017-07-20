@@ -41,8 +41,6 @@ public class FormController {
     @GetMapping(path = "/forms")
     public @ResponseBody
     ResponseEntity<List<FormEntity>> getAllForm(HttpSession httpSession) {
-        SystemServices systemServices = new SystemServices();
-        systemServices.backup();
         Integer userid = (Integer)httpSession.getAttribute("userId");
         UserEntity user = userRepository.findOne(userid);
         if(user.getUserRole().equals("user")){
