@@ -7,7 +7,7 @@ import 'rxjs/add/operator/switchMap';
 
 @Component({
     selector: 'app-user-edit',
-    templateUrl: './user-eidt.component.html',
+    templateUrl: './user-edit.component.html',
     styleUrls: ['./user-edit.component.css']
 })
 export class UserEditComponent implements OnInit {

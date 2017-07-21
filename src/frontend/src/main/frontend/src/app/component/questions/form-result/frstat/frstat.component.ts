@@ -7,7 +7,7 @@ import {QuestionBuilder} from "../../../../services/question-builder";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {Location} from "@angular/common";
 import 'rxjs/add/operator/switchMap';
-import {CSV} from 'csv.js';
+//import {CSV} from 'csv.js';
 
 @Component({
     selector: 'app-frstat',

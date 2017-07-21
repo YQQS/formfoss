@@ -16,6 +16,7 @@ import {FRQuestionComponent} from "./component/questions/form-result/frquestion/
 import {FRStatComponent} from "./component/questions/form-result/frstat/frstat.component";
 import {FRUserComponent} from "./component/questions/form-result/fruser/fruser.component";
 import {HomePageComponent} from "./component/questions/homepage/homepage.component";
+import {UserEditComponent} from "./component/users/user-edit/user-edit.component";
 
 const routes:Routes = [
     {path: "", redirectTo: '/homepage', pathMatch: 'full'},
@@ -24,6 +25,7 @@ const routes:Routes = [
     {path: "login", component: LoginComponent},
     {path: "register", component: RegisterComponent},
     {path: "list", component: UsersComponent},
+    {path: "editusers/:id", component: UserEditComponent},
     {path: "users/:id", component: UserDetailComponent},
     {path: 'questionList', component: QuestionListComponent},
     {path: 'questions/edit/:id', component: FormEditComponent},

@@ -24,7 +24,9 @@
         <input [(ngModel)]="user.userPhone" />
     </div>
     <div style="float:right" >
-        <button (click)="save()" >Save</button>
+
+        <button (click)="save()" (click)="goBack()" >Save</button>
+
         <button (click)="goBack()">Back</button>
     </div>
 
