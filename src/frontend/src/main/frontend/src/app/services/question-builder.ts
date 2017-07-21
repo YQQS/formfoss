@@ -39,6 +39,7 @@ export class QuestionBuilder {
         }
         dyForm.title = input['title'] || '';
         dyForm.desc = input['desc'] || '';
+        dyForm.isPublished = input['isPublished'];
         dyForm.settings = input['settings'] || {};
         dyForm.formItems = input['formItems']
             .map(question => QuestionBuilder.buildQuestion(question))
@@ -53,11 +54,11 @@ export class QuestionBuilder {
                 case 'multiChoice':
                     return new AnswerMultiChoice(item);
                 case 'singleChoice':
-                    return new AnswerSingleChoice(input);
+                    return new AnswerSingleChoice(item);
                 case 'slider':
-                    return new AnswerSlider(input);
+                    return new AnswerSlider(item);
                 case 'textbox':
-                    return new AnswerTextbox(input);
+                    return new AnswerTextbox(item);
             }
         });
 
@@ -72,6 +73,9 @@ export class QuestionBuilder {
 
     static toChartModel(questionData: ResultAnswerBase, questionSchema: QuestionBase<any>): ChartModel {
         let chartModel = new ChartModel();
+        chartModel.options = {
+            responsive: true
+        };
         switch (questionData.type) {
             case 'dropdown':
                 chartModel.type = 'pie';
@@ -80,6 +84,25 @@ export class QuestionBuilder {
                     .map(item => item.value);
                 chartModel.data = questionData.result
                     .map(item => item.choiceCount);
+                chartModel.dataSets = [{data: chartModel.data, label: chartModel.title}];
+
+                //let maxData: number = chartModel.data.sort((a,b) => b - a)[0];
+                chartModel.options = {
+                    responsive: true,
+                    chartArea: {
+                        backgroundColor: 'white'
+                    }
+                    /*
+                    scales: {
+                        yAxes: [{
+                            display: true,
+                            ticks: {
+                                max: maxData
+                            }
+                        }]
+                    }
+                    */
+                };
                 break;
 
             case 'slider':

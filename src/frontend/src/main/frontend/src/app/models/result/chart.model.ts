@@ -3,6 +3,8 @@ export class ChartModel {
     type: string;
     label: string[];
     data: number[];
+    dataSets: {data: number[], label: string}[];
+    options: any;
 
     constructor() {}
 }

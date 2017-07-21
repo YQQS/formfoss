@@ -14,9 +14,12 @@ import {FormEditComponent} from './component/questions/dynamic-edit/form-edit/fo
 import {FormNewComponent} from './component/questions/dynamic-edit/form-new/form-new.component';
 import {FRQuestionComponent} from "./component/questions/form-result/frquestion/frquestion.component";
 import {FRStatComponent} from "./component/questions/form-result/frstat/frstat.component";
+import {FRUserComponent} from "./component/questions/form-result/fruser/fruser.component";
+import {HomePageComponent} from "./component/questions/homepage/homepage.component";
 
 const routes:Routes = [
-    {path: "", redirectTo: '/formStat', pathMatch: 'full'},
+    {path: "", redirectTo: '/homepage', pathMatch: 'full'},
+    {path: "homepage" ,component:HomePageComponent},
     {path: "prototype", component: FormPrototypeComponent},
     {path: "login", component: LoginComponent},
     {path: "register", component: RegisterComponent},
@@ -26,7 +29,8 @@ const routes:Routes = [
     {path: 'questions/edit/:id', component: FormEditComponent},
     {path: 'questions/new', component: FormNewComponent},
     {path: 'questions/:id', component: FormPreviewComponent},
-    {path: 'formStat', component: FRStatComponent}
+    {path: 'formStat/:id', component: FRStatComponent},
+    {path: 'formUserStat/:id', component: FRUserComponent}
 ];
 
 @NgModule({
