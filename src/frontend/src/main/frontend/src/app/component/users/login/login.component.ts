@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
             .subscribe(res => {
                 alert(res['message']);
                 this.router.navigate(['/list']);
-            });
+            }, error => alert(error['message']));
     }
     ngOnInit() {
     }

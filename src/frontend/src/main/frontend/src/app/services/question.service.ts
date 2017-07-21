@@ -89,20 +89,19 @@ export class QuestionService {
     submitAnswer(formGroup: FormGroup, formObj: DynamicFormModel) {
         let answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
         return this.http.post(this.answerUrl, JSON.stringify(answer), {headers: this.jsonHeader})
-            .map(res => res.json())
+            .map(res => QuestionBuilder.buildDynamicForm(res.json()) )
             .catch(this.handleError)
     }
 
-    getAll() {
+    getAll(): Observable<DynamicFormModel[]> {
         return this.http.get(this.formUrl)
-        return this.http.get(this.formUrl)
-            .map(res => res.json() as DynamicFormModel[])
+            .map(res => (res.json() as any[]).map(item => QuestionBuilder.buildDynamicForm(item)))
             .catch(this.handleError)
     }
 
-    getPublished(){
+    getPublished(): Observable<DynamicFormModel[]> {
         return this.http.get(this.publishUrl)
-            .map(res => res.json() as DynamicFormModel[])
+            .map(res => res.json().map(item => QuestionBuilder.buildDynamicForm(item)))
             .catch(this.handleError)
     }
 

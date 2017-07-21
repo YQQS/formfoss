@@ -7,6 +7,8 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import {Location} from "@angular/common";
 import {QuestionBuilder} from "../../../services/question-builder";
+import {MdDialog} from "@angular/material";
+import {SubmitPreviewComponent} from "./submit-preview/submit-preview.component";
 
 @Component({
     selector: 'dynamic-form',
@@ -20,16 +22,24 @@ export class DynamicFormComponent implements OnInit {
     payLoad = '';
 
     constructor(private qtService: QuestionService,
-                private router: ActivatedRoute) { }
+                private router: ActivatedRoute,
+                public diaRef: MdDialog) { }
 
     ngOnInit() {
     }
 
 
     onSubmit() {
-        this.qtService.submitAnswer(this.form, this.formObject)
-            .subscribe(res => alert(res.message),
-                error => alert(error))
+        let dialogRef = this.diaRef.open(SubmitPreviewComponent, {
+            data: this.form.value
+        });
+        dialogRef.afterClosed().subscribe((data: {confirm: boolean}) => {
+            if (data.confirm) {
+                this.qtService.submitAnswer(this.form, this.formObject)
+                    .subscribe(res => alert(res.message),
+                        error => alert(error))
+            }
+        })
     }
 
     save() {
