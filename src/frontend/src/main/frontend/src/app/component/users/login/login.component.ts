@@ -23,10 +23,11 @@ export class LoginComponent implements OnInit {
                 input.userPassword)
             .subscribe(res => {
                 alert(res['message']);
-                sessionStorage.setItem('currentUser', JSON.stringify({
-                    userName: input.userName,
-                    userPassword: input.userPassword
-                }));
+                this.userService.getAll(input.userName)
+                    .subscribe(user => {
+                        this.currentUser = user[0];
+                        sessionStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                    });
                 this.router.navigate(['/list']);
             }, error => alert(error['message']));
     }

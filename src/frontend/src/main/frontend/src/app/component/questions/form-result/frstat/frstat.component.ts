@@ -54,7 +54,18 @@ export class FRStatComponent implements OnInit {
     }
 
     download() {
+        let csvcontent = "data:text/csv;charset=utf-8,";
+        this.chartModels.forEach(item => {
+            let dataString = item.label.join(',');
+            csvcontent += (dataString + '\n');
+            csvcontent += (item.data.join(',') + '\n');
+        });
 
+        console.log(csvcontent);
+
+        let encodeUrl = encodeURI(csvcontent);
+        let csvElement = <HTMLLinkElement> document.getElementById('csv-link');
+        csvElement.href = encodeUrl;
     }
 
 }

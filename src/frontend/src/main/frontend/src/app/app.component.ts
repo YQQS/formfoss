@@ -34,6 +34,8 @@ export class AppComponent implements OnInit {
     }
 
 
-    edit() {}
+    edit() {
+        this.router.navigate(['/profile', JSON.parse(this.getUser())['userId'] ])
+    }
 
 }

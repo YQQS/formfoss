@@ -45,6 +45,7 @@ import {ChartsModule} from "ng2-charts";
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 import {SubmitPreviewComponent} from "./component/questions/dynamic-form/submit-preview/submit-preview.component";
 import { AlertDialogComponent } from './component/alert-dialog/alert-dialog.component';
+import {MyUserEditComponent} from "./component/users/myuser-edit/myuser-edit.component";
 
 @NgModule({
     declarations: [
@@ -68,7 +69,8 @@ import { AlertDialogComponent } from './component/alert-dialog/alert-dialog.comp
         FRStatComponent,
         HomePageComponent,
         SubmitPreviewComponent,
-        AlertDialogComponent
+        AlertDialogComponent,
+        MyUserEditComponent
     ],
     imports: [
         BrowserModule,

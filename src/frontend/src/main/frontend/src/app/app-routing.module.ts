@@ -16,6 +16,7 @@ import {FRQuestionComponent} from "./component/questions/form-result/frquestion/
 import {FRStatComponent} from "./component/questions/form-result/frstat/frstat.component";
 import {FRUserComponent} from "./component/questions/form-result/fruser/fruser.component";
 import {HomePageComponent} from "./component/questions/homepage/homepage.component";
+import { MyUserEditComponent} from "./component/users/myuser-edit/myuser-edit.component";
 
 const routes:Routes = [
     {path: "", redirectTo: '/homepage', pathMatch: 'full'},
@@ -30,7 +31,8 @@ const routes:Routes = [
     {path: 'questions/new', component: FormNewComponent},
     {path: 'questions/:id', component: FormPreviewComponent},
     {path: 'formStat/:id', component: FRStatComponent},
-    {path: 'formUserStat/:id', component: FRUserComponent}
+    {path: 'formUserStat/:id', component: FRUserComponent},
+    {path: 'profile/:id', component: MyUserEditComponent}
 ];
 
 @NgModule({
