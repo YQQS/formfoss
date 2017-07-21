@@ -8,7 +8,7 @@ import {RegisterComponent} from './component/users/register/register.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {AppRoutingModule} from './app-routing.module';
-import {UserListComponent} from './component/users/user-list/user-list.component';
+import {UsersComponent} from './component/users/users.component';
 import { UserDetailComponent } from './component/users/user-detail/user-detail.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
@@ -27,71 +27,47 @@ import {
     MdToolbarModule, MdTooltipModule
 } from '@angular/material';
 import 'hammerjs';
-import { FormViewComponent } from './component/form/view/form-view/form-view.component';
-import { QuestionViewComponent } from './component/form/view/question-view/question-view.component';
-import { FormStructureEditComponent } from './component/form/edit/form-structure-edit/form-structure-edit.component';
-import {QuestionService} from './services/question.service';
-import { HomeComponent} from './component/extra/home/home.component';
-import { FormListComponent } from './component/form/list/form-list.component';
-import { FormDetailComponent } from './component/form/view/form-detail/form-detail.component';
-import { FormEditComponent } from './component/form/edit/form-edit/form-edit.component';
-import { FormNewComponent } from './component/form/edit/form-new/form-new.component';
-import { FormSettingsComponent } from './component/form/edit/form-settings/form-settings.component';
-import { QuestionStatComponent } from './component/form/stat/question-stat/question-stat.component';
-import { UserStatComponent } from './component/form/stat/user-stat/user-stat.component';
-import { FormStatComponent } from './component/form/stat/form-stat/form-stat.component';
-import {ChartsModule} from 'ng2-charts';
-import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from '@angular/common';
-import {SubmitPreviewComponent} from './component/form/view/form-submit-preview/submit-preview.component';
-import {UserEditComponent} from './component/users/user-edit/user-edit.component';
-import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
-import {AlertService} from './services/alert.service';
-import {AlertComponent} from './component/_directives/alert/alert.component';
-import {AuthGuard} from './component/_guards/auth.guard';
-import { PageNotFoundComponent } from './component/extra/page-not-found/page-not-found.component';
-import { CanNotAccessComponent } from './component/extra/can-not-access/can-not-access.component';
-import {AdminGuard} from './component/_guards/admin.guard';
-import { AdminComponent } from './component/_navigation/admin/admin.component';
-import { ToolbarComponent } from './component/_navigation/toolbar/toolbar.component';
-import {UserSelfEditComponent}from'./component/users/user-self-edit/user-self-edit.component';
-import { AnswerViewComponent } from './component/form/answer/answer-view/answer-view.component';
-import { QuestionAnsweredViewComponent } from './component/form/answer/question-answered-view/question-answered-view.component';
-import { AnswerListComponent } from './component/form/answer/answer-list/answer-list.component';
-import { AnswerDetailComponent } from './component/form/answer/answer-detail/answer-detail.component';
-
+import { FormPrototypeComponent } from './component/form-prototype/form-prototype.component';
+import { DynamicFormComponent } from './component/questions/dynamic-form/dynamic-form.component';
+import { DynamicQuestionComponent } from './component/questions/dynamic-question/dynamic-question.component';
+import { DynamicEditComponent } from './component/questions/dynamic-edit/dynamic-edit.component';
+import {QuestionService} from "./services/question.service";
+import { HomePageComponent} from './component/questions/homepage/homepage.component';
+import { QuestionListComponent } from './component/questions/question-list/question-list.component';
+import { FormPreviewComponent } from './component/questions/dynamic-form/form-preview/form-preview.component';
+import { FormEditComponent } from './component/questions/dynamic-edit/form-edit/form-edit.component';
+import { FormNewComponent } from './component/questions/dynamic-edit/form-new/form-new.component';
+import { FormSettingsComponent } from './component/questions/dynamic-edit/form-settings/form-settings.component';
+import { FRQuestionComponent } from './component/questions/form-result/frquestion/frquestion.component';
+import { FRUserComponent } from './component/questions/form-result/fruser/fruser.component';
+import { FRStatComponent } from './component/questions/form-result/frstat/frstat.component';
+import {ChartsModule} from "ng2-charts";
+import {HashLocationStrategy, LocationStrategy} from "@angular/common";
+import {SubmitPreviewComponent} from "./component/questions/dynamic-form/submit-preview/submit-preview.component";
+import {UserEditComponent} from "./component/users/user-edit/user-edit.component";
 @NgModule({
     declarations: [
         AppComponent,
         LoginComponent,
         RegisterComponent,
-        UserListComponent,
+        UsersComponent,
         UserDetailComponent,
-        FormViewComponent,
-        QuestionViewComponent,
-        FormStructureEditComponent,
-        FormListComponent,
-        FormListComponent,
-        FormDetailComponent,
+        FormPrototypeComponent,
+        DynamicFormComponent,
+        DynamicQuestionComponent,
+        DynamicEditComponent,
+        QuestionListComponent,
+        QuestionListComponent,
+        FormPreviewComponent,
         FormEditComponent,
         FormNewComponent,
         FormSettingsComponent,
-        QuestionStatComponent,
-        UserStatComponent,
-        FormStatComponent,
-        HomeComponent,
+        FRQuestionComponent,
+        FRUserComponent,
+        FRStatComponent,
+        HomePageComponent,
         SubmitPreviewComponent,
-        AlertDialogComponent,
-        UserEditComponent,
-        AlertComponent,
-        PageNotFoundComponent,
-        CanNotAccessComponent,
-        AdminComponent,
-        ToolbarComponent,
-        UserSelfEditComponent,
-        AnswerViewComponent,
-        QuestionAnsweredViewComponent,
-        AnswerListComponent,
-        AnswerDetailComponent
+        UserEditComponent
     ],
     imports: [
         BrowserModule,
@@ -126,14 +102,10 @@ import { AnswerDetailComponent } from './component/form/answer/answer-detail/ans
         MdDialogModule,
         MdTooltipModule,
         MdSnackBarModule,
-        ChartsModule,
-        MdTooltipModule
+        ChartsModule
     ],
-    entryComponents: [SubmitPreviewComponent, AlertDialogComponent, FormSettingsComponent],
-    providers: [UserService, QuestionService, AlertService, AuthGuard, AdminGuard, {
-        provide: LocationStrategy, useClass: HashLocationStrategy}, {
-        provide: APP_BASE_HREF, useValue: '/'
-    }],
+    entryComponents: [SubmitPreviewComponent],
+    providers: [UserService, QuestionService ,{provide: LocationStrategy, useClass: HashLocationStrategy}],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
