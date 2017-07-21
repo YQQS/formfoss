@@ -1,4 +1,4 @@
-<div align="center">
+<div align="center" [hidden]="currentUser">
     <form class="login-form" novalidate
           #loginForm="ngForm" (ngSubmit)="login(loginForm.value)">
         <div>
@@ -31,4 +31,8 @@
             <button md-raised-button routerLink="/register" color="accent">register</button>
         </div>
     </form>
+</div>
+
+<div *ngIf="currentUser" align="center">
+    you are logined in as {{currentUser.userName}}
 </div>

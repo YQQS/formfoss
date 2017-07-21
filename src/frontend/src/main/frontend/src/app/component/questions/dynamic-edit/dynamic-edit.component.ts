@@ -8,6 +8,8 @@ import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import 'rxjs/add/operator/switchMap';
 import {QuestionBuilder} from "../../../services/question-builder";
 import {QuestionDropDown} from "../../../models/question-dropdown";
+import {MdDialog} from "@angular/material";
+import {AlertDialogComponent} from "../../alert-dialog/alert-dialog.component";
 
 @Component({
     selector: 'dynamic-edit',
@@ -25,12 +27,12 @@ export class DynamicEditComponent implements OnInit {
     // the FormControlGroup for preview
     form: FormGroup;
 
-    checked: boolean;
+    updatedQuestion: boolean = false;
 
     controlTypes = ['textbox', 'dropdown', 'slider'];
 
     constructor(private qtService: QuestionService,
-                private location: Location,
+                public diaRef: MdDialog,
                 private router: ActivatedRoute) {
     }
 
@@ -77,6 +79,8 @@ export class DynamicEditComponent implements OnInit {
     }
 
     buildQuestion(question: QuestionBase<any>) {
+        this.updatedQuestion =  true;
+
         let pos = this.formObject.formItems.indexOf(question);
         this.formObject.formItems[pos] =
             QuestionBuilder.buildQuestion(question);
@@ -105,6 +109,8 @@ export class DynamicEditComponent implements OnInit {
     }
 
     addOption(question: QuestionDropDown) {
+        this.updatedQuestion = true;
+
         let index: number = this.formObject.formItems.indexOf(question);
         let size: number = (<QuestionDropDown> this.formObject.formItems[index]).options.length;
         let newKey: number;
@@ -127,6 +133,8 @@ export class DynamicEditComponent implements OnInit {
     }
 
     delOption(question: QuestionBase<any>, pos: number) {
+        this.updatedQuestion = true;
+
         let index = this.formObject.formItems.indexOf(question);
         let optKey = (<QuestionDropDown> question).options[pos].key;
 
@@ -152,6 +160,27 @@ export class DynamicEditComponent implements OnInit {
         }
         this.isPreview = !this.isPreview;
         this.form = QuestionBuilder.toFormGroup(this.formObject.formItems);
+    }
+
+    confirmAndSave() {
+        let dialogRef;
+        if (this.updatedQuestion && this.formObject.isPublished && this.formObject.formId) {
+            dialogRef = this.diaRef.open(AlertDialogComponent, {
+                data: {
+                    message: 'Change to a published form may result in unexpected error, continue?'
+                }
+            });
+
+            dialogRef.afterClosed()
+                .subscribe(data => {
+                    if (data.confirm) {
+                        this.saveOrUpdate();
+                    }
+                })
+        } else {
+            this.saveOrUpdate();
+        }
+
     }
 
     saveOrUpdate() {

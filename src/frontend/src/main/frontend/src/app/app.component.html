@@ -16,6 +16,10 @@
         </button>
         
         <md-nav-list>
+            <button md-button routerLink="/homepage" routerLinkActive="active">
+                <md-icon>home</md-icon>
+                Home
+            </button>
             <button md-button color="" routerLink="/prototype" routerLinkActive="active">
                 <md-icon>stars</md-icon>
                 Prototype
@@ -31,10 +35,23 @@
             </button>
         </md-nav-list>
         
-        <button md-button class="example-button-login" routerLink="/login" color="accent" routerLinkActive="active">
-            <md-icon>person</md-icon>
-            Login
-        </button>
+        <div class="example-button-login" >
+            <button *ngIf="!getUser()"
+                    md-button routerLink="/login" color="accent" routerLinkActive="active">
+                <md-icon>person</md-icon>
+                Login
+            </button>
+            
+            <button *ngIf="getUser()"
+                    md-icon-button [mdMenuTriggerFor]="profileMenu">
+                <md-icon>person</md-icon>
+            </button>
+            
+            <md-menu #profileMenu >
+                <button md-menu-item (click)="edit()">Edit profile</button>
+                <button md-menu-item (click)="logout()" >logout</button>
+            </md-menu>
+        </div>
     </md-toolbar>
     
     

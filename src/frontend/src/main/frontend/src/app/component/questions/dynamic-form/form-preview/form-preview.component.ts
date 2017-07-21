@@ -27,7 +27,6 @@ export class FormPreviewComponent implements OnInit {
             })
             .subscribe((form: DynamicFormModel) => {
                 this.formObject = form;
-                console.log(this.formObject);
                 this.formGroup = QuestionBuilder.toFormGroup(this.formObject.formItems);
             });
     }

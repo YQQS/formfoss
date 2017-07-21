@@ -71,6 +71,12 @@ export class UserService {
             .catch(this.handleError)
     }
 
+    logout() {
+        return this.http.post(this.userUrl + '/logout', '{}')
+            .map(res => res.json())
+            .catch(this.handleError)
+    }
+
 
     add(username: string, password: string, email: string): Observable<any> {
         let body: string = JSON.stringify({

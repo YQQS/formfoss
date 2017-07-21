@@ -1,18 +1,16 @@
 <div>
     <md-toolbar>
-        <button md-raised-button color="primary" [disabled]="formGroup.errors" (click)="saveOrUpdate()">
+        <button md-raised-button color="primary" [disabled]="formGroup.errors" (click)="confirmAndSave()">
             <md-icon>save</md-icon>
             Save
         </button>
+        
         <button  md-raised-button color="accent" [disabled]="formGroup.errors" (click)="preview()" >
             <md-icon>visibility</md-icon>
             <label *ngIf="!isPreview">preview</label>
             <label *ngIf="isPreview">back edit</label>
         </button>
-        <button md-raised-button color="warn" (click)="reset()">
-            <md-icon>refresh</md-icon>
-            Reset
-        </button>
+        
         <button md-raised-button color="primary" [disabled]="formObject.isPublished" (click)="publish()">
             <md-icon>send</md-icon>
             publish
@@ -90,16 +88,16 @@
                                         min select should not large than max select
                                     </md-hint>
                                 </md-input-container>
-
+                                
                                 <md-input-container>
                                     <input mdInput placeholder="max Select" formControlName="maxSelect-edit">
                                     <md-hint class="alter" *ngIf="formGroup.get(question.key).errors?.editMaxSelect">
                                         this should not larger than {{question?.options.length}}</md-hint>
                                 </md-input-container>
-
+                                
                             </div>
                         </div>
-
+                        
                         <div *ngSwitchCase="'slider'" class="validator number">
                             <md-input-container>
                                 <input mdInput formControlName="min-edit"
@@ -110,7 +108,7 @@
                                        placeholder="max value">
                             </md-input-container>
                         </div>
-
+                        
                         <div *ngSwitchCase="'textbox'" class="validator textbox">
                             <md-input-container>
                                 <input mdInput placeholder="min Length"
@@ -126,7 +124,7 @@
                             </md-input-container>
                         </div>
                     </div>
-
+                    
                     <br>
                     <div class="edit-select">
                         <p class="edit-type-text">question type</p>
@@ -139,7 +137,7 @@
                         >required</md-slide-toggle>
                         <md-slide-toggle color="accent" >extra validator</md-slide-toggle>
                     </div>
-
+                
                 </md-card-content>
                 <md-card-actions>
                     <button md-raised-button color="primary" (click)="addQuestion(question)">Add question</button>
@@ -147,14 +145,14 @@
                 </md-card-actions>
             </md-card>
         </div>
-
+        
         <!--
         <div>
             <p>things from fromObject</p>
             {{formObject | json}}
         </div>
         -->
-
+    
     </form>
 </div>
 
