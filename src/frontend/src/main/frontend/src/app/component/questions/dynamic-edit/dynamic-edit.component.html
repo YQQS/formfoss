@@ -1,20 +1,16 @@
 <div>
     <md-toolbar>
-        <button md-raised-button color="primary" [disabled]="formGroup.errors" (click)="saveOrUpdate()">
+        <button md-raised-button color="primary" [disabled]="formGroup.errors" (click)="confirmAndSave()">
             <md-icon>save</md-icon>
             Save
         </button>
+        
         <button  md-raised-button color="accent" [disabled]="formGroup.errors" (click)="preview()" >
             <md-icon>visibility</md-icon>
             <label *ngIf="!isPreview">preview</label>
             <label *ngIf="isPreview">back edit</label>
         </button>
-        <button md-icon-button (click)="settings()" >
-            <md-icon>settings</md-icon>
-        </button>
-            <md-icon>refresh</md-icon>
-            Reset
-        </button>
+        
         <button md-raised-button color="primary" [disabled]="formObject.isPublished" (click)="publish()">
             <md-icon>send</md-icon>
             publish

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
+import {User} from "../../../models/user";
 
 @Component({
     selector: 'app-login',
@@ -10,6 +11,8 @@ import 'rxjs/add/operator/toPromise';
     styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+    currentUser: User;
+
     constructor(
                 private userService: UserService,
                 private router: Router
@@ -20,11 +23,15 @@ export class LoginComponent implements OnInit {
                 input.userPassword)
             .subscribe(res => {
                 alert(res['message']);
-                console.log(sessionStorage.getItem('userId'));
+                sessionStorage.setItem('currentUser', JSON.stringify({
+                    userName: input.userName,
+                    userPassword: input.userPassword
+                }));
                 this.router.navigate(['/list']);
             }, error => alert(error['message']));
     }
     ngOnInit() {
+        this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     }
 
 }

@@ -129,7 +129,7 @@ public class UserController {
         return new ResponseEntity<String>("{\"message\": \"Update user successfully\"}",HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/users/login")
+    @PostMapping(path = "/users/login")
     public @ResponseBody ResponseEntity<String> login(@RequestParam String userName,
                                                       @RequestParam String userPassword, HttpSession httpSession) {
         List<UserEntity> users= userRepository.findByUserNameIgnoreCase(userName);
@@ -143,7 +143,7 @@ public class UserController {
         return new ResponseEntity<String>("{\"message\": \"username or pass word not match\"}",status);
     }
 
-    @RequestMapping(path="/users/logout")
+    @PostMapping(path="/users/logout")
     public @ResponseBody ResponseEntity<String> logout(HttpSession httpSession){
         httpSession.removeAttribute("userId");
         return new ResponseEntity<String>("{\"message\": \"Logout success\"}",HttpStatus.OK);
