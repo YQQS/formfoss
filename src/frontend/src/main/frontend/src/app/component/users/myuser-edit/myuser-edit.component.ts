@@ -10,7 +10,7 @@ import 'rxjs/add/operator/switchMap';
     templateUrl: './myuser-eidt.component.html',
     styleUrls: ['./myuser-edit.component.css']
 })
-export class MyUserEditComponent implements OnInit {
+export class UserEditComponent implements OnInit {
     user: User;
 
     constructor(private userService: UserService,
