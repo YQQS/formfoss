@@ -44,7 +44,7 @@ import { FRStatComponent } from './component/questions/form-result/frstat/frstat
 import {ChartsModule} from "ng2-charts";
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 import {SubmitPreviewComponent} from "./component/questions/dynamic-form/submit-preview/submit-preview.component";
-
+import {UserEditComponent} from "./component/users/user-edit/user-edit.component";
 @NgModule({
     declarations: [
         AppComponent,
@@ -66,7 +66,8 @@ import {SubmitPreviewComponent} from "./component/questions/dynamic-form/submit-
         FRUserComponent,
         FRStatComponent,
         HomePageComponent,
-        SubmitPreviewComponent
+        SubmitPreviewComponent,
+        UserEditComponent
     ],
     imports: [
         BrowserModule,
