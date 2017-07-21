@@ -44,6 +44,7 @@ import { FRStatComponent } from './component/questions/form-result/frstat/frstat
 import {ChartsModule} from "ng2-charts";
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 import {SubmitPreviewComponent} from "./component/questions/dynamic-form/submit-preview/submit-preview.component";
+import { AlertDialogComponent } from './component/alert-dialog/alert-dialog.component';
 
 @NgModule({
     declarations: [
@@ -66,7 +67,8 @@ import {SubmitPreviewComponent} from "./component/questions/dynamic-form/submit-
         FRUserComponent,
         FRStatComponent,
         HomePageComponent,
-        SubmitPreviewComponent
+        SubmitPreviewComponent,
+        AlertDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -103,7 +105,7 @@ import {SubmitPreviewComponent} from "./component/questions/dynamic-form/submit-
         MdSnackBarModule,
         ChartsModule
     ],
-    entryComponents: [SubmitPreviewComponent],
+    entryComponents: [SubmitPreviewComponent, AlertDialogComponent],
     providers: [UserService, QuestionService ,{provide: LocationStrategy, useClass: HashLocationStrategy}],
     bootstrap: [AppComponent]
 })

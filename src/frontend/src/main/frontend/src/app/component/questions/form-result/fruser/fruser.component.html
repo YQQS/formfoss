@@ -6,9 +6,8 @@
     
     <div class="user-answer-list" *ngFor="let answer of answers">
         <div *ngFor="let question of form.formItems; index as i" class="user-answer">
-            {{i+1}}.
-            <h3>{{question.title}}</h3>
-            <p>{{question.desc}}</p>
+            <h3>{{i+1}}. {{question.title}}</h3>
+            <h5>{{question.desc}}</h5>
             
             <div *ngIf="question.controlType === 'dropdown'">
                 <p>avaliable options: </p>
