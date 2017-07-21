@@ -1,3 +1,13 @@
-.question-graph {
-    width: 50%;
+.question-textbox {
+    display: list-item;
+    color: salmon;
+    background-color: transparent;
+    font-family: "DejaVu Sans";
+    font-size: small;
+}
+
+.individual-button {
+    position: fixed;
+    right: 10px;
+    top: 70px;
 }

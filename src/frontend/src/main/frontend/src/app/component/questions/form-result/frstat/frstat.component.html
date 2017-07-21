@@ -1,8 +1,27 @@
 <div *ngIf="formData && formModel">
-    <div *ngFor="let chart of chartModels; index as i">
-        <h3>{{i}}th question</h3>
-        <div class="question-graph">
-        <app-frquestion [chartModel]="chart"></app-frquestion>
+    <button md-button (click)="back()">
+        <md-icon>arrow_back</md-icon>
+        back
+    </button>
+    <div class="individual-button">
+        <button md-raised-button (click)="goIndividual()">
+            Individuals
+        </button>
+    </div>
+    
+    <div >
+        <div *ngFor="let chart of chartModels; index as i">
+            <h3>{{i+1}}th question</h3>
+            <h4>{{formModel.title}}</h4>
+            
+            <div *ngIf="formData.data[i].type === 'textbox'" class="question-textbox">
+                <p *ngFor="let txt of formData.data[i].result; index as in" >{{in+1}}. {{txt}}</p>
+            </div>
+            
+            <div *ngIf="chart.type && chart.data.length > 0" class="question-graph" align="center">
+                <app-frquestion [chartModel]="chart"></app-frquestion>
+            </div>
         </div>
     </div>
+
 </div>

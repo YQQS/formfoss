@@ -166,6 +166,18 @@ export class DynamicEditComponent implements OnInit {
             })
     }
 
+    publish() {
+        this.qtService.publish(this.formObject.userId, this.formObject.formId)
+            .subscribe(res=>{
+                if(res.message && res.url) {
+                    alert(res.message+".You can release your form throw url:"+res.url);
+                }
+                else if(res.message){
+                    alert(res.message);
+                }
+            })
+    }
+
     private sync() {
         this.formObject.formItems.forEach((question, index) => {
             let values = this.formGroup.get(question.key).value;

@@ -1,12 +1,12 @@
 export class ResultAnswerBase {
     key: string;
     type: string;
-    result: any;
+    result: any[];
 
     constructor(input: {
         key: string,
         type: string,
-        result: any
+        result: any[]
     }) {
         this.key = input.key;
         this.type = input.type;

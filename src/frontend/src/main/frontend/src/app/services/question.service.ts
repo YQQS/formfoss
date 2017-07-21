@@ -88,21 +88,20 @@ export class QuestionService {
 
     submitAnswer(formGroup: FormGroup, formObj: DynamicFormModel) {
         let answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
-        answer.commitflag = true;
         return this.http.post(this.answerUrl, JSON.stringify(answer), {headers: this.jsonHeader})
-            .map(res => res.json())
+            .map(res => QuestionBuilder.buildDynamicForm(res.json()) )
             .catch(this.handleError)
     }
 
-    getAll() {
+    getAll(): Observable<DynamicFormModel[]> {
         return this.http.get(this.formUrl)
-            .map(res => res.json() as DynamicFormModel[])
+            .map(res => (res.json() as any[]).map(item => QuestionBuilder.buildDynamicForm(item)))
             .catch(this.handleError)
     }
 
-    getPublished(){
+    getPublished(): Observable<DynamicFormModel[]> {
         return this.http.get(this.publishUrl)
-            .map(res => res.json() as DynamicFormModel[])
+            .map(res => res.json().map(item => QuestionBuilder.buildDynamicForm(item)))
             .catch(this.handleError)
     }
 
@@ -124,6 +123,15 @@ export class QuestionService {
             .catch(this.handleError)
     }
 
+    getUserAnswers(formId: number): Observable<AnswerModel[]> {
+        return this.http.get(this.answerUrl + '/' + formId)
+            .map(res => {
+                let answers = res.json() as any[];
+                return answers.map(item => QuestionBuilder.parseAnswerModel(item))
+            })
+            .catch(this.handleError)
+    }
+
     getUserAnswerByFormId(userId: number, formId: number): Observable<AnswerModel> {
         return this.http.get(this.answerUrl + '/' + userId + '/' + formId)
             .map(res => QuestionBuilder.parseAnswerModel(res.json()) )
@@ -136,9 +144,9 @@ export class QuestionService {
             .catch(this.handleError)
     }
 
-    publish(uid:number ,fid:number) {
+    publish(uid:number, fid:number) {
         return this.http.patch(this.userUrl+'/'+uid+this.formUrl+'/'+fid,"{}",{headers: this.jsonHeader})
-            .map(res=>res.json())
+            .map(res => res.json())
             .catch(this.handleError)
     }
 

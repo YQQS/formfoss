@@ -3,6 +3,12 @@
         <md-icon>arrow_back</md-icon>
         Back
     </button>
-    <dynamic-form [formObject]="formObject" [form]="formGroup"></dynamic-form>
-
+    
+    <div>
+        <dynamic-form [formObject]="formObject" [form]="formGroup"></dynamic-form>
+        
+        <div class="alert" *ngIf="!formObject.isPublished" align="center">
+            form not published, contact the owner to publish before submit your answer.
+        </div>
+    </div>
 </div>

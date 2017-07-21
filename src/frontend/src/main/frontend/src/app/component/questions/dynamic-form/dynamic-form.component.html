@@ -10,14 +10,11 @@
         </div>
 
         <div class="form-row">
-            <button md-raised-button color="primary" type="submit" [disabled]="form.invalid">Submit</button>
-            <button md-raised-button color="accent" type="button" (click)="save()" [disabled]="form.pristine">Save</button>
+            <button md-raised-button color="primary" type="submit" [disabled]="form.invalid || !formObject.isPublished">Submit</button>
+            <button md-raised-button color="accent" type="button" (click)="save()" [disabled]="form.pristine || !formObject.isPublished">Save</button>
             <button md-raised-button color="warn" type="reset" [disabled]="form.untouched">Reset</button>
         </div>
+        
     </form>
-
-    <div *ngIf="payLoad" class="form-row">
-        <strong>Saved the following values</strong><br>{{payLoad}}
-    </div>
 
 </div>

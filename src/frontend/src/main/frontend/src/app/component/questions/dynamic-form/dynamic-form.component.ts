@@ -7,6 +7,8 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import {Location} from "@angular/common";
 import {QuestionBuilder} from "../../../services/question-builder";
+import {MdDialog} from "@angular/material";
+import {SubmitPreviewComponent} from "./submit-preview/submit-preview.component";
 
 @Component({
     selector: 'dynamic-form',
@@ -16,30 +18,33 @@ import {QuestionBuilder} from "../../../services/question-builder";
 export class DynamicFormComponent implements OnInit {
     //@Input() questions: QuestionBase<any>[] = [];
     @Input() formObject: DynamicFormModel;
-    @Input() @Output() form: FormGroup;
+    @Input() form: FormGroup;
     payLoad = '';
 
     constructor(private qtService: QuestionService,
                 private router: ActivatedRoute,
-                private location: Location) { }
+                public diaRef: MdDialog) { }
 
     ngOnInit() {
     }
 
 
     onSubmit() {
-        this.payLoad = JSON.stringify(QuestionBuilder.buildAnswerModel(
-            this.form, this.formObject
-        ));
-        this.qtService.submitAnswer(this.form, this.formObject)
-            .subscribe(res => alert(res.message),
-                error => alert(error))
+        let dialogRef = this.diaRef.open(SubmitPreviewComponent, {
+            data: this.form.value
+        });
+        dialogRef.afterClosed().subscribe((data: {confirm: boolean}) => {
+            if (data.confirm) {
+                this.qtService.submitAnswer(this.form, this.formObject)
+                    .subscribe(res => alert(res.message),
+                        error => alert(error))
+            }
+        })
     }
 
     save() {
         this.qtService.saveAnswer(this.form, this.formObject)
             .subscribe(res => {
-                console.log(res);
                 alert(res.message)
                 },
                 error => alert(error));

@@ -12,7 +12,8 @@ import {UsersComponent} from './component/users/users.component';
 import { UserDetailComponent } from './component/users/user-detail/user-detail.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-    MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdCardModule, MdCheckboxModule, MdDatepickerModule,
+    MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdCardModule, MdCheckboxModule, MdChipsModule,
+    MdDatepickerModule,
     MdDialogModule,
     MdGridListModule,
     MdIconModule,
@@ -42,6 +43,7 @@ import { FRUserComponent } from './component/questions/form-result/fruser/fruser
 import { FRStatComponent } from './component/questions/form-result/frstat/frstat.component';
 import {ChartsModule} from "ng2-charts";
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
+import {SubmitPreviewComponent} from "./component/questions/dynamic-form/submit-preview/submit-preview.component";
 
 @NgModule({
     declarations: [
@@ -63,7 +65,8 @@ import {HashLocationStrategy, LocationStrategy} from "@angular/common";
         FRQuestionComponent,
         FRUserComponent,
         FRStatComponent,
-        HomePageComponent
+        HomePageComponent,
+        SubmitPreviewComponent
     ],
     imports: [
         BrowserModule,
@@ -90,7 +93,9 @@ import {HashLocationStrategy, LocationStrategy} from "@angular/common";
         MdGridListModule,
         MdCardModule,
         MdTabsModule,
+        MdDialogModule,
         MdIconModule,
+        MdChipsModule,
         MdProgressBarModule,
         MdProgressSpinnerModule,
         MdDialogModule,
@@ -98,6 +103,7 @@ import {HashLocationStrategy, LocationStrategy} from "@angular/common";
         MdSnackBarModule,
         ChartsModule
     ],
+    entryComponents: [SubmitPreviewComponent],
     providers: [UserService, QuestionService ,{provide: LocationStrategy, useClass: HashLocationStrategy}],
     bootstrap: [AppComponent]
 })

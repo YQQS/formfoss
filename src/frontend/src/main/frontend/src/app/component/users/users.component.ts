@@ -23,7 +23,7 @@ import 'rxjs/add/observable/fromEvent';
 })
 export class UsersComponent implements OnInit {
     users: User[];
-    filteredUsers: Observable<User[]>
+    filteredUsers: Observable<User[]>;
     private searchTerm = new Subject<string>();
 
     constructor(private userService: UserService,

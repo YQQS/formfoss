@@ -6,6 +6,7 @@ export class DynamicFormModel {
     userId?: number;
     title: string;
     desc: string;
+    isPublished: boolean;
     settings: DynamicFormSettings;
     //ordered question list
     formItems: QuestionBase<any>[];
