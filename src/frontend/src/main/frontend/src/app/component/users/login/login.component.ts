@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
                 input.userPassword)
             .subscribe(res => {
                 alert(res['message']);
+                console.log(sessionStorage.getItem('userId'));
                 this.router.navigate(['/list']);
             }, error => alert(error['message']));
     }
