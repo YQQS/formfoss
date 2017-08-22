@@ -26,6 +26,7 @@ const routes:Routes = [
     {path: "register", component: RegisterComponent},
     {path: "list", component: UsersComponent},
     {path: "users/:id", component: UserDetailComponent},
+    {path: 'editusers/:id', component: MyUserEditComponent},
     {path: 'questionList', component: QuestionListComponent},
     {path: 'questions/edit/:id', component: FormEditComponent},
     {path: 'questions/new', component: FormNewComponent},

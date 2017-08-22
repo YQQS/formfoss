@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
-import {User} from "../../../models/user";
+import {User} from '../../../models/user';
 
 @Component({
     selector: 'app-login',
@@ -29,8 +29,9 @@ export class LoginComponent implements OnInit {
                         sessionStorage.setItem('currentUser', JSON.stringify(this.currentUser));
                     });
                 this.router.navigate(['/list']);
-            }, error => alert(error['message']));
+            }, error => alert(error));
     }
+
     ngOnInit() {
         this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     }

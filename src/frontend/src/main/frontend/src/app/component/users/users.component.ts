@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {User} from "../../models/user";
-import {UserService} from "../../services/user.service";
-import {Router} from "@angular/router";
+import {User} from '../../models/user';
+import {UserService} from '../../services/user.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-users',
@@ -22,7 +22,7 @@ export class UsersComponent implements OnInit {
             }, error => alert(error));
     }
 
-    onSelect(user: User) : void {
+    onSelect(user: User): void {
         this.selectedUser = user;
     }
 
@@ -39,10 +39,10 @@ export class UsersComponent implements OnInit {
         );
     }
 
-    gotoDetail(id:number) {
+    gotoDetail(id: number) {
         this.router.navigate(['/users', id]);
     }
-    gotoEdit(id:number) {
+    gotoEdit(id: number) {
         this.router.navigate(['/editusers', id]);
     }
     ngOnInit() {
