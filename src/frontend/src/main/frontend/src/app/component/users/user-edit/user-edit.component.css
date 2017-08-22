@@ -1,4 +1,5 @@
 button {
+    color: black;
     margin-top: 20px;
     font-family: Arial;
     background-color: #eee;
@@ -8,7 +9,14 @@ button {
     cursor: pointer; cursor: hand;
 }
 
+li:hover {
+    color: aqua;
+    background-color: transparent;
+    left: .1em;
+}
+
 .badge  {
+    font-family: Arial;
     width:1.4cm;
     display: inline-block;
     font-size: small;
@@ -22,4 +30,14 @@ button {
     height: 1.8em;
     margin: .1cm;
     border-radius: 4px 4px 4px 4px;
+}
+
+ul {
+    margin: 0 0 2em 0;
+    list-style-type: none;
+    padding: 0;
+}
+
+.example-card {
+    width: 50%;
 }
