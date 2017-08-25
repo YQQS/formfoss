@@ -88,10 +88,7 @@ export class QuestionBuilder {
 
                 //let maxData: number = chartModel.data.sort((a,b) => b - a)[0];
                 chartModel.options = {
-                    responsive: true,
-                    chartArea: {
-                        backgroundColor: 'white'
-                    }
+                    responsive: true
                     /*
                     scales: {
                         yAxes: [{

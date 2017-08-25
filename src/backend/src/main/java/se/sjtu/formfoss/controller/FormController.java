@@ -24,6 +24,7 @@ import java.util.*;
  * Created by 86506 on 2017/6/29.
  */
 @Controller
+@RequestMapping(path = "/api")
 public class FormController {
     @Autowired
     private FormRepository formRepository;

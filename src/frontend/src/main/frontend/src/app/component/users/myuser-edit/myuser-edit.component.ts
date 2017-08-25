@@ -10,9 +10,7 @@ import 'rxjs/add/operator/switchMap';
     templateUrl: './myuser-eidt.component.html',
     styleUrls: ['./myuser-edit.component.css']
 })
-
 export class MyUserEditComponent implements OnInit {
-
     user: User;
 
     constructor(private userService: UserService,
@@ -21,7 +19,9 @@ export class MyUserEditComponent implements OnInit {
 
     save(): void {
         this.userService.update(this.user)
-            .subscribe((user: User) => this.user = user)
+            .subscribe((res) => {
+                alert('Ok');
+            })
     }
 
     goBack() : void {

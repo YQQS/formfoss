@@ -20,6 +20,7 @@ export class QuestionService {
     private startForm = {
         title: 'Title',
         desc: 'Put your description here',
+        isPublished: false,
         settings: {},
         formItems: [
             {

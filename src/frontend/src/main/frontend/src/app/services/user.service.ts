@@ -17,11 +17,11 @@ import { User } from '../models/user';
 export class UserService {
     private userUrl = '/users/';
     private jsonHeader = new Headers({'Content-Type': 'application/json'});
-    private formHeader = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
+    private formHeader = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
 
     constructor(private http: Http) { }
 
-    getAll(userName?: string, userEmail?: string, fuzzy: boolean = false) : Observable<User[]> {
+    getAll(userName?: string, userEmail?: string, fuzzy: boolean = false): Observable<User[]> {
         let url: string = this.userUrl + `?fuzzy=${fuzzy}`;
         if (userName) {
             url += `&userName=${userName}`;
@@ -53,7 +53,7 @@ export class UserService {
             .map(res => res.json() as boolean)
     }
 
-    getUser(id: number) : Observable<User> {
+    getUser(id: number): Observable<User> {
         const url = this.userUrl + id;
         return this.http.get(url)
             .map((res: Response) => res.json())
@@ -62,24 +62,32 @@ export class UserService {
 
 
     login(userName: string, userPassword: string): Observable<any> {
-        //let body = {userName: userName, userPassword: userPassword};
-        let body: string = "userName=" + userName + "&userPassword=" + userPassword;
-        return this.http.post(this.userUrl + 'login', body, {headers: this.formHeader})
+        return this.http.post(this.userUrl + 'login',
+            JSON.stringify({
+                userName: userName,
+                userPassword: userPassword
+            }), {headers: this.jsonHeader})
+
             .map((response: Response) => {
-                return response.json();
+                const user = response.json();
+                if (user
+                    // && user.token
+                 ) {
+                    sessionStorage.setItem('currentUser', JSON.stringify(user));
+                }
+                return user;
             })
+
             .catch(this.handleError)
     }
 
     logout() {
-        return this.http.post(this.userUrl + '/logout', '{}')
-            .map(res => res.json())
-            .catch(this.handleError)
+        sessionStorage.removeItem('currentUser');
     }
 
 
     add(username: string, password: string, email: string): Observable<any> {
-        let body: string = JSON.stringify({
+        const body: string = JSON.stringify({
             userName: username,
             userPassword: password,
             userEmail: email
@@ -110,13 +118,25 @@ export class UserService {
     private handleError(error: Response | any)  {
         let errMsg: string;
         if (error instanceof Response) {
-            console.error(error.text());
+            console.error(error.json());
             const body = error.json() || '';
-            const err = body.errorMsg || JSON.stringify(error);
-            errMsg =`${error.status} - ${error.statusText || ''}: ${err}`;
+            const err = body.errorMsg || body.message || JSON.stringify(error);
+            errMsg = `${error.status} - ${error.statusText || ''}: ${err}`;
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
         return Observable.throw(errMsg);
     }
+
+    private build_reqOpts() {
+        let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (currentUser && currentUser.token) {
+            let headers = new Headers({
+                'Authorization': 'formfoss ' + currentUser.token
+            });
+
+            return new RequestOptions({headers: headers});
+        }
+    }
+
 }
