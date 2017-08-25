@@ -16,3 +16,6 @@ jwt:
   header: Authorization
   start-pattern: 'formfoss '
   expiration: 604800
+url:
+  authentication: '/auth'
+  public: '/public'
