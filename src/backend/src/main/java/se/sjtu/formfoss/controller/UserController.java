@@ -19,7 +19,7 @@ import java.util.*;
  * Created by ace on 6/28/17.
  */
 @Controller
-@RequestMapping(path = "/api")
+@RequestMapping(path = "${url.authentication}")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
@@ -50,32 +50,6 @@ public class UserController {
     }
 
 
-    @GetMapping(path="/users/validate")
-    public @ResponseBody ResponseEntity<Boolean> validateRegister(@RequestParam(defaultValue = "") String userName,@RequestParam(defaultValue = "") String userEmail){
-        Iterable<UserEntity> users;
-        if(userName.length() != 0 && userEmail.length() ==0){
-            users = userRepository.findByUserName(userName);
-            if(users.iterator().hasNext() == false) return new ResponseEntity<Boolean>(true,HttpStatus.OK);
-            return new ResponseEntity<Boolean>(false,HttpStatus.OK);
-        }
-        if(userName.length() == 0 && userEmail.length() != 0 ){
-            users = userRepository.findByUserEmail(userEmail);
-            if(users.iterator().hasNext() == false) return new ResponseEntity<Boolean>(true,HttpStatus.OK);
-            return new ResponseEntity<Boolean>(false,HttpStatus.NO_CONTENT);
-        }
-        if(userName.length() != 0 && userEmail.length() != 0 ){
-            users = userRepository.findByUserName(userName);
-            if(users.iterator().hasNext() == false){
-                users = userRepository.findByUserEmail(userEmail);
-                if(users.iterator().hasNext() == false){
-                    return new ResponseEntity<Boolean>(true,HttpStatus.OK);
-                }
-                return new ResponseEntity<Boolean>(false,HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<Boolean>(false,HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
-    }
 
     //search by id
     @GetMapping(path="/users/{id}")
@@ -114,12 +88,6 @@ public class UserController {
         return new ResponseEntity<String>("{\"message\": \"Update user successfully\"}",HttpStatus.OK);
     }
 
-
-    @PostMapping(path="/users/logout")
-    public @ResponseBody ResponseEntity<String> logout(HttpSession httpSession){
-        httpSession.removeAttribute("userId");
-        return new ResponseEntity<String>("{\"message\": \"Logout success\"}",HttpStatus.OK);
-    }
 
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<Error> UserNotFound(GlobalException e){
