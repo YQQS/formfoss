@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
-    @Value("formfoss ")
+    @Value("${jwt.start-pattern}")
     private String startStr;
 
     @Value("${jwt.header}")
@@ -24,12 +24,6 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
         super(new AntPathRequestMatcher(url));
     }
 
-    /*
-    @Override
-    public boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        return true;
-    }
-    */
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {

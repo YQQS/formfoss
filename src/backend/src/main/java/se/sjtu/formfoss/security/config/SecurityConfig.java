@@ -1,6 +1,7 @@
 package se.sjtu.formfoss.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,11 @@ import java.util.List;
 @EnableAutoConfiguration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Value("${url.public}")
+    private String publicUrl;
+
+    @Value("${url.authentication}")
+    private String authenticationUrl;
 
     @Autowired
     private JwtAuthEntryPoint unauthorizedHandler;
@@ -51,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtAuthFilter jwtAuthFilterBean() throws Exception {
-        JwtAuthFilter filter = new JwtAuthFilter("/api/**");
+        JwtAuthFilter filter = new JwtAuthFilter(authenticationUrl + "/**");
 
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler(new JwtAuthSuccessHandler());
@@ -70,10 +76,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // request authorization
                 .authorizeRequests()
-                .antMatchers("/getCredential").permitAll()
-                .antMatchers(HttpMethod.POST,
-                        "/register").permitAll()
-                .antMatchers("/api/**").authenticated()
+                .antMatchers(publicUrl + "/**").permitAll()
+                .antMatchers(authenticationUrl + "/**").authenticated()
                 .anyRequest().denyAll()
 
         .and()
