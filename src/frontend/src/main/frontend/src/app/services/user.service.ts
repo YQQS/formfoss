@@ -62,19 +62,27 @@ export class UserService {
 
 
     login(userName: string, userPassword: string): Observable<any> {
-        // let body = {userName: userName, userPassword: userPassword};
-        const body: string = 'userName=' + userName + '&userPassword=' + userPassword;
-        return this.http.post(this.userUrl + 'login', body, {headers: this.formHeader})
+        return this.http.post(this.userUrl + 'login',
+            JSON.stringify({
+                userName: userName,
+                userPassword: userPassword
+            }), {headers: this.jsonHeader})
+
             .map((response: Response) => {
-                return response.json();
+                const user = response.json();
+                if (user
+                    // && user.token
+                 ) {
+                    sessionStorage.setItem('currentUser', JSON.stringify(user));
+                }
+                return user;
             })
+
             .catch(this.handleError)
     }
 
     logout() {
-        return this.http.post(this.userUrl + '/logout', '{}')
-            .map(res => res.json())
-            .catch(this.handleError)
+        sessionStorage.removeItem('currentUser');
     }
 
 
@@ -118,6 +126,17 @@ export class UserService {
             errMsg = error.message ? error.message : error.toString();
         }
         return Observable.throw(errMsg);
+    }
+
+    private build_reqOpts() {
+        let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (currentUser && currentUser.token) {
+            let headers = new Headers({
+                'Authorization': 'formfoss ' + currentUser.token
+            });
+
+            return new RequestOptions({headers: headers});
+        }
     }
 
 }

@@ -45,8 +45,10 @@ import {ChartsModule} from "ng2-charts";
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 import {SubmitPreviewComponent} from "./component/questions/dynamic-form/submit-preview/submit-preview.component";
 import {UserEditComponent} from "./component/users/user-edit/user-edit.component";
-import { AlertDialogComponent } from './component/alert-dialog/alert-dialog.component';
+import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
 import {MyUserEditComponent} from "./component/users/myuser-edit/myuser-edit.component";
+import {AlertService} from "./services/alert.service";
+import {AlertComponent} from "./component/_directives/alert/alert.component";
 
 @NgModule({
     declarations: [
@@ -73,7 +75,7 @@ import {MyUserEditComponent} from "./component/users/myuser-edit/myuser-edit.com
         AlertDialogComponent,
         MyUserEditComponent,
         UserEditComponent,
-
+        AlertComponent
     ],
     imports: [
         BrowserModule,
@@ -111,7 +113,7 @@ import {MyUserEditComponent} from "./component/users/myuser-edit/myuser-edit.com
         ChartsModule
     ],
     entryComponents: [SubmitPreviewComponent, AlertDialogComponent],
-    providers: [UserService, QuestionService ,{provide: LocationStrategy, useClass: HashLocationStrategy}],
+    providers: [UserService, QuestionService, AlertService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

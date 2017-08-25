@@ -28,6 +28,7 @@ import java.util.Map;
  * Created by 86506 on 2017/7/4.
  */
 @Controller
+@RequestMapping(path = "/api")
 public class UserAnswerController {
     @Autowired
     private UserAnswerRepository userAnswerRepository;

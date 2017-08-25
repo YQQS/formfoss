@@ -43,7 +43,7 @@ export class UsersComponent implements OnInit {
         this.router.navigate(['/users', id]);
     }
     gotoEdit(id: number) {
-        this.router.navigate(['/editusers', id]);
+        this.router.navigate(['/editUsers', id]);
     }
     ngOnInit() {
         this.getAll();

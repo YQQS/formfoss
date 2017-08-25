@@ -24,13 +24,7 @@ export class AppComponent implements OnInit {
     }
 
     logout() {
-        sessionStorage.removeItem('currentUser');
-        this.userService.logout().subscribe(
-            res => {
-                alert(res.message);
-                this.router.navigate(['/homepage']);
-            }
-        )
+        this.userService.logout();
     }
 
 
