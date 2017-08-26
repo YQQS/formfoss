@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>se.sjtu.formfoss</groupId>
-	<artifactId>formfoss</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
+    <groupId>se.sjtu.formfoss</groupId>
+    <artifactId>formfoss</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-	<name>formfoss</name>
-	<description>The formfoss parent project</description>
+    <name>formfoss</name>
+    <description>The formfoss parent project</description>
 
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<spring.version>4.3.10.RELEASE</spring.version>
-		<spring-data.version>Ingalls-SR6</spring-data.version>
-		<spring.boot.version>1.5.6.RELEASE</spring.boot.version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring.version>4.3.10.RELEASE</spring.version>
+        <spring-data.version>Ingalls-SR6</spring-data.version>
+        <spring.boot.version>1.5.6.RELEASE</spring.boot.version>
         <spring.security.version>4.2.3.RELEASE</spring.security.version>
-		<spring.security.jwt>1.0.8.RELEASE</spring.security.jwt>
-		<mariadb.jdbc.version>2.1.0</mariadb.jdbc.version>
-		<io.jsonwebtoken.version>0.7.0</io.jsonwebtoken.version>
-		<java.version>1.8</java.version>
+        <spring.security.jwt>1.0.8.RELEASE</spring.security.jwt>
+        <mariadb.jdbc.version>2.1.0</mariadb.jdbc.version>
+        <io.jsonwebtoken.version>0.7.0</io.jsonwebtoken.version>
+        <java.version>1.8</java.version>
         <maven.compiler.plugin.version>3.6.2</maven.compiler.plugin.version>
-		<frontend.maven.version>1.4</frontend.maven.version>
-	</properties>
+        <frontend.maven.version>1.4</frontend.maven.version>
+    </properties>
 
 
-	<modules>
-		<module>frontend</module>
-		<module>backend</module>
-	</modules>
+    <modules>
+        <module>frontend</module>
+        <module>backend</module>
+    </modules>
 </project>

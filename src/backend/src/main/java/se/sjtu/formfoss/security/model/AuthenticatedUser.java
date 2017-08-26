@@ -15,10 +15,6 @@ public class AuthenticatedUser implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public AuthenticatedUser(Integer userId, String userName) {
-        this.userId = userId;
-        this.userName = userName;
-    }
 
     public AuthenticatedUser(Integer userId, String userName, String token, Collection<? extends GrantedAuthority> authorities) {
         this.userId = userId;

@@ -31,7 +31,7 @@ import { FormPrototypeComponent } from './component/form-prototype/form-prototyp
 import { DynamicFormComponent } from './component/questions/dynamic-form/dynamic-form.component';
 import { DynamicQuestionComponent } from './component/questions/dynamic-question/dynamic-question.component';
 import { DynamicEditComponent } from './component/questions/dynamic-edit/dynamic-edit.component';
-import {QuestionService} from "./services/question.service";
+import {QuestionService} from './services/question.service';
 import { HomePageComponent} from './component/questions/homepage/homepage.component';
 import { QuestionListComponent } from './component/questions/question-list/question-list.component';
 import { FormPreviewComponent } from './component/questions/dynamic-form/form-preview/form-preview.component';
@@ -41,14 +41,15 @@ import { FormSettingsComponent } from './component/questions/dynamic-edit/form-s
 import { FRQuestionComponent } from './component/questions/form-result/frquestion/frquestion.component';
 import { FRUserComponent } from './component/questions/form-result/fruser/fruser.component';
 import { FRStatComponent } from './component/questions/form-result/frstat/frstat.component';
-import {ChartsModule} from "ng2-charts";
-import {HashLocationStrategy, LocationStrategy} from "@angular/common";
-import {SubmitPreviewComponent} from "./component/questions/dynamic-form/submit-preview/submit-preview.component";
-import {UserEditComponent} from "./component/users/user-edit/user-edit.component";
+import {ChartsModule} from 'ng2-charts';
+import {HashLocationStrategy, LocationStrategy} from '@angular/common';
+import {SubmitPreviewComponent} from './component/questions/dynamic-form/submit-preview/submit-preview.component';
+import {UserEditComponent} from './component/users/user-edit/user-edit.component';
 import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
-import {MyUserEditComponent} from "./component/users/myuser-edit/myuser-edit.component";
-import {AlertService} from "./services/alert.service";
-import {AlertComponent} from "./component/_directives/alert/alert.component";
+import {MyUserEditComponent} from './component/users/myuser-edit/myuser-edit.component';
+import {AlertService} from './services/alert.service';
+import {AlertComponent} from './component/_directives/alert/alert.component';
+import {AuthGuard} from './component/_guards/auth.guard';
 
 @NgModule({
     declarations: [
@@ -113,7 +114,7 @@ import {AlertComponent} from "./component/_directives/alert/alert.component";
         ChartsModule
     ],
     entryComponents: [SubmitPreviewComponent, AlertDialogComponent],
-    providers: [UserService, QuestionService, AlertService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
+    providers: [UserService, QuestionService, AlertService, AuthGuard, {provide: LocationStrategy, useClass: HashLocationStrategy}],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

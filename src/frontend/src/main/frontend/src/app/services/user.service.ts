@@ -12,10 +12,14 @@ import 'rxjs/add/operator/distinctUntilChanged'
 
 import {Observable} from 'rxjs/Observable';
 import { User } from '../models/user';
+import {MessageUtil} from '../util/message.util';
+import {ServiceUtil} from '../util/service.util';
 
 @Injectable()
 export class UserService {
-    private userUrl = '/users/';
+    private userUrl = ServiceUtil.authUrl + '/users/';
+    private loginUrl = ServiceUtil.publicUrl + '/getCredential';
+    private registerUrl = ServiceUtil.publicUrl + '/signup';
     private jsonHeader = new Headers({'Content-Type': 'application/json'});
     private formHeader = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
 
@@ -29,16 +33,16 @@ export class UserService {
         if (userEmail) {
             url += `&userEmail=${userEmail}`;
         }
-        return this.http.get(url)
+        return this.http.get(url, ServiceUtil.buildAuthReqOpts())
             .map(response => {
                 return response.json() as User[];
                 }
             )
-            .catch(this.handleError);
+            .catch(ServiceUtil.handleError);
     }
 
     nameConflict(name: string): Observable<boolean> {
-        const url = this.userUrl + `validate?userName=${name}`;
+        const url = ServiceUtil.publicUrl + `/validate?userName=${name}`;
         return this.http.get(url)
             .debounceTime(1000)
             .distinctUntilChanged()
@@ -46,7 +50,7 @@ export class UserService {
     }
 
     emailConflict(email: string): Observable<boolean> {
-        const url = this.userUrl + `validate?userEmail=${email}`;
+        const url = ServiceUtil.publicUrl + `/validate?userEmail=${email}`;
         return this.http.get(url)
             .debounceTime(1000)
             .distinctUntilChanged()
@@ -55,14 +59,14 @@ export class UserService {
 
     getUser(id: number): Observable<User> {
         const url = this.userUrl + id;
-        return this.http.get(url)
+        return this.http.get(url, ServiceUtil.buildAuthReqOpts())
             .map((res: Response) => res.json())
-            .catch(this.handleError);
+            .catch(ServiceUtil.handleError);
     }
 
 
     login(userName: string, userPassword: string): Observable<any> {
-        return this.http.post(this.userUrl + 'login',
+        return this.http.post(this.loginUrl,
             JSON.stringify({
                 userName: userName,
                 userPassword: userPassword
@@ -70,15 +74,16 @@ export class UserService {
 
             .map((response: Response) => {
                 const user = response.json();
-                if (user
-                    // && user.token
-                 ) {
+
+                if (user && user.token) {
                     sessionStorage.setItem('currentUser', JSON.stringify(user));
+                    return MessageUtil.successMessage('logged in');
                 }
-                return user;
+
+                return MessageUtil.errorMessage('request success, but server did not return the proper response');
             })
 
-            .catch(this.handleError)
+            .catch(error => Observable.throw(error))
     }
 
     logout() {
@@ -86,57 +91,44 @@ export class UserService {
     }
 
 
-    add(username: string, password: string, email: string): Observable<any> {
+    /*
+     * quick sign up
+     *
+     */
+    signup(username: string, password: string, email: string): Observable<any> {
         const body: string = JSON.stringify({
             userName: username,
             userPassword: password,
             userEmail: email
         });
-        return this.http.post(this.userUrl, body, {headers: this.jsonHeader})
+        return this.http.post(this.registerUrl, body, {headers: this.jsonHeader})
             .map((response: Response) => {
                 return response.json();
             })
-            .catch(this.handleError);
+            .catch(ServiceUtil.handleError);
     }
 
     deleteUser(id: number): Observable<any> {
         const url = this.userUrl + id;
-        return this.http.delete(url, {headers: this.formHeader})
+        return this.http.delete(url, ServiceUtil.buildAuthReqOpts())
             .map((response: Response) => {
                 return response.json();
             })
-            .catch(this.handleError);
+            .catch(ServiceUtil.handleError);
+    }
+
+    add(user: User): Observable<any> {
+        return this.http.post(this.userUrl, JSON.stringify(user), ServiceUtil.buildAuthReqOpts())
+            .map(res => res.json())
+            .catch(ServiceUtil.handleError);
     }
 
     update(user: User): Observable<User> {
         const url = this.userUrl;
-        return this.http.put(url, JSON.stringify(user), {headers: this.jsonHeader})
+        return this.http.put(url, JSON.stringify(user), ServiceUtil.buildAuthReqOpts())
             .map((res: Response) => res.json() as User)
-            .catch(this.handleError)
+            .catch(ServiceUtil.handleError)
     }
 
-    private handleError(error: Response | any)  {
-        let errMsg: string;
-        if (error instanceof Response) {
-            console.error(error.json());
-            const body = error.json() || '';
-            const err = body.errorMsg || body.message || JSON.stringify(error);
-            errMsg = `${error.status} - ${error.statusText || ''}: ${err}`;
-        } else {
-            errMsg = error.message ? error.message : error.toString();
-        }
-        return Observable.throw(errMsg);
-    }
-
-    private build_reqOpts() {
-        let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-        if (currentUser && currentUser.token) {
-            let headers = new Headers({
-                'Authorization': 'formfoss ' + currentUser.token
-            });
-
-            return new RequestOptions({headers: headers});
-        }
-    }
 
 }

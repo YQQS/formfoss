@@ -2,7 +2,6 @@ import {Injectable} from "@angular/core";
 import {QuestionBase} from "../models/question-base";
 import {QuestionDropDown} from "../models/question-dropdown";
 import {QuestionTextbox} from '../models/question-textbox'
-import {QuestionSlider} from "../models/question-slider";
 import { QuestionBuilder } from './question-builder';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DynamicFormModel} from "../models/dynamic-form.model";
@@ -12,8 +11,8 @@ import 'rxjs/add/operator/catch';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/observable/throw';
 import {AnswerModel} from "../models/answer.model";
-import {ResultAnswerBase} from "../models/result/result.answer-base";
 import {ResultModel} from "../models/result/result.model";
+import {ServiceUtil} from '../util/service.util';
 
 @Injectable()
 export class QuestionService {
@@ -46,122 +45,111 @@ export class QuestionService {
         inputType: 'text',
         validator: {}
     };
-    private formUrl = '/forms';
-    private answerUrl = '/useranswers';
-    private dataUrl = '/formdata';
-    private userUrl='/users';
-    private publishUrl='/forms/published'
+
+    private formUrl = ServiceUtil.authUrl + '/forms';
+    private answerUrl = ServiceUtil.authUrl + '/useranswers';
+    private dataUrl = ServiceUtil.authUrl + '/formdata';
+    private userUrl = ServiceUtil.authUrl + '/users';
+    private publishUrl = ServiceUtil.publicUrl + '/forms/published';
     private jsonHeader = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http) {}
 
 
-    getOneQuestion(key: string, order: number) {
-        let question: QuestionBase<any> =  QuestionBuilder.buildQuestion(this.questionTemp);
+    getOneQuestion(key: string, order: number): QuestionBase<any> {
+        const question: QuestionBase<any> =  QuestionBuilder.buildQuestion(this.questionTemp);
         question.order = order ;
         question.key = key;
         return question;
     }
 
-    getStartForm() {
+    getStartForm(): DynamicFormModel {
         return QuestionBuilder.buildDynamicForm(this.startForm);
     }
 
     saveOrUpdate(form: DynamicFormModel) {
         if (form.formId) {
-            return this.http.put(this.formUrl, JSON.stringify(form), {headers: this.jsonHeader})
+            return this.http.put(this.formUrl, JSON.stringify(form), ServiceUtil.buildAuthReqOpts())
                 .map(res => res.json())
-                .catch(this.handleError)
+                .catch(ServiceUtil.handleError)
         } else {
-            return this.http.post(this.formUrl, JSON.stringify(form), {headers: this.jsonHeader})
+            return this.http.post(this.formUrl, JSON.stringify(form), ServiceUtil.buildAuthReqOpts())
                 .map(res => res.json())
-                .catch(this.handleError);
+                .catch(ServiceUtil.handleError);
         }
     }
 
     saveAnswer(formGroup: FormGroup, formObj: DynamicFormModel) {
-        let answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
+        const answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
         answer.commitflag = false;
-        return this.http.post(this.answerUrl + '/tempsave', JSON.stringify(answer), {headers: this.jsonHeader})
+        return this.http.post(this.answerUrl + '/tempsave', JSON.stringify(answer), ServiceUtil.buildAuthReqOpts())
             .map(res => res.json())
-            .catch(this.handleError)
+            .catch(ServiceUtil.handleError)
     }
 
     submitAnswer(formGroup: FormGroup, formObj: DynamicFormModel) {
-        let answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
-        return this.http.post(this.answerUrl, JSON.stringify(answer), {headers: this.jsonHeader})
+        const answer = QuestionBuilder.buildAnswerModel(formGroup, formObj);
+        return this.http.post(this.answerUrl, JSON.stringify(answer), ServiceUtil.buildAuthReqOpts())
             .map(res => QuestionBuilder.buildDynamicForm(res.json()) )
-            .catch(this.handleError)
+            .catch(ServiceUtil.handleError)
     }
 
     getAll(): Observable<DynamicFormModel[]> {
-        return this.http.get(this.formUrl)
-            .map(res => (res.json() as any[]).map(item => QuestionBuilder.buildDynamicForm(item)))
-            .catch(this.handleError)
+        return this.http.get(this.formUrl, ServiceUtil.buildAuthReqOpts())
+            .map(res => (res.json() as any[])
+                .map(item => QuestionBuilder.buildDynamicForm(item)))
+            .catch(ServiceUtil.handleError)
     }
 
     getPublished(): Observable<DynamicFormModel[]> {
         return this.http.get(this.publishUrl)
             .map(res => res.json().map(item => QuestionBuilder.buildDynamicForm(item)))
-            .catch(this.handleError)
+            .catch(ServiceUtil.handleError)
     }
 
     getForm(id: number): Observable<DynamicFormModel> {
-        return this.http.get(this.formUrl + '/' + id)
+        return this.http.get(this.formUrl + '/' + id, ServiceUtil.buildAuthReqOpts())
             .map(res => QuestionBuilder.buildDynamicForm(res.json()))
-            .catch(this.handleError)
+            .catch(ServiceUtil.handleError)
     }
 
     delete(id: number) {
-        return this.http.delete(this.formUrl + '/' + id)
+        return this.http.delete(this.formUrl + '/' + id, ServiceUtil.buildAuthReqOpts())
             .map(res => res.json())
-            .catch(this.handleError)
+            .catch(ServiceUtil.handleError)
     }
 
     getUserAnswer(answerId: number): Observable<AnswerModel> {
-        return this.http.get(this.answerUrl + '/answer/' + answerId)
+        return this.http.get(this.answerUrl + '/answer/' + answerId, ServiceUtil.buildAuthReqOpts())
             .map(res => QuestionBuilder.parseAnswerModel(res.json()) )
-            .catch(this.handleError)
+            .catch(ServiceUtil.handleError)
     }
 
     getUserAnswers(formId: number): Observable<AnswerModel[]> {
-        return this.http.get(this.answerUrl + '/' + formId)
+        return this.http.get(this.answerUrl + '/' + formId, ServiceUtil.buildAuthReqOpts())
             .map(res => {
-                let answers = res.json() as any[];
+                const answers = res.json() as any[];
                 return answers.map(item => QuestionBuilder.parseAnswerModel(item))
             })
-            .catch(this.handleError)
+            .catch(ServiceUtil.handleError)
     }
 
     getUserAnswerByFormId(userId: number, formId: number): Observable<AnswerModel> {
-        return this.http.get(this.answerUrl + '/' + userId + '/' + formId)
+        return this.http.get(this.answerUrl + '/' + userId + '/' + formId, ServiceUtil.buildAuthReqOpts())
             .map(res => QuestionBuilder.parseAnswerModel(res.json()) )
-            .catch(this.handleError)
+            .catch(ServiceUtil.handleError)
     }
 
     getFormData(formId: number): Observable<ResultModel> {
-        return this.http.get(this.dataUrl + '/' + formId)
+        return this.http.get(this.dataUrl + '/' + formId, ServiceUtil.buildAuthReqOpts())
             .map(res => QuestionBuilder.parseResultModel(res.json()) )
-            .catch(this.handleError)
+            .catch(ServiceUtil.handleError)
     }
 
-    publish(uid:number, fid:number) {
-        return this.http.patch(this.userUrl+'/'+uid+this.formUrl+'/'+fid,"{}",{headers: this.jsonHeader})
+    publish(uid: number, fid: number) {
+        return this.http.patch(this.userUrl + '/' + uid + this.formUrl + '/' + fid, '{}',ServiceUtil.buildAuthReqOpts())
             .map(res => res.json())
-            .catch(this.handleError)
+            .catch(ServiceUtil.handleError)
     }
 
-
-    private handleError(error: Response | any)  {
-        let errMsg: string;
-        if (error instanceof Response) {
-            console.error(error.text());
-            const body = error.json() || '';
-            const err = body.errorMsg || JSON.stringify(error);
-            errMsg =`${error.status} - ${error.statusText || ''}: ${err}`;
-        } else {
-            errMsg = error.message ? error.message : error.toString();
-        }
-        return Observable.throw(errMsg);
-    }
 }

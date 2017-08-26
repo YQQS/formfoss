@@ -56,7 +56,10 @@ public class LoginController {
         }
 
         status = HttpStatus.UNAUTHORIZED;
-        return new ResponseEntity<>(status);
+        return new ResponseEntity<>(
+                new AuthenticatedUser(null ,null, null, null),
+                status
+        );
     }
 
     /*
