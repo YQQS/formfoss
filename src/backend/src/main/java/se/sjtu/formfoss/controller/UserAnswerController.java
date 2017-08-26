@@ -1,13 +1,10 @@
 package se.sjtu.formfoss.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.ls.LSException;
 import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.exception.GlobalException;
 import se.sjtu.formfoss.model.*;
@@ -28,6 +25,7 @@ import java.util.Map;
  * Created by 86506 on 2017/7/4.
  */
 @Controller
+@RequestMapping(path = "${url.authentication}")
 public class UserAnswerController {
     @Autowired
     private UserAnswerRepository userAnswerRepository;

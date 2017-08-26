@@ -1,4 +1,4 @@
-<ul *ngIf="user" >
+<ul *ngIf="user">
     <md-toolbar align="center"   color="warn">
         <md-icon>assignment</md-icon>
         <span align="center">Details of User = {{user.userId}}</span>
@@ -45,8 +45,8 @@
             <span>{{user.userPhone}}</span>
         </li>
     </div>
-    <div align="center">
-        <button md-button (click)="goBack()">Back</button>
+    <div style="float:right" >
+        <button (click)="goBack()">Back</button>
     </div>
 
 

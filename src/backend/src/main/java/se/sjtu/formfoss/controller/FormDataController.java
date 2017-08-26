@@ -20,6 +20,7 @@ import java.util.Map;
  * Created by QHZ on 2017/7/4.
  */
 @Controller
+@RequestMapping(path = "${url.authentication}")
 public class FormDataController {
     @Autowired
     FormDataRepository formDataRepository;

@@ -19,78 +19,37 @@ import java.util.*;
  * Created by ace on 6/28/17.
  */
 @Controller
+@RequestMapping(path = "${url.authentication}")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
 
     @GetMapping(path="/users")
-    public @ResponseBody Iterable<UserEntity> getAllUser(@RequestParam(defaultValue = "") String userName,@RequestParam(defaultValue = "") String userEmail, @RequestParam(defaultValue = "false") Boolean fuzzy,HttpSession httpSession)  {
+    public @ResponseBody Iterable<UserEntity> getAllUser(@RequestParam(defaultValue = "") String userName,
+                                                         @RequestParam(defaultValue = "") String userEmail,
+                                                         @RequestParam(defaultValue = "false") Boolean fuzzy) {
 
-        Integer userid = (Integer)httpSession.getAttribute("userId");
-        UserEntity user = userRepository.findOne(userid);
-        if(user.getUserRole().equals("admin")) {
-            Iterable<UserEntity> allUser = userRepository.findAll();
-            HttpStatus status;
-            if (!allUser.iterator().hasNext()) {
-                status = HttpStatus.NOT_FOUND;
-                throw new GlobalException(status);
-            }
-            status = HttpStatus.OK;
             if (userName.length() == 0 && userEmail.length() == 0) {
-                return allUser;
+                return userRepository.findAll();
             } else if (userName.length() > 0 && userEmail.length() == 0) {
                 if (fuzzy) {
-                    allUser = userRepository.findByUserNameContainingIgnoreCase(userName);
-                    return allUser;
+                    return userRepository.findByUserNameContainingIgnoreCase(userName);
                 }
-                allUser = userRepository.findByUserNameIgnoreCase(userName);
-                return allUser;
+                return userRepository.findByUserNameIgnoreCase(userName);
             } else if (userEmail.length() > 0 && userName.length() == 0) {
                 if (fuzzy) {
-                    allUser = userRepository.findByUserEmailContainingIgnoreCase(userEmail);
-                    return allUser;
+                    return userRepository.findByUserEmailContainingIgnoreCase(userEmail);
                 }
-                allUser = userRepository.findByUserEmailIgnoreCase(userEmail);
-                return allUser;
+                return userRepository.findByUserEmailIgnoreCase(userEmail);
             }
 
             if (fuzzy) {
-                allUser = userRepository.findByUserNameContainingIgnoreCaseAndUserEmailContainingIgnoreCase(userName, userEmail);
-                return allUser;
+                return userRepository.findByUserNameContainingIgnoreCaseAndUserEmailContainingIgnoreCase(userName, userEmail);
             }
-            allUser = userRepository.findByUserNameIgnoreCaseAndUserEmailIgnoreCase(userName, userEmail);
-            return allUser;
-        }
-        return new ArrayList<UserEntity>();
+            return userRepository.findByUserNameIgnoreCaseAndUserEmailIgnoreCase(userName, userEmail);
     }
 
 
-    @GetMapping(path="/users/validate")
-    public @ResponseBody ResponseEntity<Boolean> validateRegister(@RequestParam(defaultValue = "") String userName,@RequestParam(defaultValue = "") String userEmail){
-        Iterable<UserEntity> users;
-        if(userName.length() != 0 && userEmail.length() ==0){
-            users = userRepository.findByUserName(userName);
-            if(users.iterator().hasNext() == false) return new ResponseEntity<Boolean>(true,HttpStatus.OK);
-            return new ResponseEntity<Boolean>(false,HttpStatus.OK);
-        }
-        if(userName.length() == 0 && userEmail.length() != 0 ){
-            users = userRepository.findByUserEmail(userEmail);
-            if(users.iterator().hasNext() == false) return new ResponseEntity<Boolean>(true,HttpStatus.OK);
-            return new ResponseEntity<Boolean>(false,HttpStatus.NO_CONTENT);
-        }
-        if(userName.length() != 0 && userEmail.length() != 0 ){
-            users = userRepository.findByUserName(userName);
-            if(users.iterator().hasNext() == false){
-                users = userRepository.findByUserEmail(userEmail);
-                if(users.iterator().hasNext() == false){
-                    return new ResponseEntity<Boolean>(true,HttpStatus.OK);
-                }
-                return new ResponseEntity<Boolean>(false,HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<Boolean>(false,HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
-    }
 
     //search by id
     @GetMapping(path="/users/{id}")
@@ -129,25 +88,6 @@ public class UserController {
         return new ResponseEntity<String>("{\"message\": \"Update user successfully\"}",HttpStatus.OK);
     }
 
-    @PostMapping(path = "/users/login")
-    public @ResponseBody ResponseEntity<String> login(@RequestParam String userName,
-                                                      @RequestParam String userPassword, HttpSession httpSession) {
-        List<UserEntity> users= userRepository.findByUserNameIgnoreCase(userName);
-        HttpStatus status;
-        if (users.size() == 1 && users.get(0).getUserPassword().equals(userPassword)) {
-            status=HttpStatus.OK;
-            httpSession.setAttribute("userId",users.get(0).getUserId());
-            return new ResponseEntity<String>("{\"message\": \"Login success\"}",status);
-        }
-        status=HttpStatus.UNAUTHORIZED;
-        return new ResponseEntity<String>("{\"message\": \"username or pass word not match\"}",status);
-    }
-
-    @PostMapping(path="/users/logout")
-    public @ResponseBody ResponseEntity<String> logout(HttpSession httpSession){
-        httpSession.removeAttribute("userId");
-        return new ResponseEntity<String>("{\"message\": \"Logout success\"}",HttpStatus.OK);
-    }
 
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<Error> UserNotFound(GlobalException e){

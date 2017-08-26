@@ -16,7 +16,6 @@ import se.sjtu.formfoss.repository.FormDataRepository;
 import se.sjtu.formfoss.repository.UserAnswerRepository;
 
 import javax.servlet.http.HttpSession;
-import javax.xml.ws.Response;
 import java.io.IOException;
 import java.util.*;
 
@@ -24,6 +23,7 @@ import java.util.*;
  * Created by 86506 on 2017/6/29.
  */
 @Controller
+@RequestMapping(path = "${url.authentication}")
 public class FormController {
     @Autowired
     private FormRepository formRepository;
@@ -39,18 +39,8 @@ public class FormController {
     //OK
     @GetMapping(path = "/forms")
     public @ResponseBody
-    ResponseEntity<List<FormEntity>> getAllForm(HttpSession httpSession) {
-        Integer userid = (Integer)httpSession.getAttribute("userId");
-        UserEntity user = userRepository.findOne(userid);
-        if(user.getUserRole().equals("user")){
-            List<FormEntity> allForm = formRepository.findByUserId(userid);
-            if(allForm.iterator().hasNext() == false){
-                throw new GlobalException(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
-        }
-        List<FormEntity> allForm = formRepository.findAll();
-        return new ResponseEntity<List<FormEntity>>(allForm, HttpStatus.OK);
+    List<FormEntity> getAllForm() {
+        return formRepository.findAll();
     }
 
     //get published forms and display on the homwpage

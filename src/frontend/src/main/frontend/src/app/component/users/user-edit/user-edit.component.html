@@ -24,9 +24,11 @@
         <input [(ngModel)]="user.userPhone" />
     </div>
 
+    <div style="float:right" >
 
-</div>
-<div  align="center" >
-    <button md-button (click)="save()" (click)="goBack()" >Save</button>
-    <button md-button (click)="goBack()">Back</button>
+        <button (click)="save()" (click)="goBack()" >Save</button>
+
+        <button (click)="goBack()">Back</button>
+    </div>
+
 </div>

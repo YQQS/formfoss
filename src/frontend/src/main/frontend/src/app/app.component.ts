@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {User} from "./models/user";
-import {UserService} from "./services/user.service";
-import {Router} from "@angular/router";
+import {User} from './models/user';
+import {UserService} from './services/user.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-root',
@@ -24,16 +24,12 @@ export class AppComponent implements OnInit {
     }
 
     logout() {
-        sessionStorage.removeItem('currentUser');
-        this.userService.logout().subscribe(
-            res => {
-                alert(res.message)
-                this.router.navigate(['/homepage']);
-            }
-        )
+        this.userService.logout();
     }
 
 
-    edit() {}
+    edit() {
+        this.router.navigate(['/profile', JSON.parse(this.getUser())['userId'] ])
+    }
 
 }

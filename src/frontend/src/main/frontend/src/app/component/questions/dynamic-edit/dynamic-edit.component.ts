@@ -9,7 +9,7 @@ import 'rxjs/add/operator/switchMap';
 import {QuestionBuilder} from "../../../services/question-builder";
 import {QuestionDropDown} from "../../../models/question-dropdown";
 import {MdDialog} from "@angular/material";
-import {AlertDialogComponent} from "../../alert-dialog/alert-dialog.component";
+import {AlertDialogComponent} from "../../_directives/alert-dialog/alert-dialog.component";
 
 @Component({
     selector: 'dynamic-edit',
