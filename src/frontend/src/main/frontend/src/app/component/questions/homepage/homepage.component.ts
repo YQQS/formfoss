@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {DynamicFormModel} from "../../../models/dynamic-form.model";
-import {QuestionService} from "../../../services/question.service";
-import {Router} from "@angular/router";
+import {DynamicFormModel} from '../../../models/dynamic-form.model';
+import {QuestionService} from '../../../services/question.service';
+import {Router} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
 
 

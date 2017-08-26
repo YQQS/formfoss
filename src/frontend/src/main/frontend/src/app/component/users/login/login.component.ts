@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
-import { User } from '../../../models/user';
 import { AlertService } from '../../../services/alert.service';
 
 @Component({
@@ -12,7 +11,6 @@ import { AlertService } from '../../../services/alert.service';
     styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-    currentUser: User;
 
     constructor(
         private userService: UserService,
@@ -24,14 +22,24 @@ export class LoginComponent implements OnInit {
         this.userService.logout();
         return this.userService.login(input.userName.trim().toLowerCase(), input.userPassword)
             .subscribe(res => {
-                this.router.navigate(['/list']);
-            }, error => {
-                this.alertService.error(error);
+                if (res.message) {
+                    this.alertService.success(res.message);
+                    this.router.navigate(['/list']);
+                } else if (res.errorMsg) {
+                    this.alertService.error(res.errorMsg);
+                } else {
+                    this.alertService.error(JSON.stringify(res));
+                }
+            }, (error: Response) => {
+                if (error.status === 401) {
+                    this.alertService.error('username or password not match');
+                } else {
+                    this.alertService.error('failed, unexpected response returned from server');
+                }
             });
     }
 
     ngOnInit() {
-        this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     }
 
 }

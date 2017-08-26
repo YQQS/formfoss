@@ -43,13 +43,6 @@ public class FormController {
         return formRepository.findAll();
     }
 
-    //get published forms and display on the homwpage
-    @GetMapping(path="/forms/published")
-    public @ResponseBody
-    ResponseEntity<List<FormEntity>> getPublicForm(){
-        List<FormEntity> publishedForm = formRepository.findByIsPublishedIsTrue();
-        return new ResponseEntity<List<FormEntity>>(publishedForm,HttpStatus.OK);
-    }
 
     //OK
     @GetMapping(path = "/forms/{formId}")

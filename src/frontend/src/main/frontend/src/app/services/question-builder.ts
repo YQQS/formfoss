@@ -9,7 +9,7 @@ import {AnswerTextbox} from "../models/answer-textbox";
 import {AnswerSlider} from "../models/answer-slider";
 import {AnswerSingleChoice} from "../models/answer-singleChoice";
 import {AnswerMultiChoice} from "../models/answer-multiChoice";
-import {FossValidators} from "../validator/validator";
+import {FossValidators} from "../validator/foss.validator";
 import {ResultModel} from "../models/result/result.model";
 import {ChartModel} from "../models/result/chart.model";
 import {ResultAnswerBase} from "../models/result/result.answer-base";
