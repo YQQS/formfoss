@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
-import {FossValidators} from "../../../validator/validator";
+import {FossValidators} from "../../../validator/foss.validator";
 import {User} from "../../../models/user";
+import {AlertService} from "../../../services/alert.service";
 
 @Component({
     selector: 'app-register',
@@ -15,18 +16,25 @@ export class RegisterComponent implements OnInit {
 
 
     constructor(private userService: UserService,
+                private alertService: AlertService,
                 private router: Router,
                 private formBuilder: FormBuilder
                ) { }
 
     register() {
-        console.log(this.registerForm.controls);
-        return this.userService.add(this.registerForm.value.userName.trim().toLowerCase(),
+        return this.userService.signup(
+            this.registerForm.value.userName.trim().toLowerCase(),
             this.registerForm.value.userPassword,
             this.registerForm.value.userEmail.trim())
             .subscribe(response => {
-                alert(response.message);
-                this.router.navigate(['/list']);
+                if (response.message) {
+                    this.alertService.success(response.message);
+                    this.router.navigate(['/list']);
+                } else if (response.errorMsg) {
+                    this.alertService.error(response.errorMsg);
+                } else {
+                    this.alertService.error(JSON.stringify(response));
+                }
             }, error2 => alert(error2))
     }
 
