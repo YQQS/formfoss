@@ -13,6 +13,7 @@ import {AlertService} from "../../../services/alert.service";
 })
 export class RegisterComponent implements OnInit {
     registerForm: FormGroup;
+    loading = false;
 
 
     constructor(private userService: UserService,
@@ -28,14 +29,15 @@ export class RegisterComponent implements OnInit {
             this.registerForm.value.userEmail.trim())
             .subscribe(response => {
                 if (response.message) {
-                    this.alertService.success(response.message);
-                    this.router.navigate(['/list']);
+                    this.loading = true;
+                    this.alertService.success(response.message, true);
+                    this.router.navigate(['/login']);
                 } else if (response.errorMsg) {
                     this.alertService.error(response.errorMsg);
                 } else {
                     this.alertService.error(JSON.stringify(response));
                 }
-            }, error2 => alert(error2))
+            }, error2 => this.alertService.error(error2))
     }
 
 

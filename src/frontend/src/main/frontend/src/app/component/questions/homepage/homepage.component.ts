@@ -3,6 +3,7 @@ import {DynamicFormModel} from '../../../models/dynamic-form.model';
 import {QuestionService} from '../../../services/question.service';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
+import {AlertService} from '../../../services/alert.service';
 
 
 @Component({
@@ -14,12 +15,13 @@ export class HomePageComponent implements OnInit {
     questionList: DynamicFormModel[];
 
     constructor(private qtService: QuestionService,
-                private router: Router) { }
+                private router: Router,
+                private alertService: AlertService) { }
 
     getPublished() {
         this.qtService.getPublished()
             .subscribe( res => this.questionList = res,
-                        error => alert(error));
+                        error => this.alertService.error(error));
     }
 
 

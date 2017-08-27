@@ -1,6 +1,7 @@
 import { RequestOptions, Headers, Response } from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
+import {User} from '../models/user';
 
 export class ServiceUtil {
     static publicUrl = '/public';
@@ -9,7 +10,7 @@ export class ServiceUtil {
     static formHeader = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
 
     static buildAuthReqOpts(): RequestOptions {
-        let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 
         let header: Headers = new Headers();
 
@@ -35,6 +36,11 @@ export class ServiceUtil {
     static checkAuthorization(): boolean {
         const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
         return (currentUser && currentUser.token);
+    }
+
+    static getCurrentUser(): User {
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser')) || null;
+        return currentUser;
     }
 
     /*
