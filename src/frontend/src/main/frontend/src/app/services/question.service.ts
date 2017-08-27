@@ -1,7 +1,5 @@
 import {Injectable} from "@angular/core";
 import {QuestionBase} from "../models/question-base";
-import {QuestionDropDown} from "../models/question-dropdown";
-import {QuestionTextbox} from '../models/question-textbox'
 import { QuestionBuilder } from './question-builder';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DynamicFormModel} from "../models/dynamic-form.model";
@@ -10,8 +8,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/observable/throw';
-import {AnswerModel} from "../models/answer.model";
-import {ResultModel} from "../models/result/result.model";
+import {AnswerModel} from '../models/answer.model';
+import {ResultModel} from '../models/result/result.model';
 import {ServiceUtil} from '../util/service.util';
 
 @Injectable()
@@ -113,7 +111,7 @@ export class QuestionService {
             .catch(ServiceUtil.handleError)
     }
 
-    delete(id: number) {
+    deleteForm(id: number) {
         return this.http.delete(this.formUrl + '/' + id, ServiceUtil.buildAuthReqOpts())
             .map(res => res.json())
             .catch(ServiceUtil.handleError)
@@ -147,7 +145,7 @@ export class QuestionService {
     }
 
     publish(uid: number, fid: number) {
-        return this.http.patch(this.userUrl + '/' + uid + this.formUrl + '/' + fid, '{}',ServiceUtil.buildAuthReqOpts())
+        return this.http.patch(this.userUrl + '/' + uid + this.formUrl + '/' + fid, '{}', ServiceUtil.buildAuthReqOpts())
             .map(res => res.json())
             .catch(ServiceUtil.handleError)
     }

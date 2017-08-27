@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { UserService } from '../../../services/user.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
 import { AlertService } from '../../../services/alert.service';
 
@@ -12,19 +12,27 @@ import { AlertService } from '../../../services/alert.service';
 })
 export class LoginComponent implements OnInit {
 
+    loading = false;
+
+    // the origin url
+    returnUrl: string;
+
     constructor(
         private userService: UserService,
         private alertService: AlertService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     ) { }
 
     login(input: any) {
-        this.userService.logout();
+
         return this.userService.login(input.userName.trim().toLowerCase(), input.userPassword)
             .subscribe(res => {
                 if (res.message) {
-                    this.alertService.success(res.message);
-                    this.router.navigate(['/list']);
+                    this.loading = true;
+                    this.router.navigate([this.returnUrl])
+                        .then(() =>
+                            this.alertService.success(res.message));
                 } else if (res.errorMsg) {
                     this.alertService.error(res.errorMsg);
                 } else {
@@ -40,6 +48,8 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.userService.logout();
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
 
 }

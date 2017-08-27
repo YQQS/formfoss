@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DynamicFormModel} from "../../../models/dynamic-form.model";
-import {QuestionService} from "../../../services/question.service";
-import {Router} from "@angular/router";
+import {QuestionService} from '../../../services/question.service';
+import {Router} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
 
 
@@ -28,7 +28,7 @@ export class QuestionListComponent implements OnInit {
     }
 
     deleteForm(id: number) {
-        this.qtService.delete(id)
+        this.qtService.deleteForm(id)
             .subscribe(res => {
                 if (res.message) {
                     alert(res.message);

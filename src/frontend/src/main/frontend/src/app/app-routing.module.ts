@@ -16,14 +16,14 @@ import {HomePageComponent} from './component/questions/homepage/homepage.compone
 import { MyUserEditComponent} from './component/users/myuser-edit/myuser-edit.component';
 import {AuthGuard} from './component/_guards/auth.guard';
 
-const routes:Routes = [
-    {path: "", redirectTo: '/homepage', pathMatch: 'full'},
-    {path: "homepage", component: HomePageComponent},
-    {path: "prototype", component: FormPrototypeComponent},
-    {path: "login", component: LoginComponent},
-    {path: "register", component: RegisterComponent},
-    {path: "list", component: UsersComponent, canActivate: [AuthGuard]},
-    {path: "users/:id", component: UserDetailComponent, canActivate: [AuthGuard]},
+const routes: Routes = [
+    {path: '', redirectTo: '/homepage', pathMatch: 'full'},
+    {path: 'homepage', component: HomePageComponent},
+    {path: 'prototype', component: FormPrototypeComponent},
+    {path: 'login', component: LoginComponent},
+    {path: 'register', component: RegisterComponent},
+    {path: 'list', component: UsersComponent, canActivate: [AuthGuard]},
+    {path: 'users/:id', component: UserDetailComponent, canActivate: [AuthGuard]},
     {path: 'editUsers/:id', component: MyUserEditComponent, canActivate: [AuthGuard]},
     {path: 'questionList', component: QuestionListComponent, canActivate: [AuthGuard]},
     {path: 'questions/edit/:id', component: FormEditComponent, canActivate: [AuthGuard]},
