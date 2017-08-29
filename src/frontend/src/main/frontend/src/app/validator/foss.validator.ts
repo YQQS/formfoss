@@ -17,7 +17,7 @@ export class FossValidators {
                 noLarger: {
                     valid: false
                 }
-            }: null;
+            } : null;
     }
 
     static editMaxSelect(g: AbstractControl) {
@@ -32,7 +32,7 @@ export class FossValidators {
     // form fill in validators
     static minSelect(min: number) {
         return (g: FormArray) =>
-            (g.value as any[]).filter(item => item != false).length < min ?
+            (g.value as any[]).filter(item => item !== false).length < min ?
              {
                 minSelect: {
                     valid: false
@@ -43,7 +43,7 @@ export class FossValidators {
 
     static maxSelect(max: number) {
         return (g: FormArray) =>
-            (g.value as any[]).filter(item => item != false).length > max ?
+            (g.value as any[]).filter(item => item !== false).length > max ?
              {
                 maxSelect: {
                     valid: false
