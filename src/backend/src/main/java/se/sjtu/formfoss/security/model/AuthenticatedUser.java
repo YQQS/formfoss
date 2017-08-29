@@ -9,18 +9,16 @@ import java.util.Collection;
 public class AuthenticatedUser implements UserDetails {
     private Integer userId;
 
-    private String userName;
+    private String username;
 
     private String token;
+
+    private String role;
 
     private Collection<? extends GrantedAuthority> authorities;
 
 
-    public AuthenticatedUser(Integer userId, String userName, String token, Collection<? extends GrantedAuthority> authorities) {
-        this.userId = userId;
-        this.userName = userName;
-        this.token = token;
-        this.authorities = authorities;
+    public AuthenticatedUser() {
     }
 
     @JsonIgnore
@@ -28,9 +26,13 @@ public class AuthenticatedUser implements UserDetails {
         return userId;
     }
 
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override
@@ -48,6 +50,18 @@ public class AuthenticatedUser implements UserDetails {
 
     public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
         this.authorities = authorities;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
@@ -83,7 +97,7 @@ public class AuthenticatedUser implements UserDetails {
     public String toString() {
         return "AuthenticatedUser{" +
                 "userId=" + userId +
-                ", userName='" + userName + '\'' +
+                ", username='" + username + '\'' +
                 ", token='" + token + '\'' +
                 ", authorities=" + authorities +
                 '}';

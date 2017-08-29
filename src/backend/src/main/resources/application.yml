@@ -19,3 +19,4 @@ jwt:
 url:
   authentication: '/auth'
   public: '/public'
+  frontend: '/#frontend'

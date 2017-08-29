@@ -42,7 +42,7 @@ import { QuestionStatComponent } from './component/form/stat/question-stat/quest
 import { UserStatComponent } from './component/form/stat/user-stat/user-stat.component';
 import { FormStatComponent } from './component/form/stat/form-stat/form-stat.component';
 import {ChartsModule} from 'ng2-charts';
-import {HashLocationStrategy, LocationStrategy} from '@angular/common';
+import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {SubmitPreviewComponent} from './component/form/view/form-submit-preview/submit-preview.component';
 import {UserEditComponent} from './component/users/user-edit/user-edit.component';
 import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
@@ -116,7 +116,10 @@ import { PageNotFoundComponent } from './component/extra/page-not-found/page-not
         ChartsModule
     ],
     entryComponents: [SubmitPreviewComponent, AlertDialogComponent],
-    providers: [UserService, QuestionService, AlertService, AuthGuard, {provide: LocationStrategy, useClass: HashLocationStrategy}],
+    providers: [UserService, QuestionService, AlertService, AuthGuard, {
+        provide: LocationStrategy, useClass: HashLocationStrategy}, {
+        provide: APP_BASE_HREF, useValue: '/'
+    }],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

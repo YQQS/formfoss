@@ -45,19 +45,19 @@ public class LoginController {
                 authorities.add(new SimpleGrantedAuthority(
                         matchedUser.getUserRole()
                 ));
-                AuthenticatedUser authenticatedUser = new AuthenticatedUser(
-                        matchedUser.getUserId(),
-                        matchedUser.getUserName(),
-                        jwtUtil.generateToken(matchedUser),
-                        authorities
-                );
+                AuthenticatedUser authenticatedUser = new AuthenticatedUser();
+                authenticatedUser.setUsername(matchedUser.getUserName());
+                authenticatedUser.setToken(jwtUtil.generateToken(matchedUser));
+                authenticatedUser.setAuthorities(authorities);
+                authenticatedUser.setRole(matchedUser.getUserRole());
+
                 return new ResponseEntity<>(authenticatedUser, status);
             }
         }
 
         status = HttpStatus.UNAUTHORIZED;
         return new ResponseEntity<>(
-                new AuthenticatedUser(null ,null, null, null),
+                new AuthenticatedUser(),
                 status
         );
     }

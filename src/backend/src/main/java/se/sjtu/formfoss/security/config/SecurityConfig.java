@@ -76,9 +76,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // request authorization
                 .authorizeRequests()
+                //
                 .antMatchers(publicUrl + "/**").permitAll()
+                // logged in user can access
                 .antMatchers(authenticationUrl + "/**").authenticated()
-                .anyRequest().denyAll()
+                // admin can access
+
+                .anyRequest().permitAll()
 
         .and()
                 .addFilterBefore(jwtAuthFilterBean(), UsernamePasswordAuthenticationFilter.class);
