@@ -46,6 +46,14 @@ public class JwtAuthProvider extends AbstractUserDetailsAuthenticationProvider {
         }
 
         List<GrantedAuthority> authorityList = AuthorityUtils.commaSeparatedStringToAuthorityList(parsedUser.getUserRole());
-        return new AuthenticatedUser(parsedUser.getUserId(), parsedUser.getUserName(), token, authorityList);
+
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
+        authenticatedUser.setUserId(parsedUser.getUserId());
+        authenticatedUser.setUsername(parsedUser.getUserName());
+        authenticatedUser.setRole(parsedUser.getUserRole());
+        authenticatedUser.setToken(token);
+        authenticatedUser.setAuthorities(authorityList);
+
+        return authenticatedUser;
     }
 }

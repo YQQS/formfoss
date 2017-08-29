@@ -1,7 +1,7 @@
 import { RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
-import {User} from '../models/user';
+import {AuthenticatedUser} from '../models/authenticatedUser';
 
 export class ServiceUtil {
     static publicUrl = '/public';
@@ -38,9 +38,23 @@ export class ServiceUtil {
         return (currentUser && currentUser.token);
     }
 
-    static getCurrentUser(): User {
-        const currentUser = JSON.parse(sessionStorage.getItem('currentUser')) || null;
-        return currentUser;
+    /*
+     * parse the currentUser Object returned from server
+     */
+    static parseCurrentUser(input: any): AuthenticatedUser {
+        const authenticatedUser = new AuthenticatedUser();
+        authenticatedUser.username = input['username'] || null;
+        authenticatedUser.role = input['role'] || null;
+        authenticatedUser.token = input['token'] || null;
+        return authenticatedUser;
+    }
+
+    /*
+     * get currentUser: AuthenticatedUser from sessionStorage if exist
+     */
+    static getCurrentUser(): AuthenticatedUser {
+        const user = sessionStorage.getItem('currentUser');
+        return user === null ? null : new AuthenticatedUser(JSON.parse(user));
     }
 
     /*
