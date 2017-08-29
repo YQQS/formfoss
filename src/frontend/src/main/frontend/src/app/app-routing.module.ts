@@ -3,35 +3,37 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { LoginComponent } from './component/users/login/login.component';
 import { RegisterComponent } from './component/users/register/register.component';
-import { UsersComponent } from './component/users/users.component';
+import { UserListComponent } from './component/users/user-list/user-list.component';
 import {UserDetailComponent} from './component/users/user-detail/user-detail.component';
 import {FormPrototypeComponent} from './component/form-prototype/form-prototype.component';
-import {QuestionListComponent} from './component/questions/question-list/question-list.component';
-import {FormPreviewComponent} from './component/questions/dynamic-form/form-preview/form-preview.component';
-import {FormEditComponent} from './component/questions/dynamic-edit/form-edit/form-edit.component';
-import {FormNewComponent} from './component/questions/dynamic-edit/form-new/form-new.component';
-import {FRStatComponent} from './component/questions/form-result/frstat/frstat.component';
-import {FRUserComponent} from './component/questions/form-result/fruser/fruser.component';
-import {HomePageComponent} from './component/questions/homepage/homepage.component';
+import {FormListComponent} from './component/form/list/form-list.component';
+import {FormPreviewComponent} from './component/form/view/form-preview/form-preview.component';
+import {FormEditComponent} from './component/form/edit/form-edit/form-edit.component';
+import {FormNewComponent} from './component/form/edit/form-new/form-new.component';
+import {FormStatComponent} from './component/form/stat/form-stat/form-stat.component';
+import {UserStatComponent} from './component/form/stat/user-stat/user-stat.component';
+import {HomeComponent} from './component/extra/home/home.component';
 import { MyUserEditComponent} from './component/users/myuser-edit/myuser-edit.component';
 import {AuthGuard} from './component/_guards/auth.guard';
+import {PageNotFoundComponent} from './component/extra/page-not-found/page-not-found.component';
 
 const routes: Routes = [
-    {path: '', redirectTo: '/homepage', pathMatch: 'full'},
-    {path: 'homepage', component: HomePageComponent},
+    {path: '', redirectTo: '/home', pathMatch: 'full'},
+    {path: 'home', component: HomeComponent},
     {path: 'prototype', component: FormPrototypeComponent},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
-    {path: 'list', component: UsersComponent, canActivate: [AuthGuard]},
+    {path: 'list', component: UserListComponent, canActivate: [AuthGuard]},
     {path: 'users/:id', component: UserDetailComponent, canActivate: [AuthGuard]},
     {path: 'editUsers/:id', component: MyUserEditComponent, canActivate: [AuthGuard]},
-    {path: 'questionList', component: QuestionListComponent, canActivate: [AuthGuard]},
+    {path: 'questionList', component: FormListComponent, canActivate: [AuthGuard]},
     {path: 'questions/edit/:id', component: FormEditComponent, canActivate: [AuthGuard]},
     {path: 'questions/new', component: FormNewComponent},
     {path: 'questions/:id', component: FormPreviewComponent},
-    {path: 'formStat/:id', component: FRStatComponent, canActivate: [AuthGuard]},
-    {path: 'formUserStat/:id', component: FRUserComponent, canActivate: [AuthGuard]},
-    {path: 'profile/:id', component: MyUserEditComponent, canActivate: [AuthGuard]}
+    {path: 'formStat/:id', component: FormStatComponent, canActivate: [AuthGuard]},
+    {path: 'formUserStat/:id', component: UserStatComponent, canActivate: [AuthGuard]},
+    {path: 'profile/:id', component: MyUserEditComponent, canActivate: [AuthGuard]},
+    {path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({

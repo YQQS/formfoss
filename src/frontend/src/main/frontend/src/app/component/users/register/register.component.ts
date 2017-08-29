@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user.service';
-import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
-import {FossValidators} from "../../../validator/foss.validator";
-import {User} from "../../../models/user";
-import {AlertService} from "../../../services/alert.service";
+import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {FossValidators} from '../../../validator/foss.validator';
+import {User} from '../../../models/user';
+import {AlertService} from '../../../services/alert.service';
 
 @Component({
     selector: 'app-register',
@@ -14,7 +14,6 @@ import {AlertService} from "../../../services/alert.service";
 export class RegisterComponent implements OnInit {
     registerForm: FormGroup;
     loading = false;
-
 
     constructor(private userService: UserService,
                 private alertService: AlertService,
@@ -30,7 +29,7 @@ export class RegisterComponent implements OnInit {
             .subscribe(response => {
                 if (response.message) {
                     this.loading = true;
-                    this.alertService.success(response.message, true);
+                    this.alertService.success(response.message);
                     this.router.navigate(['/login']);
                 } else if (response.errorMsg) {
                     this.alertService.error(response.errorMsg);
@@ -52,7 +51,7 @@ export class RegisterComponent implements OnInit {
 
     nameConflict(control: AbstractControl) {
         return this.userService.nameConflict(control.value.trim().toLowerCase())
-            .map(res => res ? null: {nameConflict: true} );
+            .map(res => res ? null : {nameConflict: true} );
 
     }
 
