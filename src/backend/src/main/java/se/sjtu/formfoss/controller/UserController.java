@@ -11,9 +11,7 @@ import se.sjtu.formfoss.model.UserEntity;
 import se.sjtu.formfoss.repository.UserRepository;
 import se.sjtu.formfoss.exception.GlobalException;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.*;
 
 /**
  * Created by ace on 6/28/17.

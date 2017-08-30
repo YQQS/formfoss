@@ -33,7 +33,7 @@ export class ServiceUtil {
      * check authorization info stored in sessionStore
      * restrict anonymous request
      */
-    static checkAuthorization(): boolean {
+    static hasAuthorization(): boolean {
         const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
         return (currentUser && currentUser.token);
     }
