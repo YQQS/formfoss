@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import se.sjtu.formfoss.exception.BasicError;
 import se.sjtu.formfoss.exception.GlobalException;
 import se.sjtu.formfoss.model.*;
 import se.sjtu.formfoss.repository.CountRepository;

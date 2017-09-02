@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import se.sjtu.formfoss.exception.ObjectNotFoundException;
+import se.sjtu.formfoss.exception.PermissionDenyException;
 import se.sjtu.formfoss.model.FormEntity;
 import se.sjtu.formfoss.service.FormService;
 
@@ -33,9 +35,9 @@ public class PublicController {
     ResponseEntity<FormEntity> searchById(@PathVariable Integer formId ) {
         FormEntity form = formService.getFormById(formId);
         if (form == null) {
-            return new ResponseEntity<>(new FormEntity(), HttpStatus.NOT_FOUND);
+            throw new ObjectNotFoundException("form not exist");
         } else if (!form.isIsPublished()) {
-            return new ResponseEntity<>(new FormEntity(), HttpStatus.FORBIDDEN);
+            throw new PermissionDenyException("don't have the privilege to access the form");
         }
         return new ResponseEntity<>(form, HttpStatus.OK);
     }
