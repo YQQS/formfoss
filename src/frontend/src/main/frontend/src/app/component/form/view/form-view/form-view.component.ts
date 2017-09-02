@@ -9,6 +9,7 @@ import {Location} from '@angular/common';
 import {FormUtil} from '../../../../util/form.util';
 import {MdDialog} from '@angular/material';
 import {SubmitPreviewComponent} from '../form-submit-preview/submit-preview.component';
+import {AlertService} from '../../../../services/alert.service';
 
 @Component({
     selector: 'app-form-view',
@@ -23,6 +24,7 @@ export class FormViewComponent implements OnInit {
 
     constructor(private qtService: QuestionService,
                 private router: ActivatedRoute,
+                private alertService: AlertService,
                 public diaRef: MdDialog) { }
 
     ngOnInit() {
@@ -36,8 +38,8 @@ export class FormViewComponent implements OnInit {
         dialogRef.afterClosed().subscribe((data: {confirm: boolean}) => {
             if (data.confirm) {
                 this.qtService.submitAnswer(this.form, this.formObject)
-                    .subscribe(res => alert(res.message),
-                        error => alert(error))
+                    .subscribe(res => this.alertService.success(res['message'] || JSON.stringify(res)),
+                        (error: string) => this.alertService.error(error))
             }
         })
     }

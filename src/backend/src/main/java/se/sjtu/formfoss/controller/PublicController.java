@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.model.FormEntity;
 import se.sjtu.formfoss.service.FormService;
 
@@ -26,5 +24,19 @@ public class PublicController {
                 formService.getPublished(),
                 HttpStatus.OK
         );
+    }
+
+
+    //OK
+    @GetMapping(path = "/forms/{formId}")
+    public @ResponseBody
+    ResponseEntity<FormEntity> searchById(@PathVariable Integer formId ) {
+        FormEntity form = formService.getFormById(formId);
+        if (form == null) {
+            return new ResponseEntity<>(new FormEntity(), HttpStatus.NOT_FOUND);
+        } else if (!form.isIsPublished()) {
+            return new ResponseEntity<>(new FormEntity(), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(form, HttpStatus.OK);
     }
 }

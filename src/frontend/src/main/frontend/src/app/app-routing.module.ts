@@ -16,6 +16,8 @@ import {HomeComponent} from './component/extra/home/home.component';
 import { MyUserEditComponent} from './component/users/myuser-edit/myuser-edit.component';
 import {AuthGuard} from './component/_guards/auth.guard';
 import {PageNotFoundComponent} from './component/extra/page-not-found/page-not-found.component';
+import {CanNotAccessComponent} from './component/extra/can-not-access/can-not-access.component';
+import {AdminGuard} from './component/_guards/admin.guard';
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -23,16 +25,17 @@ const routes: Routes = [
     {path: 'prototype', component: FormPrototypeComponent},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
-    {path: 'list', component: UserListComponent, canActivate: [AuthGuard]},
+    {path: 'userList', component: UserListComponent, canActivate: [AuthGuard, AdminGuard]},
     {path: 'users/:id', component: UserDetailComponent, canActivate: [AuthGuard]},
     {path: 'editUsers/:id', component: MyUserEditComponent, canActivate: [AuthGuard]},
-    {path: 'questionList', component: FormListComponent, canActivate: [AuthGuard]},
+    {path: 'questionList', component: FormListComponent, canActivate: [AuthGuard, AdminGuard]},
     {path: 'questions/edit/:id', component: FormEditComponent, canActivate: [AuthGuard]},
     {path: 'questions/new', component: FormNewComponent},
     {path: 'questions/:id', component: FormPreviewComponent},
     {path: 'formStat/:id', component: FormStatComponent, canActivate: [AuthGuard]},
     {path: 'formUserStat/:id', component: UserStatComponent, canActivate: [AuthGuard]},
     {path: 'profile/:id', component: MyUserEditComponent, canActivate: [AuthGuard]},
+    {path: 'can-not-access', component: CanNotAccessComponent},
     {path: '**', component: PageNotFoundComponent}
 ];
 

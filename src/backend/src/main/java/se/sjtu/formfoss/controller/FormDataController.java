@@ -1,6 +1,5 @@
 package se.sjtu.formfoss.controller;
 
-import jdk.nashorn.internal.objects.Global;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.model.FormDataEntity;
 import se.sjtu.formfoss.repository.FormDataRepository;
-import se.sjtu.formfoss.exception.Error;
+import se.sjtu.formfoss.exception.BasicError;
 import se.sjtu.formfoss.exception.GlobalException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -104,14 +103,6 @@ public class FormDataController {
     public @ResponseBody ResponseEntity<String> updateFormData(@RequestBody FormDataEntity formData){
         formDataRepository.save(formData);
         return new ResponseEntity<String>("{\"message\": \"Update form data successfully\"}",HttpStatus.OK);
-    }
-
-    @ExceptionHandler(GlobalException.class)
-    public ResponseEntity<Error> NoData(GlobalException e){
-        Error error=new Error();
-        error.setCode(404);
-        error.setMessage("Form data not found");
-        return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
     }
 
 }

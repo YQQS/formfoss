@@ -92,7 +92,7 @@ export class QuestionService {
             .catch(ServiceUtil.handleError)
     }
 
-    getAll(): Observable<FormModel[]> {
+    getAll(): Observable<any> {
         return this.http.get(this.formUrl, ServiceUtil.buildAuthReqOpts())
             .map(res => (res.json() as any[])
                 .map(item => FormUtil.buildForm(item)))
@@ -105,7 +105,7 @@ export class QuestionService {
             .catch(ServiceUtil.handleError)
     }
 
-    getForm(id: number): Observable<FormModel> {
+    getForm(id: number): Observable<any> {
         return this.http.get(this.formUrl + '/' + id, ServiceUtil.buildAuthReqOpts())
             .map(res => FormUtil.buildForm(res.json()))
             .catch(ServiceUtil.handleError)
@@ -117,13 +117,13 @@ export class QuestionService {
             .catch(ServiceUtil.handleError)
     }
 
-    getUserAnswer(answerId: number): Observable<AnswerModel> {
+    getUserAnswer(answerId: number): Observable<any> {
         return this.http.get(this.answerUrl + '/answer/' + answerId, ServiceUtil.buildAuthReqOpts())
             .map(res => FormUtil.parseAnswerModel(res.json()) )
             .catch(ServiceUtil.handleError)
     }
 
-    getUserAnswers(formId: number): Observable<AnswerModel[]> {
+    getUserAnswers(formId: number): Observable<any> {
         return this.http.get(this.answerUrl + '/' + formId, ServiceUtil.buildAuthReqOpts())
             .map(res => {
                 const answers = res.json() as any[];
@@ -132,13 +132,13 @@ export class QuestionService {
             .catch(ServiceUtil.handleError)
     }
 
-    getUserAnswerByFormId(userId: number, formId: number): Observable<AnswerModel> {
+    getUserAnswerByFormId(userId: number, formId: number): Observable<any> {
         return this.http.get(this.answerUrl + '/' + userId + '/' + formId, ServiceUtil.buildAuthReqOpts())
             .map(res => FormUtil.parseAnswerModel(res.json()) )
             .catch(ServiceUtil.handleError)
     }
 
-    getFormData(formId: number): Observable<FormResultModel> {
+    getFormData(formId: number): Observable<any> {
         return this.http.get(this.dataUrl + '/' + formId, ServiceUtil.buildAuthReqOpts())
             .map(res => FormUtil.parseResultModel(res.json()) )
             .catch(ServiceUtil.handleError)

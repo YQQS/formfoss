@@ -21,7 +21,7 @@ export class FormListComponent implements OnInit {
     getAll() {
         this.qtService.getAll()
             .subscribe( res => this.questionList = res,
-                        error => alert(error));
+                (error: string) => this.alertService.error(error));
     }
 
 
