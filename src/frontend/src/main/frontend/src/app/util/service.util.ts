@@ -2,7 +2,6 @@ import { RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 import {AuthenticatedUser} from '../models/authenticatedUser';
-import {parse} from 'ts-node/dist';
 
 export class ServiceUtil {
     static publicUrl = '/public';
