@@ -25,7 +25,7 @@ export class UserService {
 
     constructor(private http: Http) { }
 
-    getAll(userName?: string, userEmail?: string, fuzzy: boolean = false): Observable<User[]> {
+    getAll(userName?: string, userEmail?: string, fuzzy: boolean = false): Observable<any> {
         let url: string = this.userUrl + `?fuzzy=${fuzzy}`;
         if (userName) {
             url += `&userName=${userName}`;
@@ -35,7 +35,7 @@ export class UserService {
         }
         return this.http.get(url, ServiceUtil.buildAuthReqOpts())
             .map(response => {
-                return response.json() as User[];
+                    return response.json() as User[];
                 }
             )
             .catch(ServiceUtil.handleError);
@@ -123,7 +123,7 @@ export class UserService {
             .catch(ServiceUtil.handleError);
     }
 
-    update(user: User): Observable<User> {
+    update(user: User): Observable<any> {
         const url = this.userUrl;
         return this.http.put(url, JSON.stringify(user), ServiceUtil.buildAuthReqOpts())
             .map((res: Response) => res.json() as User)
