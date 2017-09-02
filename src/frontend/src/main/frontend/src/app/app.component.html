@@ -16,7 +16,7 @@
         </button>
         
         <md-nav-list>
-            <button md-button routerLink="/homepage" routerLinkActive="active">
+            <button md-button routerLink="/home" routerLinkActive="active">
                 <md-icon>home</md-icon>
                 Home
             </button>
@@ -29,20 +29,20 @@
                 Questions
             </button>
             
-            <button md-button routerLink="/list" routerLinkActive="active">
+            <button md-button routerLink="/userList" routerLinkActive="active">
                 <md-icon>people</md-icon>
                 Users
             </button>
         </md-nav-list>
         
         <div class="example-button-login" >
-            <button *ngIf="!getUser()"
+            <button *ngIf="!currentUser"
                     md-button routerLink="/login" color="accent" routerLinkActive="active">
                 <md-icon>person</md-icon>
                 Login
             </button>
             
-            <button *ngIf="getUser()"
+            <button *ngIf="currentUser"
                     md-icon-button [mdMenuTriggerFor]="profileMenu">
                 <md-icon>person</md-icon>
             </button>

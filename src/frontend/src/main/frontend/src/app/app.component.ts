@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {User} from './models/user';
 import {UserService} from './services/user.service';
 import {Router} from '@angular/router';
+import {AuthenticatedUser} from './models/authenticatedUser';
+import {ServiceUtil} from './util/service.util';
 
 @Component({
     selector: 'app-root',
@@ -10,18 +11,15 @@ import {Router} from '@angular/router';
 })
 export class AppComponent implements OnInit {
     title = 'formfoss';
-    currentUser: User;
+    currentUser: AuthenticatedUser;
 
     constructor(private userService: UserService,
                 private router: Router) {}
 
     ngOnInit() {
-        this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        this.currentUser = ServiceUtil.getCurrentUser();
     }
 
-    getUser() {
-        return sessionStorage.getItem('currentUser');
-    }
 
     logout() {
         this.userService.logout();
@@ -30,7 +28,7 @@ export class AppComponent implements OnInit {
 
 
     edit() {
-        this.router.navigate(['/profile', JSON.parse(this.getUser())['userId'] ])
+        this.router.navigate(['/profile', this.currentUser.userId]);
     }
 
 }

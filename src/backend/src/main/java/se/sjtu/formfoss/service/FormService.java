@@ -16,4 +16,8 @@ public class FormService {
     public List<FormEntity> getPublished() {
         return formRepository.findByIsPublishedIsTrue();
     }
+
+    public FormEntity getFormById(int id) {
+        return formRepository.findOne(id);
+    }
 }

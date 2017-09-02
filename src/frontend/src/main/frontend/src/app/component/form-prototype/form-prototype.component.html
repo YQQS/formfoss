@@ -35,7 +35,7 @@
                     <h3>pick a date</h3>
                     <md-input-container>
                         <input mdInput [mdDatepicker]="myPick"  [(ngModel)]="selectedDate">
-                        <button mdSuffix [mdDatepickerToggle]="myPick"></button>
+                        <md-datepicker-toggle mdSuffix [for]="myPick"></md-datepicker-toggle>
                     </md-input-container>
                     <md-datepicker #myPick></md-datepicker>
                     <h3>you select {{selectedDate}}</h3>

@@ -6,10 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import se.sjtu.formfoss.exception.Error;
+import se.sjtu.formfoss.exception.BadRequestException;
+import se.sjtu.formfoss.exception.PermissionDenyException;
 import se.sjtu.formfoss.model.UserEntity;
 import se.sjtu.formfoss.repository.UserRepository;
-import se.sjtu.formfoss.exception.GlobalException;
+import se.sjtu.formfoss.util.AuthRequestUtil;
+import se.sjtu.formfoss.util.RestResponseUtil;
 
 import java.io.IOException;
 
@@ -25,7 +27,12 @@ public class UserController {
     @GetMapping(path="/users")
     public @ResponseBody Iterable<UserEntity> getAllUser(@RequestParam(defaultValue = "") String userName,
                                                          @RequestParam(defaultValue = "") String userEmail,
-                                                         @RequestParam(defaultValue = "false") Boolean fuzzy) {
+                                                         @RequestParam(defaultValue = "false") Boolean fuzzy,
+                                                         @RequestAttribute(name = "userRole") String userRole) {
+
+            if (!userRole.equals("admin")) {
+                throw new PermissionDenyException();
+            }
 
             if (userName.length() == 0 && userEmail.length() == 0) {
                 return userRepository.findAll();
@@ -34,7 +41,7 @@ public class UserController {
                     return userRepository.findByUserNameContainingIgnoreCase(userName);
                 }
                 return userRepository.findByUserNameIgnoreCase(userName);
-            } else if (userEmail.length() > 0 && userName.length() == 0) {
+            } else if (userName.length() == 0) {
                 if (fuzzy) {
                     return userRepository.findByUserEmailContainingIgnoreCase(userEmail);
                 }
@@ -49,51 +56,77 @@ public class UserController {
 
 
 
-    //search by id
+    // search by id
     @GetMapping(path="/users/{id}")
-    public @ResponseBody ResponseEntity<UserEntity> searchById(@PathVariable Integer id) {
-        UserEntity result=userRepository.findOne(id);
-        HttpStatus status=result!=null?HttpStatus.OK: HttpStatus.NOT_FOUND;
-        if(result==null)
-            throw new GlobalException(status);
-        return new ResponseEntity<UserEntity>(result,status);
+    public @ResponseBody ResponseEntity<UserEntity> searchById(@PathVariable Integer id,
+                                                               @RequestAttribute(name = "userId") Integer userId,
+                                                               @RequestAttribute(name = "userRole") String userRole) {
+        UserEntity user = userRepository.findOne(id);
+
+        if (user == null) {
+            throw new BadRequestException("Bad request, user not exist");
+        }
+
+        if (! AuthRequestUtil.checkUserOwnership(user, userId, userRole)) {
+            throw new PermissionDenyException();
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    //delete by id
+    // delete by id
     @DeleteMapping(path="/users/{id}")
-    public @ResponseBody ResponseEntity<String> userDel(@PathVariable Integer id) {
-        UserEntity result=userRepository.findOne(id);
-        HttpStatus status=result!=null?HttpStatus.NON_AUTHORITATIVE_INFORMATION:HttpStatus.NOT_FOUND;
+    public @ResponseBody String userDel(@PathVariable Integer id,
+                                                        @RequestAttribute(name = "userId") Integer userId,
+                                                        @RequestAttribute(name = "userRole") String userRole) {
+        UserEntity user = userRepository.findOne(id);
+
+        if (user == null) {
+            throw new BadRequestException("Bad request, user not exist");
+        }
+
+        if (! AuthRequestUtil.checkUserOwnership(user, userId, userRole)) {
+            throw new PermissionDenyException();
+        }
+
         userRepository.delete(id);
-        if(result==null)
-            return new ResponseEntity<String>("{\"code\": 404,\"message\": \"Delete successfully\"}",status);
-        return new ResponseEntity<String>("{\"message\": \"Delete successfully\"}",status);
+
+        return RestResponseUtil.successMsg("deleted");
     }
 
 
-    //create a user
+    /*
+     * create a new user
+     * only for admin
+     */
     @PostMapping(path="/users")
-    public @ResponseBody ResponseEntity<String> userAdd(@RequestBody UserEntity user) throws IOException {
+    public @ResponseBody String userAdd(@RequestBody UserEntity user,
+                                        @RequestAttribute(name = "userRole") String userRole) throws IOException {
+        if (!userRole.equals("admin")) {
+            throw new PermissionDenyException();
+        }
         userRepository.save(user);
-        HttpStatus status=HttpStatus.OK;
-        return new ResponseEntity<String>("{\"message\": \"Add new user successfully\"}",status);
+
+        return RestResponseUtil.successMsg("created");
     }
 
-    //update a user
+    /*
+     * update a user
+     * work for admin and user themselves
+     */
     @PutMapping(path = "/users")
-    public @ResponseBody ResponseEntity<String> userUpdate(@RequestBody UserEntity user) throws IOException {
+    public @ResponseBody String userUpdate(@RequestBody UserEntity user,
+                                                           @RequestAttribute Integer userId,
+                                                           @RequestAttribute String userRole) {
+        if (!AuthRequestUtil.checkUserOwnership(user, userId, userRole)) {
+            throw new PermissionDenyException();
+        }
         userRepository.save(user);
-        return new ResponseEntity<String>("{\"message\": \"Update user successfully\"}",HttpStatus.OK);
+
+        return RestResponseUtil.successMsg("saved");
     }
 
 
-    @ExceptionHandler(GlobalException.class)
-    public ResponseEntity<Error> UserNotFound(GlobalException e){
-        Error error=new Error();
-        error.setCode(404);
-        error.setMessage("User not found");
-        return new ResponseEntity<Error>(error,e.getStatus());
-    }
 
 
 }

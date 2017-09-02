@@ -1,9 +1,11 @@
 package se.sjtu.formfoss.security.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import se.sjtu.formfoss.model.UserEntity;
 import se.sjtu.formfoss.security.exception.JwtTokenMissingException;
 import se.sjtu.formfoss.security.model.JwtAuthToken;
 
@@ -19,6 +21,9 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
     @Value("${jwt.header}")
     private String authHeader;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public JwtAuthFilter(String url) {
         super(new AntPathRequestMatcher(url));
@@ -51,6 +56,12 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
                                             FilterChain chain,
                                             Authentication authentication) throws IOException, ServletException {
         super.successfulAuthentication(request, response, chain, authentication);
+
+        UserEntity user = jwtUtil.parseToken(
+                request.getHeader(authHeader).substring(startStr.length())
+        );
+        request.setAttribute("userId", user.getUserId());
+        request.setAttribute("userRole", user.getUserRole());
 
         chain.doFilter(request, response);
     }

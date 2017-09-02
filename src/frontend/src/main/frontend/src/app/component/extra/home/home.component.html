@@ -3,9 +3,8 @@
     <md-list-item *ngFor="let question of questionList">
         <md-icon md-list-icon>mail</md-icon>
         <h3 md-line>{{question.title}}</h3>
-        <h3 id={{question.formId}} align="right"></h3>
-        <button md-menu-item color="accent" (click)="preview(question.formId)">
-            <md-icon>edit</md-icon>
+        <button md-icon-button color="primary" (click)="view(question.formId)">
+            <md-icon>pageview</md-icon>
         </button>
     </md-list-item>
 </md-list>

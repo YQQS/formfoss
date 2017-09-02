@@ -5,7 +5,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Map;
 
@@ -23,23 +22,15 @@ public class FormEntity {
     @Id
     @GeneratedValue
     private Integer formId;
+
     private Integer userId;
     private String title;
     private String desc;
     private Map<String,Object> settings;
     private List<Map<String,Object>> formItems;
     private boolean isPublished;
-    public FormEntity() {}
 
-    public FormEntity(Integer formId, Integer userId, String title, String desc, Map<String,Object> settings, List<Map<String,Object>> formItems) {
-        this.formId=formId;
-        this.userId = userId;
-        this.title = title;
-        this.desc =desc;
-        this.settings=settings;
-        this.formItems=formItems;
-        this.isPublished=false;
-    }
+    public FormEntity() {}
 
     public Integer getFormId() {
         return formId;
@@ -93,8 +84,8 @@ public class FormEntity {
         return isPublished;
     }
 
-    public void setIsPublished(boolean isPublished) {
-        this.isPublished = isPublished;
+    public void setIsPublished(boolean published) {
+        isPublished = published;
     }
 }
 

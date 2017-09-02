@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
 
 
 
-    preview(id: number) {
+    view(id: number) {
         this.router.navigate(['/questions', id])
     }
 

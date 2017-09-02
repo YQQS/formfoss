@@ -89,13 +89,13 @@ public class LoginController {
             );
         }
 
-        if (newUser.getUserRole() == null) {
-            newUser.setUserRole("user");
-        }
+        // only normal user register is accepted
+        newUser.setUserRole("user");
+
         userRepository.save(newUser);
 
         return new ResponseEntity<>(
-                RestResponseUtil.successMsg("new user created"),
+                RestResponseUtil.successMsg("created"),
                 HttpStatus.CREATED
         );
 
@@ -106,7 +106,8 @@ public class LoginController {
      * validate user input in sign up page
      */
     @GetMapping(path="/validate")
-    public @ResponseBody ResponseEntity<Boolean> validateRegister(@RequestParam(defaultValue = "") String userName,@RequestParam(defaultValue = "") String userEmail){
+    public @ResponseBody ResponseEntity<Boolean> validateRegister(@RequestParam(defaultValue = "") String userName,
+                                                                  @RequestParam(defaultValue = "") String userEmail){
         Iterable<UserEntity> users;
         if(userName.length() != 0 && userEmail.length() ==0){
             users = userRepository.findByUserName(userName);

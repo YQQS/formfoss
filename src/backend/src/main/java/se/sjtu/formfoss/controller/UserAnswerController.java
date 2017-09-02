@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import se.sjtu.formfoss.exception.Error;
+import se.sjtu.formfoss.exception.BasicError;
 import se.sjtu.formfoss.exception.GlobalException;
 import se.sjtu.formfoss.model.*;
 import se.sjtu.formfoss.repository.CountRepository;
@@ -384,13 +384,5 @@ public class UserAnswerController {
         return new ResponseEntity<String>("{\"message\": \"Nothing to delete\"}",HttpStatus.FORBIDDEN);
     }
 
-
-    @ExceptionHandler(GlobalException.class)
-    public ResponseEntity<Error> FormNotFound(GlobalException e){
-        Error error=new Error();
-        error.setCode(404);
-        error.setMessage("Answer not found");
-        return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
-    }
 
 }
