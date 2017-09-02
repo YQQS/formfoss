@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user.service';
-import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
-import {FossValidators} from "../../../validator/foss.validator";
-import {User} from "../../../models/user";
-import {AlertService} from "../../../services/alert.service";
+import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {FossValidators} from '../../../validator/foss.validator';
+import {User} from '../../../models/user';
+import {AlertService} from '../../../services/alert.service';
 
 @Component({
     selector: 'app-register',
@@ -13,7 +13,7 @@ import {AlertService} from "../../../services/alert.service";
 })
 export class RegisterComponent implements OnInit {
     registerForm: FormGroup;
-
+    loading = false;
 
     constructor(private userService: UserService,
                 private alertService: AlertService,
@@ -28,14 +28,15 @@ export class RegisterComponent implements OnInit {
             this.registerForm.value.userEmail.trim())
             .subscribe(response => {
                 if (response.message) {
+                    this.loading = true;
                     this.alertService.success(response.message);
-                    this.router.navigate(['/list']);
+                    this.router.navigate(['/login']);
                 } else if (response.errorMsg) {
                     this.alertService.error(response.errorMsg);
                 } else {
                     this.alertService.error(JSON.stringify(response));
                 }
-            }, error2 => alert(error2))
+            }, error2 => this.alertService.error(error2))
     }
 
 
@@ -50,7 +51,7 @@ export class RegisterComponent implements OnInit {
 
     nameConflict(control: AbstractControl) {
         return this.userService.nameConflict(control.value.trim().toLowerCase())
-            .map(res => res ? null: {nameConflict: true} );
+            .map(res => res ? null : {nameConflict: true} );
 
     }
 

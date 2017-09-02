@@ -1,0 +1,14 @@
+<div *ngIf="formObject && formGroup" >
+    <button md-button color="primary" (click)="goBack()">
+        <md-icon>arrow_back</md-icon>
+        Back
+    </button>
+    
+    <div>
+        <app-form-view [formObject]="formObject" [form]="formGroup"></app-form-view>
+        
+        <div class="alert" *ngIf="!formObject.isPublished" align="center">
+            form not published, contact the owner to publish before submit your answer.
+        </div>
+    </div>
+</div>

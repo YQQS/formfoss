@@ -76,8 +76,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // request authorization
                 .authorizeRequests()
+                //
                 .antMatchers(publicUrl + "/**").permitAll()
+                // logged in user can access
                 .antMatchers(authenticationUrl + "/**").authenticated()
+                // admin can access
                 .anyRequest().denyAll()
 
         .and()

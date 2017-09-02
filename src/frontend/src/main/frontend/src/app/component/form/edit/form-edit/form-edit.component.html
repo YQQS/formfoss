@@ -1,0 +1,7 @@
+<div *ngIf="formObject && formGroup">
+    <button md-button color="primary" (click)="goBack()" >
+        <md-icon>arrow_back</md-icon>
+        Back
+    </button>
+    <app-form-structure-edit [formObject]="formObject" [formGroup]="formGroup"></app-form-structure-edit>
+</div>

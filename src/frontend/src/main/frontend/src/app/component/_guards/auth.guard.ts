@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {AlertService} from '../../services/alert.service';
+import {ServiceUtil} from '../../util/service.util';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -8,7 +9,7 @@ export class AuthGuard implements CanActivate {
                 private alertService: AlertService) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        if (sessionStorage.getItem('currentUser')) {
+        if (ServiceUtil.hasAuthorization()) {
             return true;
         }
 

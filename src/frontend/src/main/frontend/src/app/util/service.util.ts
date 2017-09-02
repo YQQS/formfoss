@@ -1,6 +1,7 @@
 import { RequestOptions, Headers, Response } from '@angular/http';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
+import {AuthenticatedUser} from '../models/authenticatedUser';
 
 export class ServiceUtil {
     static publicUrl = '/public';
@@ -9,7 +10,7 @@ export class ServiceUtil {
     static formHeader = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
 
     static buildAuthReqOpts(): RequestOptions {
-        let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 
         let header: Headers = new Headers();
 
@@ -32,9 +33,28 @@ export class ServiceUtil {
      * check authorization info stored in sessionStore
      * restrict anonymous request
      */
-    static checkAuthorization(): boolean {
+    static hasAuthorization(): boolean {
         const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
         return (currentUser && currentUser.token);
+    }
+
+    /*
+     * parse the currentUser Object returned from server
+     */
+    static parseCurrentUser(input: any): AuthenticatedUser {
+        const authenticatedUser = new AuthenticatedUser();
+        authenticatedUser.username = input['username'] || null;
+        authenticatedUser.role = input['role'] || null;
+        authenticatedUser.token = input['token'] || null;
+        return authenticatedUser;
+    }
+
+    /*
+     * get currentUser: AuthenticatedUser from sessionStorage if exist
+     */
+    static getCurrentUser(): AuthenticatedUser {
+        const user = sessionStorage.getItem('currentUser');
+        return user === null ? null : new AuthenticatedUser(JSON.parse(user));
     }
 
     /*

@@ -1,0 +1,46 @@
+import { Component, OnInit } from '@angular/core';
+import {FormModel} from '../../../models/form/form.model';
+import {QuestionService} from '../../../services/question.service';
+import {Router} from '@angular/router';
+import {Subject} from 'rxjs/Subject';
+import {AlertService} from '../../../services/alert.service';
+
+
+@Component({
+    selector: 'app-form-list',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss']
+})
+export class HomeComponent implements OnInit {
+    questionList: FormModel[];
+
+    constructor(private qtService: QuestionService,
+                private router: Router,
+                private alertService: AlertService) { }
+
+    getPublished() {
+        this.qtService.getPublished()
+            .subscribe( res => this.questionList = res,
+                        error => this.alertService.error(error));
+    }
+
+
+    ngOnInit() {
+        this.getPublished();
+    }
+
+
+
+    preview(id: number) {
+        this.router.navigate(['/questions', id])
+    }
+
+    stats(id: number) {
+
+    }
+
+    add() {
+        this.router.navigate(['/questions/new'])
+    }
+
+}
