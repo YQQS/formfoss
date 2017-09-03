@@ -1,15 +1,16 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
 import {Location} from '@angular/common';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {FormModel} from "../../../../models/form/form.model";
-import {QuestionService} from "../../../../services/question.service";
-import {QuestionBase} from "../../../../models/form/question-base";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormModel} from '../../../../models/form/form.model';
+import {QuestionService} from '../../../../services/question.service';
+import {QuestionBase} from '../../../../models/form/question-base';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
-import {FormUtil} from "../../../../util/form.util";
-import {QuestionDropDown} from "../../../../models/form/question-dropdown";
-import {MdDialog} from "@angular/material";
-import {AlertDialogComponent} from "../../../_directives/alert-dialog/alert-dialog.component";
+import {FormUtil} from '../../../../util/form.util';
+import {QuestionDropDown} from '../../../../models/form/question-dropdown';
+import {MdDialog} from '@angular/material';
+import {AlertDialogComponent} from '../../../_directives/alert-dialog/alert-dialog.component';
+import {AlertService} from '../../../../services/alert.service';
 
 @Component({
     selector: 'app-form-structure-edit',
@@ -27,13 +28,14 @@ export class FormStructureEditComponent implements OnInit {
     // the FormControlGroup for preview
     form: FormGroup;
 
-    updatedQuestion: boolean = false;
+    updatedQuestion = false;
 
     controlTypes = ['textbox', 'dropdown', 'slider'];
 
     constructor(private qtService: QuestionService,
                 public diaRef: MdDialog,
-                private router: ActivatedRoute) {
+                private router: ActivatedRoute,
+                private alertService: AlertService) {
     }
 
     ngOnInit() {
@@ -49,20 +51,20 @@ export class FormStructureEditComponent implements OnInit {
         this.sync();
 
         // get a new question with unique key
-        let pos = this.formObject.formItems.indexOf(question);
-        let order = question ? question.order : 0;
-        let length = this.formObject.formItems.length;
-        let maxOrder = length ? this.formObject.formItems[length-1].order : 0;
-        let newQuestion: QuestionBase<any> = this.qtService
+        const pos = this.formObject.formItems.indexOf(question);
+        const order = question ? question.order : 0;
+        const length = this.formObject.formItems.length;
+        const maxOrder = length ? this.formObject.formItems[length - 1].order : 0;
+        const newQuestion: QuestionBase<any> = this.qtService
             .getOneQuestion(`question${maxOrder + 1}`, order + 1);
 
         // add a new formControl for the new question
         FormUtil.addFormEditControl(this.formGroup, newQuestion);
 
         // update question order, the order will change while the key never change
-        this.formObject.formItems.forEach((question, index) => {
+        this.formObject.formItems.forEach((item, index) => {
             if (index > pos ) {
-                question.order = question.order + 1;
+                item.order = item.order + 1;
             }
         });
         this.formObject.formItems.splice(pos + 1 , 0, newQuestion);
@@ -73,7 +75,7 @@ export class FormStructureEditComponent implements OnInit {
         this.sync();
 
         // remove formControl in formGroup
-        let index = this.formObject.formItems.indexOf(question);
+        const index = this.formObject.formItems.indexOf(question);
         this.formObject.formItems.splice(index, 1);
         this.formGroup.removeControl(question.key);
     }
@@ -81,7 +83,7 @@ export class FormStructureEditComponent implements OnInit {
     buildQuestion(question: QuestionBase<any>) {
         this.updatedQuestion =  true;
 
-        let pos = this.formObject.formItems.indexOf(question);
+        const pos = this.formObject.formItems.indexOf(question);
         this.formObject.formItems[pos] =
             FormUtil.buildQuestion(question);
 
@@ -120,7 +122,7 @@ export class FormStructureEditComponent implements OnInit {
             newKey = parseInt((<QuestionDropDown> this.formObject.formItems[index]).options[size - 1]
                 .key.replace(/[^0-9]/g, '')) + 1;
         }
-        let keyStr: string = `option${newKey}`;
+        let keyStr = `option${newKey}`;
 
         (this.formGroup.get(question.key).get('options-edit') as FormGroup)
             .addControl(keyStr, new FormControl('Option Description'));
@@ -154,7 +156,7 @@ export class FormStructureEditComponent implements OnInit {
     reset() {
     }
 
-    preview(){
+    preview() {
         if (!this.isPreview) {
             this.sync();
         }
@@ -189,20 +191,19 @@ export class FormStructureEditComponent implements OnInit {
         }
         this.qtService.saveOrUpdate(this.formObject)
             .subscribe(res => {
-                alert(res.message);
-            }, error => {
-                alert(error);
+                this.alertService.success(res['message']);
+            }, (error: string) => {
+                this.alertService.error(error);
             })
     }
 
     publish() {
         this.qtService.publish(this.formObject.userId, this.formObject.formId)
-            .subscribe(res=>{
-                if(res.message && res.url) {
-                    alert(res.message+".You can release your form throw url:"+res.url);
-                }
-                else if(res.message){
-                    alert(res.message);
+            .subscribe(res => {
+                if (res.message && res.url) {
+                    this.alertService.success(res.message + '.You can release your form throw url:' + res.url);
+                } else if (res.message) {
+                    this.alertService.error(res.message);
                 }
             })
     }
