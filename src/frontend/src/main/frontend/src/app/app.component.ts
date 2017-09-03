@@ -7,7 +7,7 @@ import {ServiceUtil} from './util/service.util';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
     title = 'formfoss';
@@ -21,14 +21,5 @@ export class AppComponent implements OnInit {
     }
 
 
-    logout() {
-        this.userService.logout();
-        this.router.navigate(['/home'])
-    }
-
-
-    edit() {
-        this.router.navigate(['/profile', this.currentUser.userId]);
-    }
 
 }
