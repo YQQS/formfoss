@@ -48,7 +48,8 @@ export class QuestionService {
     private answerUrl = ServiceUtil.authUrl + '/useranswers';
     private dataUrl = ServiceUtil.authUrl + '/formdata';
     private userUrl = ServiceUtil.authUrl + '/users';
-    private publishUrl = ServiceUtil.publicUrl + '/forms/published';
+    private publishedUrl = ServiceUtil.publicUrl + '/forms/published';
+    private publishedFormurl = ServiceUtil.publicUrl + '/forms/';
     private jsonHeader = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http) {}
@@ -100,9 +101,15 @@ export class QuestionService {
     }
 
     getPublished(): Observable<FormModel[]> {
-        return this.http.get(this.publishUrl)
+        return this.http.get(this.publishedUrl)
             .map(res => res.json().map(item => FormUtil.buildForm(item)))
             .catch(ServiceUtil.handleError)
+    }
+
+    getPublishedById(id: number): Observable<any> {
+        return this.http.get(this.publishedFormurl + id)
+            .map(res => FormUtil.buildForm(res.json()))
+            .catch(ServiceUtil.handleError);
     }
 
     getForm(id: number): Observable<any> {

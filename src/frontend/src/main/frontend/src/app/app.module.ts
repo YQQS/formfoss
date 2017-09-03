@@ -53,6 +53,7 @@ import {AuthGuard} from './component/_guards/auth.guard';
 import { PageNotFoundComponent } from './component/extra/page-not-found/page-not-found.component';
 import { CanNotAccessComponent } from './component/extra/can-not-access/can-not-access.component';
 import {AdminGuard} from './component/_guards/admin.guard';
+import { HeaderComponent } from './component/users/header/header.component';
 
 @NgModule({
     declarations: [
@@ -81,7 +82,8 @@ import {AdminGuard} from './component/_guards/admin.guard';
         UserEditComponent,
         AlertComponent,
         PageNotFoundComponent,
-        CanNotAccessComponent
+        CanNotAccessComponent,
+        HeaderComponent
     ],
     imports: [
         BrowserModule,

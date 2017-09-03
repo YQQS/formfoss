@@ -18,7 +18,6 @@ import se.sjtu.formfoss.repository.UserAnswerRepository;
 import se.sjtu.formfoss.util.AuthRequestUtil;
 import se.sjtu.formfoss.util.RestResponseUtil;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
@@ -77,22 +76,23 @@ public class FormController {
 
     @PostMapping(path = "/forms")
     public synchronized @ResponseBody
-    ResponseEntity<String> formAdd(@RequestBody FormEntity form,HttpSession httpSession) throws IOException {
+    ResponseEntity<String> formAdd(@RequestBody FormEntity form,
+                                   @RequestAttribute Integer userId,
+                                   @RequestAttribute String userRole) {
         IdCount idCount = countRepository.findOne("1");
         Integer formId = idCount.getFormIdCount();
         formId = formId + 1;
         idCount.setFormIdCount(formId);
         countRepository.save(idCount);
         form.setFormId(formId);
-        Integer userid = (Integer) httpSession.getAttribute("userId");
-        form.setUserId(userid);
+        form.setUserId(userId);
         form.setIsPublished(true);
         formRepository.save(form);
         FormDataEntity formData=new FormDataEntity();
         formData.setFormId(formId);
         formData.setAnswerCount(0);
         List<Map<String,Object>> data=new ArrayList<Map<String, Object>>(),questions=form.getFormItems();
-        for(int i=0;i<questions.size();i++){
+        for (int i=0;i<questions.size();i++){
             Map<String,Object> datai=new HashMap<String, Object>();
             datai.put("key",questions.get(i).get("key"));
             datai.put("type",questions.get(i).get("controlType"));

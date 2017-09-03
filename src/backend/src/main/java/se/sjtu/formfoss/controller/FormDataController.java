@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.model.FormDataEntity;
 import se.sjtu.formfoss.repository.FormDataRepository;
-import se.sjtu.formfoss.exception.BasicError;
 import se.sjtu.formfoss.exception.GlobalException;
 import java.io.IOException;
 import java.util.ArrayList;

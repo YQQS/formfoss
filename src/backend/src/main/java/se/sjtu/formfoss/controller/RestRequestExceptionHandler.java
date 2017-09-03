@@ -11,11 +11,8 @@ import se.sjtu.formfoss.util.RestResponseUtil;
 public class RestRequestExceptionHandler {
 
     @ExceptionHandler(GlobalException.class)
-    public ResponseEntity<BasicError> UserNotFound(GlobalException e){
-        BasicError error=new BasicError();
-        error.setCode(404);
-        error.setMessage("User not found");
-        return new ResponseEntity<>(error,e.getStatus());
+    public ResponseEntity<Object> UserNotFound(){
+        return new ResponseEntity<>(RestResponseUtil.errorMsg("user not found"), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {PermissionDenyException.class})
@@ -42,13 +39,23 @@ public class RestRequestExceptionHandler {
         return new ResponseEntity<>(errorMsg, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {ObjectNotFoundException.class})
+    @ExceptionHandler(value = {ObjectNotFoundException.class, ListNotFoundException.class})
     public ResponseEntity<Object> handleObjectNotFound(RuntimeException ex) {
-        String errorMsg = "Object Not Found";
+        String msg = "Not Found";
         if (ex.getMessage() != null) {
-            errorMsg = errorMsg + ": " + ex.getMessage();
+            msg = msg + ": " + ex.getMessage();
         }
 
-        return new ResponseEntity<>(errorMsg, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(RestResponseUtil.errorMsg(msg), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {LoginFailedException.class})
+    public ResponseEntity<Object> handleLoginFailed(RuntimeException ex) {
+        String msg = "Login failed";
+        if (ex.getMessage() != null) {
+            msg += msg + ": " +ex.getMessage();
+        }
+
+        return new ResponseEntity<>(RestResponseUtil.errorMsg(msg), HttpStatus.UNAUTHORIZED);
     }
 }
