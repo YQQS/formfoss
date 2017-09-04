@@ -8,13 +8,11 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/observable/throw';
-import {AnswerModel} from '../models/answer/answer.model';
-import {FormResultModel} from '../models/result/form-result.model';
 import {ServiceUtil} from '../util/service.util';
 
 @Injectable()
 export class QuestionService {
-    private startForm = {
+    private static startForm = {
         title: 'Title',
         desc: 'Put your description here',
         isPublished: false,
@@ -34,7 +32,7 @@ export class QuestionService {
         ]
     };
 
-    private questionTemp = {
+    private static questionTemp = {
         key: 'question',
         controlType: 'textbox',
         title: 'Template Title',
@@ -56,14 +54,14 @@ export class QuestionService {
 
 
     getOneQuestion(key: string, order: number): QuestionBase<any> {
-        const question: QuestionBase<any> =  FormUtil.buildQuestion(this.questionTemp);
+        const question: QuestionBase<any> =  FormUtil.buildQuestion(QuestionService.questionTemp);
         question.order = order ;
         question.key = key;
         return question;
     }
 
     getStartForm(): FormModel {
-        return FormUtil.buildForm(this.startForm);
+        return FormUtil.buildForm(QuestionService.startForm);
     }
 
     saveOrUpdate(form: FormModel) {
@@ -93,11 +91,21 @@ export class QuestionService {
             .catch(ServiceUtil.handleError)
     }
 
-    getAll(): Observable<any> {
+    getAllForms(): Observable<any> {
         return this.http.get(this.formUrl, ServiceUtil.buildAuthReqOpts())
             .map(res => (res.json() as any[])
                 .map(item => FormUtil.buildForm(item)))
             .catch(ServiceUtil.handleError)
+    }
+
+    getFormsByUserId(userId: number): Observable<any> {
+        const url = this.userUrl + '/' + userId + '/forms';
+        return this.http.get(url, ServiceUtil.buildAuthReqOpts())
+            .map((res: Response) => {
+                return (res.json() as any[]).map(
+                    item => FormUtil.buildForm(item));
+            })
+            .catch(ServiceUtil.handleError);
     }
 
     getPublished(): Observable<FormModel[]> {

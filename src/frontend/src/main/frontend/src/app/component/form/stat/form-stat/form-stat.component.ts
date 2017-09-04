@@ -7,6 +7,7 @@ import {FormUtil} from "../../../../util/form.util";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {Location} from "@angular/common";
 import 'rxjs/add/operator/switchMap';
+import {AlertService} from '../../../../services/alert.service';
 
 @Component({
     selector: 'app-form-stat',
@@ -21,12 +22,13 @@ export class FormStatComponent implements OnInit {
     constructor(private qtService: QuestionService,
                 private router: ActivatedRoute,
                 private route: Router,
-                private location: Location) { }
+                private location: Location,
+                private alertService: AlertService) { }
 
     ngOnInit() {
         this.router.paramMap
             .switchMap((params: ParamMap) => {
-                let id: number = +params.get('id');
+                const id: number = +params.get('id');
                 return this.qtService.getFormData(id);
             })
             .subscribe((formData) => {
@@ -38,10 +40,9 @@ export class FormStatComponent implements OnInit {
                                 this.formData,
                                 this.formModel
                             );
-                            console.log(this.chartModels);
                         })
                 },
-                error => alert(error));
+                error => this.alertService.error(error));
     }
 
     back() {
@@ -49,11 +50,11 @@ export class FormStatComponent implements OnInit {
     }
 
     goIndividual() {
-        this.route.navigate(['/formUserStat', this.formModel.formId]);
+        this.route.navigate(['/question', this.formModel.formId, 'stat', 'user']);
     }
 
     download() {
-        let csvcontent = "data:text/csv;charset=utf-8,";
+        let csvcontent = 'data:text/csv;charset=utf-8,';
         this.chartModels.forEach(item => {
             let dataString = item.label.join(',');
             csvcontent += (dataString + '\n');

@@ -5,10 +5,10 @@ Simple online form survey from SJTU SE2017
 [![Build Status](https://travis-ci.org/YQQS/formfoss.svg?branch=master)](https://travis-ci.org/YQQS/formfoss)
 
 **To start this project, you need**
-+ maven3
-+ java
-+ nodejs
-+ yarn/npm
++ [maven3](https://maven.apache.org)
++ [java8](https://www.java.com)
++ [nodejs](https://nodejs.org)
++ [yarn](https://yarnpkg.com) or [npm](https://www.npmjs.com)
 
 **installed**
 

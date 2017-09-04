@@ -83,7 +83,7 @@ export class UserService {
                 return MessageUtil.errorMessage('request success, but server did not return the proper response');
             })
 
-            .catch(error => Observable.throw(error))
+            .catch(ServiceUtil.handleError);
     }
 
     logout() {
@@ -123,10 +123,10 @@ export class UserService {
             .catch(ServiceUtil.handleError);
     }
 
-    update(user: User): Observable<any> {
+    update(user: User): Observable<string> {
         const url = this.userUrl;
         return this.http.put(url, JSON.stringify(user), ServiceUtil.buildAuthReqOpts())
-            .map((res: Response) => res.json() as User)
+            .map((res: Response) => ServiceUtil.handleSuccess(res))
             .catch(ServiceUtil.handleError)
     }
 

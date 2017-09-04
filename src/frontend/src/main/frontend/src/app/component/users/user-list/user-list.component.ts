@@ -2,6 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {User} from '../../../models/user';
 import {UserService} from '../../../services/user.service';
 import {Router} from '@angular/router';
+import {AlertService} from '../../../services/alert.service';
 
 @Component({
     selector: 'app-user-list',
@@ -13,13 +14,14 @@ export class UserListComponent implements OnInit {
     selectedUser: User;
 
     constructor(private userService: UserService,
-                private router: Router) { }
+                private router: Router,
+                private alertService: AlertService) { }
 
     getAll(): void {
         this.userService.getAll()
             .subscribe(users => {
                 this.users = users;
-            }, error => alert(error));
+            }, error => this.alertService.error(error));
     }
 
     onSelect(user: User): void {
@@ -29,21 +31,20 @@ export class UserListComponent implements OnInit {
     deleteUser(id: number): void {
         this.userService.deleteUser(id).subscribe(
             res => {
-                console.log(res.message);
-
                 this.selectedUser = null;
                 this.getAll();
-                this.router.navigate(['/list']);
+                this.router.navigate(['/user', 'list'])
+                    .then(() => this.alertService.success(res['message'] || 'Deleted'));
             },
-            error => alert(error)
+            error => this.alertService.error(error)
         );
     }
 
     gotoDetail(id: number) {
-        this.router.navigate(['/users', id]);
+        this.router.navigate(['/user', id]);
     }
     gotoEdit(id: number) {
-        this.router.navigate(['/editUsers', id]);
+        this.router.navigate(['/user', id, 'edit']);
     }
     ngOnInit() {
         this.getAll();

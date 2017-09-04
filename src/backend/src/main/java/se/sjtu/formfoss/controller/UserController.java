@@ -116,8 +116,8 @@ public class UserController {
      */
     @PutMapping(path = "/users")
     public @ResponseBody String userUpdate(@RequestBody UserEntity user,
-                                                           @RequestAttribute Integer userId,
-                                                           @RequestAttribute String userRole) {
+                                           @RequestAttribute Integer userId,
+                                           @RequestAttribute String userRole) {
         if (!AuthRequestUtil.checkUserOwnership(user, userId, userRole)) {
             throw new PermissionDenyException();
         }
