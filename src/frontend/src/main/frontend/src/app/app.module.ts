@@ -46,14 +46,14 @@ import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from '@angular/co
 import {SubmitPreviewComponent} from './component/form/view/form-submit-preview/submit-preview.component';
 import {UserEditComponent} from './component/users/user-edit/user-edit.component';
 import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
-import {MyUserEditComponent} from './component/users/myuser-edit/myuser-edit.component';
 import {AlertService} from './services/alert.service';
 import {AlertComponent} from './component/_directives/alert/alert.component';
 import {AuthGuard} from './component/_guards/auth.guard';
 import { PageNotFoundComponent } from './component/extra/page-not-found/page-not-found.component';
 import { CanNotAccessComponent } from './component/extra/can-not-access/can-not-access.component';
 import {AdminGuard} from './component/_guards/admin.guard';
-import { HeaderComponent } from './component/users/header/header.component';
+import { AdminComponent } from './component/_navigation/admin/admin.component';
+import { ToolbarComponent } from './component/_navigation/toolbar/toolbar.component';
 
 @NgModule({
     declarations: [
@@ -78,12 +78,12 @@ import { HeaderComponent } from './component/users/header/header.component';
         HomeComponent,
         SubmitPreviewComponent,
         AlertDialogComponent,
-        MyUserEditComponent,
         UserEditComponent,
         AlertComponent,
         PageNotFoundComponent,
         CanNotAccessComponent,
-        HeaderComponent
+        AdminComponent,
+        ToolbarComponent
     ],
     imports: [
         BrowserModule,

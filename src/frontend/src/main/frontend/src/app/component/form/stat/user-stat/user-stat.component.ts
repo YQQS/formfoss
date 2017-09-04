@@ -33,7 +33,7 @@ export class UserStatComponent implements OnInit {
     ngOnInit() {
         this.router.paramMap
             .switchMap((params: ParamMap) => {
-                let formId = +params.get('id');
+                const formId = +params.get('id');
                 return this.qtService.getForm(formId);
             })
             .subscribe((form: FormModel) => {

@@ -69,7 +69,22 @@ export class ServiceUtil {
     }
 
     /*
-     * generic method to handle http request error in *.service.ts
+     * generic method to handle a successful http response in *.service.ts
+     */
+    static handleSuccess(res: Response): string {
+        let msg: string;
+        const body = res.json();
+        if (body.message) {
+            msg = 'OK, ' + body.message;
+        } else {
+            msg = 'OK, ' + JSON.stringify(body);
+        }
+
+        return msg;
+    }
+
+    /*
+     * generic method to handle http response error in *.service.ts
      */
     static handleError(error: Response | any): Observable<string>  {
         let errMsg: string;
