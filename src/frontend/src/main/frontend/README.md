@@ -2,7 +2,7 @@
 
 ## We use yarn to manage dependency, to get start, run:
 
-    yarn 
+    yarn
 
 ## or in case you like npm:
 

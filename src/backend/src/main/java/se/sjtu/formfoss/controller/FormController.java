@@ -6,16 +6,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.exception.GlobalException;
+import se.sjtu.formfoss.exception.ObjectNotFoundException;
+import se.sjtu.formfoss.exception.PermissionDenyException;
 import se.sjtu.formfoss.model.*;
 import se.sjtu.formfoss.repository.UserRepository;
 import se.sjtu.formfoss.repository.FormRepository;
 import se.sjtu.formfoss.repository.CountRepository;
 import se.sjtu.formfoss.repository.FormDataRepository;
 import se.sjtu.formfoss.repository.UserAnswerRepository;
+import se.sjtu.formfoss.util.AuthRequestUtil;
+import se.sjtu.formfoss.util.RestResponseUtil;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
@@ -36,43 +38,61 @@ public class FormController {
     @Autowired
     private  UserAnswerRepository userAnswerRepository;
 
-    //OK
+    /*
+     * get all forms in database
+     * only work for admin
+     */
     @GetMapping(path = "/forms")
     public @ResponseBody
-    List<FormEntity> getAllForm() {
+    List<FormEntity> getAllForm(@RequestAttribute(name = "userRole") String role) {
+        if (!role.equals("admin")) {
+            throw new PermissionDenyException("Not an admin");
+        }
         return formRepository.findAll();
     }
 
 
-    //OK
+    /*
+     * get a form by formId
+     */
     @GetMapping(path = "/forms/{formId}")
     public @ResponseBody
-    ResponseEntity<FormEntity> searchById(@PathVariable Integer formId) {
-        FormEntity result = formRepository.findOne(formId);
-        HttpStatus status = (result != null) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-        if (result == null)
-            throw new GlobalException(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<FormEntity>(result, status);
+    FormEntity searchById(@PathVariable Integer formId,
+                          @RequestAttribute(name = "userId") Integer userId,
+                          @RequestAttribute(name = "userRole") String userRole) {
+        FormEntity form = formRepository.findOne(formId);
+
+        if (form == null) {
+            throw new ObjectNotFoundException("form not exist");
+        }
+
+        // check ownership
+        if (! AuthRequestUtil.checkFormOwnership(form, userId, userRole)) {
+            throw new PermissionDenyException();
+        }
+
+        return form;
     }
 
     @PostMapping(path = "/forms")
     public synchronized @ResponseBody
-    ResponseEntity<String> formAdd(@RequestBody FormEntity form,HttpSession httpSession) throws IOException {
+    ResponseEntity<String> formAdd(@RequestBody FormEntity form,
+                                   @RequestAttribute Integer userId,
+                                   @RequestAttribute String userRole) {
         IdCount idCount = countRepository.findOne("1");
         Integer formId = idCount.getFormIdCount();
         formId = formId + 1;
         idCount.setFormIdCount(formId);
         countRepository.save(idCount);
         form.setFormId(formId);
-        Integer userid = (Integer) httpSession.getAttribute("userId");
-        form.setUserId(userid);
+        form.setUserId(userId);
         form.setIsPublished(true);
         formRepository.save(form);
         FormDataEntity formData=new FormDataEntity();
         formData.setFormId(formId);
         formData.setAnswerCount(0);
         List<Map<String,Object>> data=new ArrayList<Map<String, Object>>(),questions=form.getFormItems();
-        for(int i=0;i<questions.size();i++){
+        for (int i=0;i<questions.size();i++){
             Map<String,Object> datai=new HashMap<String, Object>();
             datai.put("key",questions.get(i).get("key"));
             datai.put("type",questions.get(i).get("controlType"));
@@ -98,47 +118,64 @@ public class FormController {
         return new ResponseEntity<String>("{\"message\": \"Create new form successfully\"}", HttpStatus.OK);
     }
 
+
+    /*
+     * update a form
+     */
     @PutMapping(path = "/forms")
     public @ResponseBody
-    ResponseEntity<String> formUpdate(@RequestBody FormEntity form) throws IOException {
-        formRepository.save(form);
-        return new ResponseEntity<String>("{\n" +
-            "    \"message\": \"Update form successfully\"\n" +
-            "}", HttpStatus.OK);
+    String formUpdate(@RequestBody FormEntity form,
+                      @RequestAttribute(name = "userId") Integer userId,
+                      @RequestAttribute(name = "userRole") String userRole) {
+
+        // check ownership
+        if ( AuthRequestUtil.checkFormOwnership(form, userId, userRole)) {
+            formRepository.save(form);
+            return RestResponseUtil.successMsg("updated");
+        } else {
+            throw new PermissionDenyException();
+        }
     }
 
     //OK
     @DeleteMapping(path = "/forms/{formId}")
     public @ResponseBody
-    ResponseEntity<String> formDel(@PathVariable Integer formId) {
-        List<FormEntity> form = formRepository.findByFormId(formId);
-        HttpStatus status = (form.iterator().hasNext() != false) ? HttpStatus.NON_AUTHORITATIVE_INFORMATION : HttpStatus.NOT_FOUND;
+    String formDel(@PathVariable Integer formId,
+                   @RequestAttribute(name = "userId") Integer userId,
+                   @RequestAttribute(name = "userRole") String userRole) {
+        FormEntity form = formRepository.findOne(formId);
+        if (form == null) {
+            throw new ObjectNotFoundException("form not exist");
+        }
+
+        if (! AuthRequestUtil.checkFormOwnership(form, userId, userRole)) {
+            throw new PermissionDenyException();
+        }
+
         formRepository.delete(formId);
-        if (form.iterator().hasNext() == false)
-            return new ResponseEntity<String>("{\n" +
-                "    \"code\": 404,\n" +
-                "    \"message\": \"Create new orm successfully\"\n" +
-                "}", status);
-        return new ResponseEntity<String>("{\n" +
-            "    \"message\": \"Delete form successfully\"\n" +
-            "}", status);
+
+        return RestResponseUtil.successMsg("deleted");
     }
 
-    //OK
+    /*
+     * get all forms created by userId = uid
+     * work for admin and user themselves
+     */
     @GetMapping(path = "/users/{uid}/forms")
     public @ResponseBody
-    ResponseEntity<Iterable<FormEntity>> getFormByUserId(@PathVariable Integer uid) {
-        Iterable<FormEntity> forms = formRepository.findByUserId(uid);
-        HttpStatus status;
-        if (!forms.iterator().hasNext()) {
-            status = HttpStatus.NOT_FOUND;
-            throw new GlobalException(status);
+    Iterable<FormEntity> getFormByUserId(@PathVariable Integer uid,
+                                         @RequestAttribute Integer userId,
+                                         @RequestAttribute String  userRole) {
+        if (!(uid.equals(userId) || userRole.equals("admin"))) {
+            throw new PermissionDenyException();
         }
-        status = HttpStatus.OK;
-        return new ResponseEntity<Iterable<FormEntity>>(forms, status);
+
+        return formRepository.findByUserId(uid);
     }
 
-    //OK
+    /*
+     * Deprecated
+     */
     @GetMapping(path = "/users/{uid}/forms/{fid}")
     public @ResponseBody
     ResponseEntity<List<FormEntity>> getFormByIdAndUserId(@PathVariable int uid, @PathVariable Integer fid) {
@@ -152,6 +189,9 @@ public class FormController {
         return new ResponseEntity<List<FormEntity>>(form, status);
     }
 
+    /*
+     * Deprecated
+     */
     @PostMapping(path = "/users/{userId}/forms")
     public @ResponseBody
     ResponseEntity<String> createForm(@RequestBody FormEntity form) throws IOException {
@@ -166,7 +206,9 @@ public class FormController {
         return new ResponseEntity<String>("{\"message\": \"Create new form successfully\"}", status);
     }
 
-    //OK
+    /*
+     * Deprecated
+     */
     @DeleteMapping(path = "/users/{userId}/forms/{formId}")
     public @ResponseBody
     ResponseEntity<String> deleteForm(@PathVariable Integer userId, @PathVariable Integer formId) {
@@ -175,23 +217,27 @@ public class FormController {
         if (form.iterator().hasNext() == false || form.iterator().next().getUserId() != userId) {
             status = HttpStatus.FORBIDDEN;
             return new ResponseEntity<String>("{\n" +
-                "    \"code\": 403,\n" +
-                "    \"message\": \"Form cannot be deleted\"\n" +
-                "}", status);
+                    "    \"code\": 403,\n" +
+                    "    \"message\": \"Form cannot be deleted\"\n" +
+                    "}", status);
         }
         formRepository.delete(formId);
         return new ResponseEntity<String>("{\n" +
-            "    \"message\": \"Delete successfully\"\n" +
-            "}", status);
+                "    \"message\": \"Delete successfully\"\n" +
+                "}", status);
     }
 
+
+    /*
+     * Deprecated
+     */
     @PutMapping(path = "/users/{userId}/forms")
     public @ResponseBody
     ResponseEntity<String> updateForm(@RequestBody FormEntity form) throws IOException {
         formRepository.save(form);
         return new ResponseEntity<String>("{\n" +
-            "    \"message\": \"Update form successfully\"\n" +
-            "}", HttpStatus.OK);
+                "    \"message\": \"Update form successfully\"\n" +
+                "}", HttpStatus.OK);
     }
 
     @GetMapping(path = "/form/answers/{formid}")
@@ -232,23 +278,15 @@ public class FormController {
         formRepository.save(form);
         if(form.isIsPublished())
             return new ResponseEntity<String>(" {\n" +
-                "            \"message\" : \"Publish form successfully\", \n" +
-                "            \"url\" : \"http://localhost:8080/#/questions/"+form.getFormId()+"\"\n" +
-                "        }",HttpStatus.OK);
+                    "            \"message\" : \"Publish form successfully\", \n" +
+                    "            \"url\" : \"http://localhost:8080/#/questions/"+form.getFormId()+"\"\n" +
+                    "        }",HttpStatus.OK);
         else
             return new ResponseEntity<String>(" {\n" +
-                "            \"message\" : \"UnPublish form successfully\" \n" +
-                "        }",HttpStatus.OK);
+                    "            \"message\" : \"UnPublish form successfully\" \n" +
+                    "        }",HttpStatus.OK);
 
     }
 
-    @ExceptionHandler(GlobalException.class)
-    public ResponseEntity<Error> GlobalExceptionHandler(GlobalException e) {
-        HttpStatus status = e.getStatus();
-        Error error = new Error();
-        error.setCode(404);
-        error.setMessage("Form not found");
-        return new ResponseEntity<Error>(error, status);
-    }
 }
 

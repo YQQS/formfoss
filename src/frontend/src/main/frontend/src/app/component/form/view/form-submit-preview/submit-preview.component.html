@@ -1,4 +1,4 @@
-<h2 md-dialog-title>Comfirm Your Submit</h2>
+<h2 md-dialog-title>Confirm Your Submit</h2>
 <md-dialog-content>
     <div *ngFor="let key of keys()">
         <p>{{key}}:  {{data[key]}}</p>
@@ -6,5 +6,5 @@
 </md-dialog-content>
 <md-dialog-actions>
     <button md-button (click)="back()">Change submit</button>
-    <button md-raised-button color="warn" (click)="confirm()">Comfirm</button>
+    <button md-raised-button color="warn" (click)="confirm()">Confirm</button>
 </md-dialog-actions>

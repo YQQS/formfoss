@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import se.sjtu.formfoss.exception.ObjectNotFoundException;
+import se.sjtu.formfoss.exception.PermissionDenyException;
 import se.sjtu.formfoss.model.FormEntity;
 import se.sjtu.formfoss.service.FormService;
 
@@ -26,5 +26,19 @@ public class PublicController {
                 formService.getPublished(),
                 HttpStatus.OK
         );
+    }
+
+
+    //OK
+    @GetMapping(path = "/forms/{formId}")
+    public @ResponseBody
+    ResponseEntity<FormEntity> searchById(@PathVariable Integer formId ) {
+        FormEntity form = formService.getFormById(formId);
+        if (form == null) {
+            throw new ObjectNotFoundException("form not exist");
+        } else if (!form.isIsPublished()) {
+            throw new PermissionDenyException("don't have the privilege to access the form");
+        }
+        return new ResponseEntity<>(form, HttpStatus.OK);
     }
 }

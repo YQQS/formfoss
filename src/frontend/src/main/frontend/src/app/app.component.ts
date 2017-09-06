@@ -1,36 +1,25 @@
 import {Component, OnInit} from '@angular/core';
-import {User} from './models/user';
 import {UserService} from './services/user.service';
 import {Router} from '@angular/router';
+import {AuthenticatedUser} from './models/authenticatedUser';
+import {ServiceUtil} from './util/service.util';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
     title = 'formfoss';
-    currentUser: User;
+    currentUser: AuthenticatedUser;
 
     constructor(private userService: UserService,
                 private router: Router) {}
 
     ngOnInit() {
-        this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-    }
-
-    getUser() {
-        return sessionStorage.getItem('currentUser');
-    }
-
-    logout() {
-        this.userService.logout();
-        this.router.navigate(['/home'])
+        this.currentUser = ServiceUtil.getCurrentUser();
     }
 
 
-    edit() {
-        this.router.navigate(['/profile', JSON.parse(this.getUser())['userId'] ])
-    }
 
 }

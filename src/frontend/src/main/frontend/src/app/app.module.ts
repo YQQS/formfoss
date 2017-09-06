@@ -46,11 +46,14 @@ import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from '@angular/co
 import {SubmitPreviewComponent} from './component/form/view/form-submit-preview/submit-preview.component';
 import {UserEditComponent} from './component/users/user-edit/user-edit.component';
 import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
-import {MyUserEditComponent} from './component/users/myuser-edit/myuser-edit.component';
 import {AlertService} from './services/alert.service';
 import {AlertComponent} from './component/_directives/alert/alert.component';
 import {AuthGuard} from './component/_guards/auth.guard';
 import { PageNotFoundComponent } from './component/extra/page-not-found/page-not-found.component';
+import { CanNotAccessComponent } from './component/extra/can-not-access/can-not-access.component';
+import {AdminGuard} from './component/_guards/admin.guard';
+import { AdminComponent } from './component/_navigation/admin/admin.component';
+import { ToolbarComponent } from './component/_navigation/toolbar/toolbar.component';
 
 @NgModule({
     declarations: [
@@ -75,10 +78,12 @@ import { PageNotFoundComponent } from './component/extra/page-not-found/page-not
         HomeComponent,
         SubmitPreviewComponent,
         AlertDialogComponent,
-        MyUserEditComponent,
         UserEditComponent,
         AlertComponent,
-        PageNotFoundComponent
+        PageNotFoundComponent,
+        CanNotAccessComponent,
+        AdminComponent,
+        ToolbarComponent
     ],
     imports: [
         BrowserModule,
@@ -116,7 +121,7 @@ import { PageNotFoundComponent } from './component/extra/page-not-found/page-not
         ChartsModule
     ],
     entryComponents: [SubmitPreviewComponent, AlertDialogComponent],
-    providers: [UserService, QuestionService, AlertService, AuthGuard, {
+    providers: [UserService, QuestionService, AlertService, AuthGuard, AdminGuard, {
         provide: LocationStrategy, useClass: HashLocationStrategy}, {
         provide: APP_BASE_HREF, useValue: '/'
     }],

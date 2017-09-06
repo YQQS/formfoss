@@ -1,14 +1,14 @@
 package se.sjtu.formfoss.controller;
 
-import jdk.nashorn.internal.objects.Global;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import se.sjtu.formfoss.exception.ObjectNotFoundException;
+import se.sjtu.formfoss.exception.PermissionDenyException;
 import se.sjtu.formfoss.model.FormDataEntity;
 import se.sjtu.formfoss.repository.FormDataRepository;
-import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.exception.GlobalException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,26 +27,24 @@ public class FormDataController {
 
     //Get all form data
     @GetMapping(path="/formdata")
-    public @ResponseBody
-    ResponseEntity<Iterable<FormDataEntity>> getAllFormData(){
-        Iterable<FormDataEntity> result=formDataRepository.findAll();
-        HttpStatus status;
-        if(!result.iterator().hasNext()){
-            status=HttpStatus.NOT_FOUND;
-            throw new GlobalException(status);
+    public @ResponseBody Iterable<FormDataEntity> getAllFormData(@RequestAttribute String userRole){
+        if (!userRole.equals("admin")) {
+            throw new PermissionDenyException("Not a Admin");
         }
-        status=HttpStatus.OK;
-        return new ResponseEntity<Iterable<FormDataEntity>>(result,status);
+        return formDataRepository.findAll();
     }
 
     //Get form data by formId
     @GetMapping(path="/formdata/{fid}")
     public @ResponseBody
-    ResponseEntity<FormDataEntity> getFormDataById(@PathVariable int fid){
-        FormDataEntity formData=formDataRepository.findOne(fid);
+    ResponseEntity<FormDataEntity> getFormDataById(@PathVariable int fid,
+                                                   @RequestAttribute Integer userId,
+                                                   @RequestAttribute String userRole){
+        FormDataEntity formData = formDataRepository.findOne(fid);
         if(formData==null){
-            throw new GlobalException(HttpStatus.NOT_FOUND);
+            throw new ObjectNotFoundException("form data not found");
         }
+
         FormDataEntity result=new FormDataEntity();
         result.setFormId(formData.getFormId());
         result.setAnswerCount(formData.getAnswerCount());
@@ -70,7 +68,7 @@ public class FormDataController {
         formData.setData(data);
         formDataRepository.save(formData);
         result.setData(subData);
-        return new ResponseEntity<FormDataEntity>(result,HttpStatus.OK);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
 
@@ -104,14 +102,6 @@ public class FormDataController {
     public @ResponseBody ResponseEntity<String> updateFormData(@RequestBody FormDataEntity formData){
         formDataRepository.save(formData);
         return new ResponseEntity<String>("{\"message\": \"Update form data successfully\"}",HttpStatus.OK);
-    }
-
-    @ExceptionHandler(GlobalException.class)
-    public ResponseEntity<Error> NoData(GlobalException e){
-        Error error=new Error();
-        error.setCode(404);
-        error.setMessage("Form data not found");
-        return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
     }
 
 }

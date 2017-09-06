@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../../models/user';
-import {UserService} from "../../../services/user.service";
-import {ActivatedRoute, ParamMap} from "@angular/router";
+import {UserService} from '../../../services/user.service';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 import { Location } from '@angular/common';
 import 'rxjs/add/operator/switchMap';
+import {AlertService} from '../../../services/alert.service';
 
 @Component({
     selector: 'app-user-detail',
@@ -15,14 +16,21 @@ export class UserDetailComponent implements OnInit {
 
     constructor(private userService: UserService,
                 private route: ActivatedRoute,
-                private location: Location) { }
+                private location: Location,
+                private alertService: AlertService) { }
 
     save(): void {
         this.userService.update(this.user)
-            .subscribe((res) => alert('OK'))
+            .subscribe(
+                (res: any) => {
+                    this.alertService.success(res['message'] || 'OK');
+                }, error => {
+                    this.alertService.error(error);
+                }
+            )
     }
 
-    goBack() : void {
+    goBack(): void {
         this.location.back();
     }
 
@@ -31,7 +39,8 @@ export class UserDetailComponent implements OnInit {
             .switchMap((params: ParamMap) => {
                 return this.userService.getUser(+params.get('id'))
             })
-            .subscribe(user => this.user = user);
+            .subscribe(user => this.user = user,
+                error => this.alertService.error(error));
     }
 
 

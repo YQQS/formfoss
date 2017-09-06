@@ -31,8 +31,12 @@ export class HomeComponent implements OnInit {
 
 
 
-    preview(id: number) {
-        this.router.navigate(['/questions', id])
+    view(id: number) {
+        this.router.navigate(['/questions', id], {
+            queryParams: {
+                isPublished: true
+            }
+        })
     }
 
     stats(id: number) {

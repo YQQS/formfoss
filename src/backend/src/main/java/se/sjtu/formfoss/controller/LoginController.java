@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import se.sjtu.formfoss.exception.BadRequestException;
+import se.sjtu.formfoss.exception.LoginFailedException;
 import se.sjtu.formfoss.model.UserEntity;
 import se.sjtu.formfoss.repository.UserRepository;
 import se.sjtu.formfoss.security.model.AuthenticatedUser;
@@ -33,12 +35,11 @@ public class LoginController {
     ResponseEntity<AuthenticatedUser> login(@RequestBody UserEntity userEntity) {
         String username = userEntity.getUserName();
         String password = userEntity.getUserPassword();
-        HttpStatus status;
 
         if (username != null && password != null) {
             List<UserEntity> users = userRepository.findByUserNameIgnoreCase(username);
+
             if (users.size() == 1 && users.get(0).getUserPassword().equals(password)) {
-                status = HttpStatus.OK;
                 UserEntity matchedUser = users.get(0);
 
                 Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -51,15 +52,14 @@ public class LoginController {
                 authenticatedUser.setAuthorities(authorities);
                 authenticatedUser.setRole(matchedUser.getUserRole());
 
-                return new ResponseEntity<>(authenticatedUser, status);
+                return new ResponseEntity<>(authenticatedUser, HttpStatus.OK);
             }
+
+            throw new LoginFailedException("username or password not match");
+        } else {
+            throw new BadRequestException("username or password is empty");
         }
 
-        status = HttpStatus.UNAUTHORIZED;
-        return new ResponseEntity<>(
-                new AuthenticatedUser(),
-                status
-        );
     }
 
     /*
@@ -75,27 +75,21 @@ public class LoginController {
         String email = newUser.getUserEmail();
 
         if (username == null || password == null || email == null) {
-            return new ResponseEntity<>(
-                    RestResponseUtil.errorMsg("bad request, username/password/email should not be empty"),
-                    HttpStatus.BAD_REQUEST
-            );
+            throw new BadRequestException("username/password/email should not be empty");
         }
 
         if (userRepository.findByUserName(username).size() > 0 ||
                 userRepository.findByUserEmail(email).size() > 0) {
-            return new ResponseEntity<>(
-                    RestResponseUtil.errorMsg("username or email already existed"),
-                    HttpStatus.BAD_REQUEST
-            );
+            throw new BadRequestException("username or email already exist");
         }
 
-        if (newUser.getUserRole() == null) {
-            newUser.setUserRole("user");
-        }
+        // only normal user register is accepted
+        newUser.setUserRole("user");
+
         userRepository.save(newUser);
 
         return new ResponseEntity<>(
-                RestResponseUtil.successMsg("new user created"),
+                RestResponseUtil.successMsg("created"),
                 HttpStatus.CREATED
         );
 
@@ -106,7 +100,8 @@ public class LoginController {
      * validate user input in sign up page
      */
     @GetMapping(path="/validate")
-    public @ResponseBody ResponseEntity<Boolean> validateRegister(@RequestParam(defaultValue = "") String userName,@RequestParam(defaultValue = "") String userEmail){
+    public @ResponseBody ResponseEntity<Boolean> validateRegister(@RequestParam(defaultValue = "") String userName,
+                                                                  @RequestParam(defaultValue = "") String userEmail){
         Iterable<UserEntity> users;
         if(userName.length() != 0 && userEmail.length() ==0){
             users = userRepository.findByUserName(userName);

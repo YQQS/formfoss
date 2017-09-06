@@ -9,7 +9,7 @@ export class AuthGuard implements CanActivate {
                 private alertService: AlertService) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        if (ServiceUtil.hasAuthorization()) {
+        if (ServiceUtil.isLoggedIn()) {
             return true;
         }
 

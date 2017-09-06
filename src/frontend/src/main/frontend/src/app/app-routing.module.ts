@@ -13,9 +13,11 @@ import {FormNewComponent} from './component/form/edit/form-new/form-new.componen
 import {FormStatComponent} from './component/form/stat/form-stat/form-stat.component';
 import {UserStatComponent} from './component/form/stat/user-stat/user-stat.component';
 import {HomeComponent} from './component/extra/home/home.component';
-import { MyUserEditComponent} from './component/users/myuser-edit/myuser-edit.component';
 import {AuthGuard} from './component/_guards/auth.guard';
 import {PageNotFoundComponent} from './component/extra/page-not-found/page-not-found.component';
+import {CanNotAccessComponent} from './component/extra/can-not-access/can-not-access.component';
+import {AdminGuard} from './component/_guards/admin.guard';
+import {UserEditComponent} from './component/users/user-edit/user-edit.component';
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -23,16 +25,27 @@ const routes: Routes = [
     {path: 'prototype', component: FormPrototypeComponent},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
-    {path: 'list', component: UserListComponent, canActivate: [AuthGuard]},
-    {path: 'users/:id', component: UserDetailComponent, canActivate: [AuthGuard]},
-    {path: 'editUsers/:id', component: MyUserEditComponent, canActivate: [AuthGuard]},
-    {path: 'questionList', component: FormListComponent, canActivate: [AuthGuard]},
-    {path: 'questions/edit/:id', component: FormEditComponent, canActivate: [AuthGuard]},
-    {path: 'questions/new', component: FormNewComponent},
-    {path: 'questions/:id', component: FormPreviewComponent},
-    {path: 'formStat/:id', component: FormStatComponent, canActivate: [AuthGuard]},
-    {path: 'formUserStat/:id', component: UserStatComponent, canActivate: [AuthGuard]},
-    {path: 'profile/:id', component: MyUserEditComponent, canActivate: [AuthGuard]},
+
+    {path: 'user', canActivate: [AuthGuard], children: [
+        {path: 'list', component: UserListComponent, canActivate: [AdminGuard]},
+        {path: ':id', children: [
+            {path: '', component: UserDetailComponent},
+            {path: 'edit', component: UserEditComponent},
+        ]},
+    ]},
+    {path: 'question', children: [
+        {path: 'new', component: FormNewComponent, canActivate: [AuthGuard]},
+        {path: 'list', component: FormListComponent, canActivate: [AuthGuard, AdminGuard]},
+        {path: ':id', children: [
+            {path: 'view', component: FormPreviewComponent},
+            {path: 'edit', component: FormEditComponent, canActivate: [AuthGuard]},
+            {path: 'stat', canActivate: [AuthGuard], children: [
+                {path: '', component: FormStatComponent},
+                {path: 'user', component: UserStatComponent}
+            ]}
+        ]}
+    ]},
+    {path: 'can-not-access', component: CanNotAccessComponent},
     {path: '**', component: PageNotFoundComponent}
 ];
 

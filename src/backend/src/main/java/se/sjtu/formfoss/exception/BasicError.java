@@ -3,9 +3,9 @@ package se.sjtu.formfoss.exception;
 import org.springframework.http.HttpStatus;
 
 /**
- * Created by Administrator on 2017/7/3.
+ * Deprecated
  */
-public class Error {
+public class BasicError {
     private int code;
     private String message;
 

@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import se.sjtu.formfoss.exception.Error;
 import se.sjtu.formfoss.exception.GlobalException;
 import se.sjtu.formfoss.model.*;
 import se.sjtu.formfoss.repository.CountRepository;
@@ -13,7 +12,6 @@ import se.sjtu.formfoss.repository.UserAnswerRepository;
 import se.sjtu.formfoss.repository.FormDataRepository;
 import se.sjtu.formfoss.repository.FormRepository;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -89,7 +87,9 @@ public class UserAnswerController {
 
     @PostMapping("/useranswers")
     public @ResponseBody
-    ResponseEntity<String> createUserAnswer(@RequestBody UserAnswerEntity userAnswer, HttpSession httpSession) throws Exception{
+    ResponseEntity<String> createUserAnswer(@RequestBody UserAnswerEntity userAnswer,
+                                            @RequestAttribute Integer userId,
+                                            @RequestAttribute String userRole) {
         if(userAnswer.getAnswerId() == null){
             IdCount idCount=countRepository.findOne("1");
             Integer answerId = idCount.getFormAnswerIdCount();
@@ -99,14 +99,13 @@ public class UserAnswerController {
             countRepository.save(idCount);
         }
         int fid=userAnswer.getFormId();
-        Integer uid = (Integer) httpSession.getAttribute("userId");
-        List<UserAnswerEntity> answerCheck=userAnswerRepository.findByFormIdAndUserId(fid,uid);
+        List<UserAnswerEntity> answerCheck=userAnswerRepository.findByFormIdAndUserId(fid,userId);
         if(!answerCheck.isEmpty() && answerCheck.get(0).getCommitflag()){
             return new ResponseEntity<String>("{\"message\": \"You have already answer the form!\"}",HttpStatus.OK);
         }
         userAnswer.setCommitflag(true);
 
-        userAnswer.setUserId(uid);
+        userAnswer.setUserId(userId);
         userAnswerRepository.save(userAnswer);
         int formId=userAnswer.getFormId();
         List<Map<String,Object>> answers = userAnswer.getAnswers();
@@ -384,13 +383,5 @@ public class UserAnswerController {
         return new ResponseEntity<String>("{\"message\": \"Nothing to delete\"}",HttpStatus.FORBIDDEN);
     }
 
-
-    @ExceptionHandler(GlobalException.class)
-    public ResponseEntity<Error> FormNotFound(GlobalException e){
-        Error error=new Error();
-        error.setCode(404);
-        error.setMessage("Answer not found");
-        return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
-    }
 
 }

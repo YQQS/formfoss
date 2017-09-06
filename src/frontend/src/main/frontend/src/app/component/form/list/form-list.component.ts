@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {FormModel} from "../../../models/form/form.model";
+import {FormModel} from '../../../models/form/form.model';
 import {QuestionService} from '../../../services/question.service';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
 import {AlertService} from '../../../services/alert.service';
+import {ServiceUtil} from '../../../util/service.util';
+import {error} from 'selenium-webdriver';
 
 
 @Component({
@@ -18,15 +20,29 @@ export class FormListComponent implements OnInit {
                 private router: Router,
                 private alertService: AlertService) { }
 
-    getAll() {
-        this.qtService.getAll()
-            .subscribe( res => this.questionList = res,
-                        error => alert(error));
+    getForms() {
+        if (ServiceUtil.isAdmin()) {
+            this.getAllForms();
+        } else {
+            this.getOwnForms();
+        }
+    }
+
+    getOwnForms() {
+        this.qtService.getFormsByUserId(ServiceUtil.getCurrentUser().userId)
+            .subscribe(res => this.questionList = res,
+                (msg: string) => this.alertService.error(msg));
+    }
+
+    getAllForms() {
+        this.qtService.getAllForms()
+            .subscribe(res => this.questionList = res,
+                msg => this.alertService.error(msg));
     }
 
 
     ngOnInit() {
-        this.getAll();
+        this.getForms();
     }
 
     deleteForm(id: number) {
@@ -35,7 +51,7 @@ export class FormListComponent implements OnInit {
                 if (res.message) {
                     this.alertService.success(res.message);
                 }
-                this.getAll();
+                this.getForms();
             }, error => this.alertService.error(error))
 
     }
@@ -57,19 +73,19 @@ export class FormListComponent implements OnInit {
     }
 
     edit(id: number) {
-        this.router.navigate(['/questions/edit', id])
+        this.router.navigate(['/question', id, 'edit']);
     }
 
     preview(id: number) {
-        this.router.navigate(['/questions', id])
+        this.router.navigate(['/question', id, 'view']);
     }
 
     stats(id: number) {
-        this.router.navigate(['/formStat', id]);
+        this.router.navigate(['/question', id, 'stat']);
     }
 
     add() {
-        this.router.navigate(['/questions/new'])
+        this.router.navigate(['/question', 'new'])
     }
 
 }

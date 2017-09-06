@@ -33,20 +33,20 @@ export class ServiceUtil {
      * check authorization info stored in sessionStore
      * restrict anonymous request
      */
-    static hasAuthorization(): boolean {
-        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-        return (currentUser && currentUser.token);
+    static isLoggedIn(): boolean {
+        return ServiceUtil.getCurrentUser() !== null;
+    }
+
+    static isAdmin(): boolean {
+        const currentUser = ServiceUtil.getCurrentUser();
+        return currentUser !== null && currentUser.role === 'admin';
     }
 
     /*
      * parse the currentUser Object returned from server
      */
     static parseCurrentUser(input: any): AuthenticatedUser {
-        const authenticatedUser = new AuthenticatedUser();
-        authenticatedUser.username = input['username'] || null;
-        authenticatedUser.role = input['role'] || null;
-        authenticatedUser.token = input['token'] || null;
-        return authenticatedUser;
+        return new AuthenticatedUser(input);
     }
 
     /*
@@ -54,13 +54,39 @@ export class ServiceUtil {
      */
     static getCurrentUser(): AuthenticatedUser {
         const user = sessionStorage.getItem('currentUser');
-        return user === null ? null : new AuthenticatedUser(JSON.parse(user));
+        let parsedUser;
+
+        if (user === null) {
+            return null;
+        } else {
+            parsedUser = JSON.parse(user);
+            if (parsedUser && parsedUser.token) {
+                return new AuthenticatedUser(parsedUser);
+            }
+
+            return null;
+        }
     }
 
     /*
-     * generic method to handle http request error in *.service.ts
+     * generic method to handle a successful http response in *.service.ts
      */
-    static handleError(error: Response | any): Observable<any>  {
+    static handleSuccess(res: Response): string {
+        let msg: string;
+        const body = res.json();
+        if (body.message) {
+            msg = 'OK, ' + body.message;
+        } else {
+            msg = 'OK, ' + JSON.stringify(body);
+        }
+
+        return msg;
+    }
+
+    /*
+     * generic method to handle http response error in *.service.ts
+     */
+    static handleError(error: Response | any): Observable<string>  {
         let errMsg: string;
 
         if (error instanceof Response) {

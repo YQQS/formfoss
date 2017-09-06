@@ -16,12 +16,30 @@ export class FormPreviewComponent implements OnInit {
     formObject: FormModel;
     formGroup: FormGroup;
 
-    constructor(private router: ActivatedRoute,
+    constructor(private activatedRoute: ActivatedRoute,
                 private location: Location,
                 private qtService: QuestionService) { }
 
     ngOnInit() {
-        this.router.paramMap
+        const isPublished = this.activatedRoute.snapshot.queryParams['isPublished'] || false;
+        const formId = +this.activatedRoute.snapshot.params['id'];
+
+        if (isPublished) {
+            this.qtService.getPublishedById(formId)
+                .subscribe(res => {
+                    this.formObject = res;
+                    this.formGroup = FormUtil.toFormViewGroup(this.formObject.formItems);
+                });
+        } else {
+            this.qtService.getForm(formId)
+                .subscribe(res => {
+                    this.formObject = res;
+                    this.formGroup = FormUtil.toFormViewGroup(this.formObject.formItems);
+                })
+        }
+
+        /*
+        this.activatedRoute.paramMap
             .switchMap((params: ParamMap) => {
                 return this.qtService.getForm(+params.get('id'))
             })
@@ -29,6 +47,7 @@ export class FormPreviewComponent implements OnInit {
                 this.formObject = form;
                 this.formGroup = FormUtil.toFormViewGroup(this.formObject.formItems);
             });
+            */
     }
 
     goBack() {

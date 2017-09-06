@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {FormModel} from "../../../../models/form/form.model";
-import {FormGroup} from "@angular/forms";
-import {QuestionService} from "../../../../services/question.service";
-import {ActivatedRoute, ParamMap} from "@angular/router";
+import {FormModel} from '../../../../models/form/form.model';
+import {FormGroup} from '@angular/forms';
+import {QuestionService} from '../../../../services/question.service';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Location} from '@angular/common';
-import {FormUtil} from "../../../../util/form.util";
+import {FormUtil} from '../../../../util/form.util';
 
 @Component({
     selector: 'app-form-edit',

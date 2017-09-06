@@ -8,13 +8,11 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/observable/throw';
-import {AnswerModel} from '../models/answer/answer.model';
-import {FormResultModel} from '../models/result/form-result.model';
 import {ServiceUtil} from '../util/service.util';
 
 @Injectable()
 export class QuestionService {
-    private startForm = {
+    private static startForm = {
         title: 'Title',
         desc: 'Put your description here',
         isPublished: false,
@@ -34,7 +32,7 @@ export class QuestionService {
         ]
     };
 
-    private questionTemp = {
+    private static questionTemp = {
         key: 'question',
         controlType: 'textbox',
         title: 'Template Title',
@@ -48,21 +46,22 @@ export class QuestionService {
     private answerUrl = ServiceUtil.authUrl + '/useranswers';
     private dataUrl = ServiceUtil.authUrl + '/formdata';
     private userUrl = ServiceUtil.authUrl + '/users';
-    private publishUrl = ServiceUtil.publicUrl + '/forms/published';
+    private publishedUrl = ServiceUtil.publicUrl + '/forms/published';
+    private publishedFormurl = ServiceUtil.publicUrl + '/forms/';
     private jsonHeader = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http) {}
 
 
     getOneQuestion(key: string, order: number): QuestionBase<any> {
-        const question: QuestionBase<any> =  FormUtil.buildQuestion(this.questionTemp);
+        const question: QuestionBase<any> =  FormUtil.buildQuestion(QuestionService.questionTemp);
         question.order = order ;
         question.key = key;
         return question;
     }
 
     getStartForm(): FormModel {
-        return FormUtil.buildForm(this.startForm);
+        return FormUtil.buildForm(QuestionService.startForm);
     }
 
     saveOrUpdate(form: FormModel) {
@@ -92,20 +91,36 @@ export class QuestionService {
             .catch(ServiceUtil.handleError)
     }
 
-    getAll(): Observable<FormModel[]> {
+    getAllForms(): Observable<any> {
         return this.http.get(this.formUrl, ServiceUtil.buildAuthReqOpts())
             .map(res => (res.json() as any[])
                 .map(item => FormUtil.buildForm(item)))
             .catch(ServiceUtil.handleError)
     }
 
+    getFormsByUserId(userId: number): Observable<any> {
+        const url = this.userUrl + '/' + userId + '/forms';
+        return this.http.get(url, ServiceUtil.buildAuthReqOpts())
+            .map((res: Response) => {
+                return (res.json() as any[]).map(
+                    item => FormUtil.buildForm(item));
+            })
+            .catch(ServiceUtil.handleError);
+    }
+
     getPublished(): Observable<FormModel[]> {
-        return this.http.get(this.publishUrl)
+        return this.http.get(this.publishedUrl)
             .map(res => res.json().map(item => FormUtil.buildForm(item)))
             .catch(ServiceUtil.handleError)
     }
 
-    getForm(id: number): Observable<FormModel> {
+    getPublishedById(id: number): Observable<any> {
+        return this.http.get(this.publishedFormurl + id)
+            .map(res => FormUtil.buildForm(res.json()))
+            .catch(ServiceUtil.handleError);
+    }
+
+    getForm(id: number): Observable<any> {
         return this.http.get(this.formUrl + '/' + id, ServiceUtil.buildAuthReqOpts())
             .map(res => FormUtil.buildForm(res.json()))
             .catch(ServiceUtil.handleError)
@@ -117,13 +132,13 @@ export class QuestionService {
             .catch(ServiceUtil.handleError)
     }
 
-    getUserAnswer(answerId: number): Observable<AnswerModel> {
+    getUserAnswer(answerId: number): Observable<any> {
         return this.http.get(this.answerUrl + '/answer/' + answerId, ServiceUtil.buildAuthReqOpts())
             .map(res => FormUtil.parseAnswerModel(res.json()) )
             .catch(ServiceUtil.handleError)
     }
 
-    getUserAnswers(formId: number): Observable<AnswerModel[]> {
+    getUserAnswers(formId: number): Observable<any> {
         return this.http.get(this.answerUrl + '/' + formId, ServiceUtil.buildAuthReqOpts())
             .map(res => {
                 const answers = res.json() as any[];
@@ -132,13 +147,13 @@ export class QuestionService {
             .catch(ServiceUtil.handleError)
     }
 
-    getUserAnswerByFormId(userId: number, formId: number): Observable<AnswerModel> {
+    getUserAnswerByFormId(userId: number, formId: number): Observable<any> {
         return this.http.get(this.answerUrl + '/' + userId + '/' + formId, ServiceUtil.buildAuthReqOpts())
             .map(res => FormUtil.parseAnswerModel(res.json()) )
             .catch(ServiceUtil.handleError)
     }
 
-    getFormData(formId: number): Observable<FormResultModel> {
+    getFormData(formId: number): Observable<any> {
         return this.http.get(this.dataUrl + '/' + formId, ServiceUtil.buildAuthReqOpts())
             .map(res => FormUtil.parseResultModel(res.json()) )
             .catch(ServiceUtil.handleError)
