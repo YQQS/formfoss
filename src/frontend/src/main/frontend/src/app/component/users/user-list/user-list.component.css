@@ -16,18 +16,17 @@ li:hover {
 }
 
 .badge  {
-    text-align: center;
-    width:1.4cm;
+    width:1.5cm;
     display: inline-block;
     font-size: small;
     color: white;
     padding: 0.8em 0.7em 0 0.7em;
     background-color: #607D8B;
-    line-height: 100%;
+    line-height: 1em;
     position: relative;
     left: -1px;
     top: -4px;
-    height: 1.8em;
+    height: 0.8cm;
     margin-right: .8em;
     border-radius: 4px 4px 4px 4px;
 }
