@@ -75,7 +75,7 @@ export class UserService {
             .map((response: Response) => {
                 const user = response.json();
 
-                if (user && user.token) {
+                if (user && user.token && user.userId && user.username && user.role) {
                     sessionStorage.setItem('currentUser', JSON.stringify(user));
                     return MessageUtil.successMessage('logged in');
                 }

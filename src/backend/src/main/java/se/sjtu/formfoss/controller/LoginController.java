@@ -51,6 +51,7 @@ public class LoginController {
                 authenticatedUser.setToken(jwtUtil.generateToken(matchedUser));
                 authenticatedUser.setAuthorities(authorities);
                 authenticatedUser.setRole(matchedUser.getUserRole());
+                authenticatedUser.setUserId(matchedUser.getUserId());
 
                 return new ResponseEntity<>(authenticatedUser, HttpStatus.OK);
             }

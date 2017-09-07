@@ -2,7 +2,12 @@
     <md-icon>add</md-icon>
 </button>
 <md-list>
-    <h3 md-subheader>Forms</h3>
+    <h3 mdSubheader>Forms</h3>
+    <md-slide-toggle [disabled]="currentUser?.role !== 'admin'"
+                     (change)="updateList($event)" [checked]="onlyMe">
+        only forms created by me
+    </md-slide-toggle>
+    
     <md-list-item *ngFor="let question of questionList">
         <md-icon md-list-icon>mail</md-icon>
         <h3 md-line>{{question.title}}</h3>

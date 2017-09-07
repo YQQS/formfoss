@@ -15,8 +15,13 @@ import {ChartModel} from '../models/result/chart.model';
 import {QuestionResultModel} from '../models/result/question-result.model';
 
 export class FormUtil {
-    static buildQuestion(input: any): QuestionBase<any> {
-        switch (input.controlType) {
+    static savedForm = 'savedForm';
+    static buildQuestion(input: {}): QuestionBase<any> {
+        const cType = input['controlType'];
+        if (cType == null) {
+            return null;
+        }
+        switch (cType) {
             case 'textbox':
                 return new QuestionTextbox(input);
             case 'dropdown':
@@ -39,7 +44,7 @@ export class FormUtil {
         }
         form.title = input['title'] || '';
         form.desc = input['desc'] || '';
-        form.isPublished = input['isPublished'];
+        form.isPublished = input['isPublished'] || false;
         form.settings = input['settings'] || {};
         form.formItems = input['formItems']
             .map(question => FormUtil.buildQuestion(question))
@@ -167,7 +172,7 @@ export class FormUtil {
     }
 
     static toFromEditGroup(form: FormModel): FormGroup {
-        let questions = form.formItems;
+        const questions = form.formItems;
         let group: FormGroup = new FormGroup({
             'title': new FormControl(form.title, Validators.required),
             'desc': new FormControl(form.desc),
@@ -260,4 +265,21 @@ export class FormUtil {
     }
 
 
+    static storeFormModel(form: FormModel) {
+        localStorage.setItem(
+            FormUtil.savedForm,
+            JSON.stringify(form)
+        );
+    }
+
+
+
+    static retrieveFormModel(): FormModel {
+        const obj = localStorage.getItem(FormUtil.savedForm);
+        if (obj !== null) {
+            return FormUtil.buildForm(JSON.parse(obj));
+        }
+
+        return null;
+    }
 }

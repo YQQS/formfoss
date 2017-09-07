@@ -21,7 +21,6 @@ public class AuthenticatedUser implements UserDetails {
     public AuthenticatedUser() {
     }
 
-    @JsonIgnore
     public Integer getUserId() {
         return userId;
     }

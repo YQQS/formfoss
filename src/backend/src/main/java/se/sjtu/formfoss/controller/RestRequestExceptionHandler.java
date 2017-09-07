@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import se.sjtu.formfoss.exception.*;
 import se.sjtu.formfoss.util.RestResponseUtil;
 
@@ -57,5 +58,15 @@ public class RestRequestExceptionHandler {
         }
 
         return new ResponseEntity<>(RestResponseUtil.errorMsg(msg), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(value = {InnerServerErrorException.class})
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleInnerServerError(RuntimeException ex) {
+        String msg = "Internal Service Error";
+        if (ex.getMessage() != null) {
+            msg += (": " + ex.getMessage());
+        }
+        return RestResponseUtil.errorMsg(msg);
     }
 }

@@ -12,7 +12,9 @@ import {ServiceUtil} from '../util/service.util';
 
 @Injectable()
 export class QuestionService {
-    private static startForm = {
+    private static startForm: FormModel = {
+        formId: null,
+        userId: null,
         title: 'Title',
         desc: 'Put your description here',
         isPublished: false,
@@ -23,6 +25,7 @@ export class QuestionService {
                 controlType: 'textbox',
                 title: 'start question title',
                 value: '',
+                desc: '',
                 inputType: 'text',
                 order: 1,
                 validator: {
@@ -64,7 +67,7 @@ export class QuestionService {
         return FormUtil.buildForm(QuestionService.startForm);
     }
 
-    saveOrUpdate(form: FormModel) {
+    saveOrUpdateForm(form: FormModel) {
         if (form.formId) {
             return this.http.put(this.formUrl, JSON.stringify(form), ServiceUtil.buildAuthReqOpts())
                 .map(res => res.json())

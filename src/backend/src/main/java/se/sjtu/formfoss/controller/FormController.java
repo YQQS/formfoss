@@ -85,10 +85,8 @@ public class FormController {
         idCount.setFormIdCount(formId);
         countRepository.save(idCount);
         form.setFormId(formId);
-        form.setUserId(userId);
-        form.setIsPublished(true);
         formRepository.save(form);
-        FormDataEntity formData=new FormDataEntity();
+        FormDataEntity formData = new FormDataEntity();
         formData.setFormId(formId);
         formData.setAnswerCount(0);
         List<Map<String,Object>> data=new ArrayList<Map<String, Object>>(),questions=form.getFormItems();
@@ -153,6 +151,9 @@ public class FormController {
         }
 
         formRepository.delete(formId);
+        // delete related data
+        formDataRepository.delete(formId);
+        userAnswerRepository.deleteAllByFormId(formId);
 
         return RestResponseUtil.successMsg("deleted");
     }
