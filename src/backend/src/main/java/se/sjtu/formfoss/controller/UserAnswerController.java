@@ -143,11 +143,16 @@ public class UserAnswerController {
             countRepository.save(idCount);
         }
         int fid=userAnswer.getFormId();
+        FormEntity form = formRepository.findOne(fid);
         List<UserAnswerEntity> answerCheck=userAnswerRepository.findByFormIdAndUserId(fid,userId);
         if(!answerCheck.isEmpty() && answerCheck.get(0).getCommitflag()){
             return new ResponseEntity<String>("{\"message\": \"You have already answer the form!\"}",HttpStatus.OK);
         }
         userAnswer.setCommitflag(true);
+
+        if(! AuthRequestUtil.checkUserAnswerOwnership(userAnswer,form,userId,userRole)){
+            throw new PermissionDenyException();
+        }
 
         userAnswer.setUserId(userId);
         userAnswerRepository.save(userAnswer);
@@ -348,12 +353,15 @@ public class UserAnswerController {
     @DeleteMapping("/useranswers")
     public @ResponseBody
     ResponseEntity<String> deleteUserAnswer(@RequestParam Integer form_id, @RequestParam Integer user_id){
-        List<UserAnswerEntity> userAnswer = userAnswerRepository.findByFormIdAndUserId(form_id,user_id);
-        HttpStatus status=(userAnswer.iterator().hasNext()!=false)?HttpStatus.NON_AUTHORITATIVE_INFORMATION:HttpStatus.NOT_FOUND;
-        if(userAnswer.iterator().hasNext() != false){
+        UserAnswerEntity userAnswer = userAnswerRepository.findByFormIdAndUserId(form_id,user_id).get(0);
+        HttpStatus status=(userAnswer != null)?HttpStatus.NON_AUTHORITATIVE_INFORMATION:HttpStatus.NOT_FOUND;
+        if(userAnswer == null){
+            throw new BadRequestException("Bad request, useranswer not exist");
+        }
+        else{
             userAnswerRepository.deleteByFormIdAndUserId(form_id,user_id);
-            Integer formId = userAnswer.get(0).getFormId();
-            List<Map<String,Object>> answers = userAnswer.get(0).getAnswers();
+            Integer formId = userAnswer.getFormId();
+            List<Map<String,Object>> answers = userAnswer.getAnswers();
             FormDataEntity formData = formDataRepository.findOne(formId);
             formData.setAnswerCount(formData.getAnswerCount() - 1);
             List<Map<String,Object>> data = formData.getData();
@@ -470,7 +478,6 @@ public class UserAnswerController {
             formDataRepository.save(formData);
             return  new ResponseEntity<String>("{\"message\": \"Delete successfully\"}",status);
         }
-        return new ResponseEntity<String>("{\"message\": \"Nothing to delete\"}",HttpStatus.FORBIDDEN);
     }
 
 
