@@ -15,16 +15,14 @@ export class FormEditComponent implements OnInit {
     formObject: FormModel;
     formGroup: FormGroup;
 
-    constructor(private router: ActivatedRoute,
+    constructor(private activatedRoute: ActivatedRoute,
                 private location: Location,
                 private qtService: QuestionService) { }
 
 
     ngOnInit() {
-        this.router.paramMap
-            .switchMap((params: ParamMap) => {
-                return this.qtService.getForm(+params.get('id'))
-            })
+        const formId = +this.activatedRoute.snapshot.params['id'];
+        return this.qtService.getForm(formId)
             .subscribe((form: FormModel) => {
                 this.formObject = form;
                 this.formGroup = FormUtil.toFromEditGroup(this.formObject);

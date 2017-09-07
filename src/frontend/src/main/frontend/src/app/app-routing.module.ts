@@ -35,8 +35,9 @@ const routes: Routes = [
     ]},
     {path: 'question', children: [
         {path: 'new', component: FormNewComponent, canActivate: [AuthGuard]},
-        {path: 'list', component: FormListComponent, canActivate: [AuthGuard, AdminGuard]},
+        {path: 'list', component: FormListComponent, canActivate: [AuthGuard]},
         {path: ':id', children: [
+            {path: '', redirectTo: 'view', pathMatch: 'prefix'},
             {path: 'view', component: FormPreviewComponent},
             {path: 'edit', component: FormEditComponent, canActivate: [AuthGuard]},
             {path: 'stat', canActivate: [AuthGuard], children: [

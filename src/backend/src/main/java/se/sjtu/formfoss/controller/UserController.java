@@ -90,6 +90,7 @@ public class UserController {
         }
 
         userRepository.delete(id);
+        // delete related form data
 
         return RestResponseUtil.successMsg("deleted");
     }
