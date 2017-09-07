@@ -16,6 +16,7 @@ li:hover {
 }
 
 .badge  {
+    text-align: center;
     width:1.5cm;
     display: inline-block;
     font-size: small;
