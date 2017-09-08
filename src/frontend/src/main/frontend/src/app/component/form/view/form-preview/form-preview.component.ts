@@ -6,6 +6,7 @@ import {FormModel} from '../../../../models/form/form.model';
 import {QuestionService} from '../../../../services/question.service';
 import {FormGroup} from '@angular/forms';
 import {FormUtil} from '../../../../util/form.util';
+import {AlertService} from '../../../../services/alert.service';
 
 @Component({
     selector: 'app-form-preview',
@@ -18,7 +19,8 @@ export class FormPreviewComponent implements OnInit {
 
     constructor(private activatedRoute: ActivatedRoute,
                 private location: Location,
-                private qtService: QuestionService) { }
+                private qtService: QuestionService,
+                private alertService: AlertService) { }
 
     ngOnInit() {
         const isPublished = this.activatedRoute.snapshot.queryParams['isPublished'] || false;
@@ -29,13 +31,13 @@ export class FormPreviewComponent implements OnInit {
                 .subscribe(res => {
                     this.formObject = res;
                     this.formGroup = FormUtil.toFormViewGroup(this.formObject.formItems);
-                });
+                }, error => this.alertService.error(error));
         } else {
             this.qtService.getForm(formId)
                 .subscribe(res => {
                     this.formObject = res;
                     this.formGroup = FormUtil.toFormViewGroup(this.formObject.formItems);
-                })
+                }, this.alertService.error)
         }
 
         /*

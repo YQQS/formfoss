@@ -4,6 +4,7 @@ import {FormGroup} from "@angular/forms";
 import {FormModel} from "../../../../models/form/form.model";
 import {Location} from "@angular/common";
 import {FormUtil} from "../../../../util/form.util";
+import {ServiceUtil} from '../../../../util/service.util';
 
 @Component({
     selector: 'app-form-new',
@@ -19,6 +20,7 @@ export class FormNewComponent implements OnInit {
 
     ngOnInit() {
         this.formObject = this.qtService.getStartForm();
+        this.formObject.userId = ServiceUtil.getCurrentUser().userId;
         this.formGroup = FormUtil.toFromEditGroup(this.formObject);
     }
 

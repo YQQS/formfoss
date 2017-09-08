@@ -2,6 +2,7 @@ package se.sjtu.formfoss.model;
 
 import com.fasterxml.jackson.annotation.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
@@ -13,12 +14,19 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Document(collection = "userAnswerEntity")
 public class UserAnswerEntity {
     @Id
     private Integer answerId;
+
+    // related form id
     private Integer formId;
+    // the answerer's user id
     private Integer userId;
+
+    // the answer structure
     List<Map<String,Object>> answers;
+    // flag if the answer is submitted
     private  Boolean commitflag;
 
     public UserAnswerEntity(){};

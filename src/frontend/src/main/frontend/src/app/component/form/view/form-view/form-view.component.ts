@@ -19,7 +19,7 @@ import {AlertService} from '../../../../services/alert.service';
 export class FormViewComponent implements OnInit {
     // @Input() questions: QuestionBase<any>[] = [];
     @Input() formObject: FormModel;
-    @Input() form: FormGroup;
+    @Input() formGroup: FormGroup;
     payLoad = '';
 
     constructor(private qtService: QuestionService,
@@ -33,11 +33,11 @@ export class FormViewComponent implements OnInit {
 
     onSubmit() {
         const dialogRef = this.diaRef.open(SubmitPreviewComponent, {
-            data: this.form.value
+            data: this.formGroup.value
         });
         dialogRef.afterClosed().subscribe((data: {confirm: boolean}) => {
             if (data.confirm) {
-                this.qtService.submitAnswer(this.form, this.formObject)
+                this.qtService.submitAnswer(this.formGroup, this.formObject)
                     .subscribe(res => this.alertService.success(res['message'] || JSON.stringify(res)),
                         (error: string) => this.alertService.error(error))
             }
@@ -45,7 +45,7 @@ export class FormViewComponent implements OnInit {
     }
 
     save() {
-        this.qtService.saveAnswer(this.form, this.formObject)
+        this.qtService.saveAnswer(this.formGroup, this.formObject)
             .subscribe(res => {
                 alert(res.message)
                 },

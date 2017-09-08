@@ -16,7 +16,11 @@ import java.util.Map;
 public class FormDataEntity {
     @Id
     int formId;
+
     int answerCount;
+
+    Integer userId;
+
     List<Map<String,Object>> data;
 
     public void setData(List<Map<String, Object>> data) {
@@ -41,6 +45,14 @@ public class FormDataEntity {
 
     public void setAnswerCount(int answerCount) {
         this.answerCount = answerCount;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     @Override

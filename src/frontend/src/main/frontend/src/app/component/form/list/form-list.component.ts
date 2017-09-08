@@ -5,7 +5,8 @@ import {Router} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
 import {AlertService} from '../../../services/alert.service';
 import {ServiceUtil} from '../../../util/service.util';
-import {error} from 'selenium-webdriver';
+import {AuthenticatedUser} from '../../../models/authenticatedUser';
+import {MdSlideToggleChange} from '@angular/material';
 
 
 @Component({
@@ -15,13 +16,15 @@ import {error} from 'selenium-webdriver';
 })
 export class FormListComponent implements OnInit {
     questionList: FormModel[];
+    onlyMe = true;
+    currentUser: AuthenticatedUser;
 
     constructor(private qtService: QuestionService,
                 private router: Router,
                 private alertService: AlertService) { }
 
     getForms() {
-        if (ServiceUtil.isAdmin()) {
+        if (ServiceUtil.isAdmin() && !this.onlyMe) {
             this.getAllForms();
         } else {
             this.getOwnForms();
@@ -29,7 +32,7 @@ export class FormListComponent implements OnInit {
     }
 
     getOwnForms() {
-        this.qtService.getFormsByUserId(ServiceUtil.getCurrentUser().userId)
+        this.qtService.getFormsByUserId(this.currentUser.userId)
             .subscribe(res => this.questionList = res,
                 (msg: string) => this.alertService.error(msg));
     }
@@ -40,8 +43,14 @@ export class FormListComponent implements OnInit {
                 msg => this.alertService.error(msg));
     }
 
+    updateList(event: MdSlideToggleChange) {
+        this.onlyMe = event.checked;
+        this.getForms();
+    }
+
 
     ngOnInit() {
+        this.currentUser = ServiceUtil.getCurrentUser();
         this.getForms();
     }
 

@@ -16,13 +16,4 @@ export class FormModel {
         this.desc = input.desc || '';
     }
 
-    addQuestion(question: QuestionBase<any>, index) {
-        this.formItems.splice(index, 0, question);
-        this.formItems.forEach((qu, i) => {
-            if (i > index ) {
-                this.formItems[i].order ++;
-                this.formItems[i].key = 'question' + this.formItems[i].order;
-            }
-        })
-    }
 }

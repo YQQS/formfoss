@@ -1,9 +1,10 @@
 <div>
     <md-toolbar>
-        <button md-raised-button color="primary" [disabled]="formGroup.errors" (click)="confirmAndSave()">
+        <button md-raised-button color="primary" [disabled]="formEditGroup.errors || formEditGroup.pristine" (click)="confirmAndSave()">
             <md-icon>save</md-icon>
             Save
         </button>
+<<<<<<< HEAD
 
         <button  md-raised-button color="accent" [disabled]="formGroup.errors" (click)="preview()" >
             <md-icon>visibility</md-icon>
@@ -11,19 +12,35 @@
             <label *ngIf="isPreview">back edit</label>
         </button>
 
+=======
+        
+>>>>>>> 377e2b5423fe3f870ccaa08c206fc70cc0f09810
         <button md-raised-button color="primary" [disabled]="formObject.isPublished" (click)="publish()">
             <md-icon>send</md-icon>
             publish
         </button>
+<<<<<<< HEAD
 
         <button md-icon-button (click)="settings()" >
             <md-icon>settings</md-icon>
         </button>
+=======
+        
+        
+        <div class="toggle-button">
+            <button md-icon-button (click)="settings()" >
+                <md-icon>settings</md-icon>
+            </button>
+            <md-slide-toggle color="primary" [disabled]="formEditGroup.errors" [checked]="isPreview" (change)="changeMode($event)">
+                Preview Mode
+            </md-slide-toggle>
+        </div>
+>>>>>>> 377e2b5423fe3f870ccaa08c206fc70cc0f09810
     </md-toolbar>
 </div>
 
 <div align="center" *ngIf="!isPreview">
-    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <form [formGroup]="formEditGroup" (ngSubmit)="onSubmit()">
         <div>
             <div>
                 <md-input-container class="edit-title">
@@ -43,7 +60,7 @@
                 </button>
             </div>
         </div>
-
+        
         <div>
             <md-card *ngFor="let question of formObject.formItems; trackBy: trackByKey"
                      [formGroupName]="question.key" class="edit-question">
@@ -51,12 +68,6 @@
                     <md-card-title>
                         the {{question.order}}th question
                     </md-card-title>
-                    <!--
-                    <md-card-subtitle>
-                        {{question.key}}
-                        {{formGroup.get(question.key).value | json}}
-                    </md-card-subtitle>
-                    -->
                 </md-card-header>
                 <md-card-content>
                     <div class="edit-question-title">
@@ -65,13 +76,16 @@
                                    [value]="question.title" placeholder="put a title">
                         </md-input-container><br>
                     </div><br>
-
+                    
                     <div [ngSwitch]="question.controlType" >
                         <div *ngSwitchCase="'dropdown'" >
                             <button md-icon-button (click)="addOption(question)" >
                                 <md-icon>add</md-icon>
                             </button>
-                            <md-slide-toggle formControlName="multiple-edit" [(ngModel)]="question.multiple">allow multi select</md-slide-toggle>
+                            <md-slide-toggle color="primary" formControlName="multiple-edit" [(ngModel)]="question.multiple">
+                                allow multi select
+                            </md-slide-toggle>
+                            
                             <div *ngFor="let opt of question?.options; let i = index" formGroupName="options-edit">
                                 <md-input-container>
                                     <span mdPrefix >{{i+1}}. </span>
@@ -84,17 +98,23 @@
                             <div *ngIf="question.multiple">
                                 <md-input-container>
                                     <input mdInput placeholder="min Select" formControlName="minSelect-edit">
-                                    <md-hint class="alter" *ngIf="formGroup.get(question.key).errors?.noLarger">
+                                    <md-hint class="alter"
+                                             *ngIf="formEditGroup.get(question.key).errors?.noLarger &&
+                                                    formEditGroup.get(question.key).get('maxSelect-edit').value">
                                         min select should not large than max select
                                     </md-hint>
                                 </md-input-container>
 
                                 <md-input-container>
                                     <input mdInput placeholder="max Select" formControlName="maxSelect-edit">
-                                    <md-hint class="alter" *ngIf="formGroup.get(question.key).errors?.editMaxSelect">
+                                    <md-hint class="alter" *ngIf="formEditGroup.get(question.key).errors?.editMaxSelect">
                                         this should not larger than {{question?.options.length}}</md-hint>
                                 </md-input-container>
+<<<<<<< HEAD
 
+=======
+                            
+>>>>>>> 377e2b5423fe3f870ccaa08c206fc70cc0f09810
                             </div>
                         </div>
 
@@ -127,14 +147,14 @@
 
                     <br>
                     <div class="edit-select">
-                        <p class="edit-type-text">question type</p>
-                        <md-select formControlName="controlType-edit" [(ngModel)]="question.controlType" (change)="buildQuestion(question)">
+                        <p class="edit-type-selector">question type</p>
+                        <md-select formControlName="controlType-edit" (change)="buildQuestion(question, $event)">
                             <md-option *ngFor="let opt of controlTypes" [value]="opt">{{opt}}</md-option>
                         </md-select>
                     </div>
                     <div class="selection-required">
-                        <md-slide-toggle color="primary" formControlName="required-edit"
-                        >required</md-slide-toggle>
+                        <md-slide-toggle color="primary" formControlName="required-edit">required</md-slide-toggle>
+                        
                         <md-slide-toggle color="accent" >extra validator</md-slide-toggle>
                     </div>
 
@@ -157,5 +177,10 @@
 </div>
 
 <div *ngIf="isPreview">
+<<<<<<< HEAD
     <app-form-view [formObject]="formObject" [form]="form"></app-form-view>
 </div>
+=======
+    <app-form-view [formObject]="formObject" [formGroup]="formViewGroup"></app-form-view>
+</div>
+>>>>>>> 377e2b5423fe3f870ccaa08c206fc70cc0f09810

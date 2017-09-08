@@ -25,14 +25,19 @@
 .edit-select {
 }
 
-.edit-type-text {
+.edit-type-selector {
     color: brown;
     font-size: 14px;
 }
 
 .alter {
-    font-size: 10px;
+    font-size: 11px;
     color: #c7254e;
     border-radius: 3px;
     padding: 15px;
+}
+
+.toggle-button {
+    position: fixed;
+    right: 10px;
 }
