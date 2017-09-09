@@ -121,7 +121,7 @@ export class FormStructureEditComponent implements OnInit {
     changeMode(event: MdSlideToggleChange) {
         if (!this.isPreview) {
             this.sync();
-            this.formViewGroup = FormUtil.toFormViewGroup(this.formObject.formItems);
+            this.formViewGroup = FormUtil.formModelToViewGroup(this.formObject.formItems);
         }
         this.isPreview = event.checked;
     }
@@ -207,48 +207,15 @@ export class FormStructureEditComponent implements OnInit {
     }
 
     publish() {
-        this.qtService.publish(this.formObject.userId, this.formObject.formId)
+        this.sync();
+        this.qtService.publish(this.formObject.formId)
             .subscribe(res => {
-                if (res.message && res.url) {
-                    this.alertService.success(res.message + '.You can release your form throw url:' + res.url);
-                } else if (res.message) {
-                    this.alertService.error(res.message);
-                }
-            })
+                this.alertService.success(res.message || 'published');
+            }, error => this.alertService.error(error));
     }
 
     private sync() {
-        this.formObject.formItems.forEach((question, index) => {
-            let values = this.formEditGroup.get(question.key).value;
-            question.title = values['title-edit'];
-            question.controlType = values['controlType-edit'];
-
-            question.validator = {};
-            question.validator.required = values['required-edit'];
-            switch (question.controlType) {
-                case 'textbox':
-                    question.validator.minLength = values['minLength-edit'];
-                    question.validator.maxLength = values['maxLength-edit'];
-                    question.validator.pattern = values['pattern-edit'];
-                    break;
-                case 'slider':
-                    question.validator.min = values['min-edit'];
-                    question.validator.max = values['max-edit'];
-                    break;
-                case 'dropdown':
-                    question.validator.minSelect = values['minSelect-edit'];
-                    question.validator.maxSelect = values['maxSelect-edit'];
-                    (question as QuestionDropDown).multiple = values['multiple-edit'];
-                    let keys: string[] = Object.keys(values['options-edit']);
-                    (question as QuestionDropDown).options = [];
-                    keys.forEach(key => {
-                        (question as QuestionDropDown).options.push({
-                            key: key,
-                            value: values['options-edit'][key]
-                        });
-                    });
-                    break;
-            }
-        })
+      FormUtil.formEditGroupSyncToModel(this.formEditGroup, this.formObject);
     }
+
 }

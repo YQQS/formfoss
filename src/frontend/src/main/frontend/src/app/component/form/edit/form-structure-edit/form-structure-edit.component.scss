@@ -1,25 +1,26 @@
-.dynamic-edit {
-    width: 70%;
+.form-main {
+    padding-left: 5%;
+    display: block;
+}
+.form-title {
+    width: 90%;
 }
 
-.edit-title {
-    width: 50%;
+.form-desc {
+    width: 90%;
 }
 
-.edit-desc {
-    width: 60%;
-    height: auto;
+.form-edit {
+    padding-left: 10%;
+    padding-right: 10%;
 }
 
-.edit-question {
-    width: 80%;
+.form-item-edit {
+    margin: 10px;
 }
 
-.edit-question-title {
-}
-
-.edit-question-title-input {
-    width: 80%;
+.question-titile-edit {
+    width: 90%;
 }
 
 .edit-select {
@@ -31,13 +32,14 @@
 }
 
 .alter {
-    font-size: 11px;
+    font-size: 12px;
     color: #c7254e;
     border-radius: 3px;
     padding: 15px;
 }
 
 .toggle-button {
-    position: fixed;
-    right: 10px;
+    position: absolute;
+    top: 160px;
+    right: 0;
 }

@@ -3,28 +3,28 @@
         <md-icon>arrow_back</md-icon>
         back
     </button>
-    
-    <div class="user-answer-list" *ngFor="let answer of answers">
+
+    <div class="user-answer-list" *ngFor="let answer of answers" class="answer-body">
         <div *ngFor="let question of form.formItems; index as i" class="user-answer">
             <h3>{{i+1}}. {{question.title}}</h3>
             <h5>{{question.desc}}</h5>
-            
+
             <div *ngIf="question.controlType === 'dropdown'">
                 <p>avaliable options: </p>
-                <md-chip-list>
+                <md-chip-list class="selection">
                     <md-chip [color]="randomColor(is)" selected="true" *ngFor="let chip of question?.options; index as is">{{chip?.value}}</md-chip>
                 </md-chip-list>
-                
+
                 <p>selected: </p>
-                <md-chip-list *ngIf="question?.multiple === true">
+                <md-chip-list *ngIf="question?.multiple === true" class="selection">
                     <md-chip selected="true" [color]="randomColor(ia)" *ngFor="let selected of answer.answers[i].answer; index as ia">{{selectedValue(selected, question)}}</md-chip>
                 </md-chip-list>
-                
-                <md-chip-list *ngIf="question?.multiple === false">
+
+                <md-chip-list *ngIf="question?.multiple === false" class="selection">
                     <md-chip selected="true">{{selectedValue(answer.answers[i].answer, question)}}</md-chip>
                 </md-chip-list>
             </div>
-            
+
             <div *ngIf="question.controlType != 'dropdown'">
                 <p>answered: {{answer.answers[i].answer}}</p>
             </div>

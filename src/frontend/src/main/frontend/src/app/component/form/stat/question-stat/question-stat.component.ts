@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, OnChanges, SimpleChange, SimpleChanges} from '@angular/core';
-import {ChartModel} from "../../../../models/result/chart.model";
+import {ChartModel} from '../../../../models/result/chart.model';
 import {Chart} from 'chart.js';
 
 @Component({
@@ -7,7 +7,8 @@ import {Chart} from 'chart.js';
     templateUrl: './question-stat.component.html',
     styleUrls: ['./question-stat.component.scss']
 })
-export class QuestionStatComponent implements OnInit{
+
+export class QuestionStatComponent implements OnInit {
     @Input() chartModel: ChartModel;
     chartType: string[] = ['polarArea', 'pie', 'doughnut'];
 

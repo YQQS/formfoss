@@ -7,13 +7,13 @@
     margin: -26px 0 15px
 }
 
-.question-desc {
-    font-size: 16px;
-    color: brown;
+.textbox-question {
+    width: 100%;
 }
 
-.question-item {
-    width: 60%;
+.question-title {
+    font-size: 18px;
+    color: brown;
 }
 
 .question-select {
@@ -25,18 +25,20 @@
 }
 
 .multi-select {
+    padding-left: 8%;
     display: flex;
     flex-flow: column;
-    align-content: center;
-    align-items: center;
+    align-content: flex-start;
+    align-items: flex-start;
     height: auto;
 }
 
 .single-select {
+    padding-left: 8%;
     display: inline-flex;
     flex-direction: column;
 }
 
-.radio-button {
+.select-item {
     margin: 5px;
 }

@@ -1,36 +1,41 @@
-<button md-mini-fab color="warn" (click)="add()" class="main-fab-icon">
-    <md-icon>add</md-icon>
-</button>
+<div class="fab-add-button">
+    <button md-fab color="warn" (click)="add()" class="main-fab-icon">
+        <md-icon>add</md-icon>
+    </button>
+</div>
 <md-list>
     <h3 mdSubheader>Forms</h3>
     <md-slide-toggle [disabled]="currentUser?.role !== 'admin'"
-                     (change)="updateList($event)" [checked]="onlyMe">
+        (change)="updateList($event)" [checked]="onlyMe">
         only forms created by me
     </md-slide-toggle>
-    
-    <md-list-item *ngFor="let question of questionList">
-        <md-icon md-list-icon>mail</md-icon>
-        <h3 md-line>{{question.title}}</h3>
-        <h3 id={{question.formId}} align="right"></h3>
-        <button md-icon-button color="primary" (click)="edit(question.formId)" >
+
+    <md-list-item *ngFor="let form of formList">
+        <md-icon md-list-icon>branding_watermark</md-icon>
+        <h2 md-line>{{form.title}}</h2>
+        <p class="form-desc form-desc-n" *ngIf="form.isPublished" md-line>published</p>
+        <p class="form-desc form-desc-x" *ngIf="!form.isPublished" md-line>not published</p>
+
+        <button md-icon-button color="primary" (click)="edit(form)" >
             <md-icon>edit</md-icon>
         </button>
-        <button md-icon-button (click)="stats(question.formId)">
+        <button md-icon-button (click)="preview(form.formId)">
+            <md-icon>visibility</md-icon>
+        </button>
+        <button md-icon-button (click)="stats(form.formId)">
             <md-icon>info</md-icon>
         </button>
+
         <button md-icon-button [mdMenuTriggerFor]="menu"><md-icon>more_vert</md-icon></button>
+
         <md-menu #menu="mdMenu">
-            <button md-menu-item color="accent" (click)="preview(question.formId)">
-                <md-icon>mood</md-icon>
-                preview
-            </button>
-            
-            <button md-menu-item color="primary" (click)="publish(question.userId,question.formId)">
+
+            <button md-menu-item color="primary" (click)="publish(form)" [disabled]="form.isPublished">
                 <md-icon>publish</md-icon>
                 publish
             </button>
 
-            <button md-menu-item color="warn" (click)="deleteForm(question.formId)">
+            <button md-menu-item color="warn" (click)="deleteForm(form.formId)">
                 <md-icon>delete</md-icon>
                 delete
             </button>

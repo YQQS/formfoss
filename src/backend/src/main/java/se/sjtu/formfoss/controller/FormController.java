@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import se.sjtu.formfoss.exception.BadRequestException;
 import se.sjtu.formfoss.exception.GlobalException;
 import se.sjtu.formfoss.exception.ObjectNotFoundException;
 import se.sjtu.formfoss.exception.PermissionDenyException;
@@ -270,23 +271,26 @@ public class FormController {
     }
 
 
-    @PatchMapping(path="/users/{userId}/forms/{formId}")
+    @PatchMapping(path="/forms/{formId}")
     public @ResponseBody
-    ResponseEntity<String> publish(@PathVariable int userId,@PathVariable int formId){
-        List<FormEntity> forms = formRepository.findByFormIdAndUserId(formId, userId);
-        FormEntity form=forms.get(0);
-        form.setIsPublished(!form.isIsPublished());
-        formRepository.save(form);
-        if(form.isIsPublished())
-            return new ResponseEntity<String>(" {\n" +
-                    "            \"message\" : \"Publish form successfully\", \n" +
-                    "            \"url\" : \"http://localhost:8080/#/questions/"+form.getFormId()+"\"\n" +
-                    "        }",HttpStatus.OK);
-        else
-            return new ResponseEntity<String>(" {\n" +
-                    "            \"message\" : \"UnPublish form successfully\" \n" +
-                    "        }",HttpStatus.OK);
+    String publish(@PathVariable int formId,
+                   @RequestAttribute Integer userId,
+                   @RequestAttribute String userRole) {
+        FormEntity form = formRepository.findOne(formId);
+        if (form == null) {
+            throw new ObjectNotFoundException("form not found");
+        }
+        if (!AuthRequestUtil.checkFormOwnership(form, userId, userRole)) {
+            throw new PermissionDenyException("Not the owner");
+        }
 
+        if (form.isIsPublished()) {
+            throw new BadRequestException("form already published");
+        }
+        form.setIsPublished(true);
+        formRepository.save(form);
+
+        return RestResponseUtil.successMsg("published");
     }
 
 }

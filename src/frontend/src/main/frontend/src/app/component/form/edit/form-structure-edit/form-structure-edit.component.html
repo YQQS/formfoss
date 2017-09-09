@@ -5,11 +5,10 @@
             Save
         </button>
         
-        <button md-raised-button color="primary" [disabled]="formObject.isPublished" (click)="publish()">
+        <button md-raised-button color="primary" [disabled]="formObject.isPublished || !formObject.formId" (click)="publish()">
             <md-icon>send</md-icon>
             publish
         </button>
-        
         
         <div class="toggle-button">
             <button md-icon-button (click)="settings()" >
@@ -22,19 +21,19 @@
     </md-toolbar>
 </div>
 
-<div align="center" *ngIf="!isPreview">
+<div *ngIf="!isPreview" class="form-edit">
     <form [formGroup]="formEditGroup" (ngSubmit)="onSubmit()">
-        <div>
+        <div class="form-main">
             <div>
-                <md-input-container class="edit-title">
-                    <input mdInput formControlName="title" [(ngModel)]="formObject.title" placeholder="title">
+                <md-input-container class="form-title">
+                    <input mdInput formControlName="title" placeholder="title">
                 </md-input-container>
             </div>
             <div>
-                <md-input-container class="edit-desc">
+                <md-form-field class="form-desc">
                     <textarea mdInput mdTextareaAutosize formControlName="desc"
-                              [(ngModel)]="formObject.desc" placeholder="description"></textarea>
-                </md-input-container>
+                              placeholder="description"></textarea>
+                </md-form-field>
             </div>
             <div *ngIf="formObject.formItems.length === 0">
                 <button md-icon-button color="warn" (click)="addQuestion()">
@@ -44,41 +43,47 @@
             </div>
         </div>
         
-        <div>
+        <div align="center">
             <md-card *ngFor="let question of formObject.formItems; trackBy: trackByKey"
-                     [formGroupName]="question.key" class="edit-question">
+                     [formGroupName]="question.key" class="form-item-edit">
                 <md-card-header>
                     <md-card-title>
                         the {{question.order}}th question
                     </md-card-title>
                 </md-card-header>
+                
                 <md-card-content>
-                    <div class="edit-question-title">
-                        <md-input-container class="edit-question-title-input">
+                    <div>
+                        <md-form-field class="question-titile-edit">
                             <input mdInput formControlName="title-edit"
                                    [value]="question.title" placeholder="put a title">
-                        </md-input-container><br>
-                    </div><br>
+                        </md-form-field><br>
+                    </div>
                     
-                    <div [ngSwitch]="question.controlType" >
+                    <div *ngIf="question.controlType === 'dropdown'">
+                        <button md-icon-button (click)="addOption(question)" >
+                            <md-icon>add</md-icon>
+                        </button>
+    
+                        <md-slide-toggle color="primary" formControlName="multiple-edit">
+                            allow multi select
+                        </md-slide-toggle>
+    
+                        <div *ngFor="let opt of question?.options; let i = index" formGroupName="options-edit">
+                            <md-input-container>
+                                <span mdPrefix >{{i+1}}. </span>
+                                <input mdInput [placeholder]="opt?.key" [value]="opt.value" [formControlName]="opt.key">
+                                <button mdSuffix md-icon-button (click)="delOption(question, i)">
+                                    <md-icon>delete</md-icon>
+                                </button>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    
+                    <div [ngSwitch]="question.controlType" [hidden]="!formEditGroup.get(question.key).get('validator-edit').value">
                         <div *ngSwitchCase="'dropdown'" >
-                            <button md-icon-button (click)="addOption(question)" >
-                                <md-icon>add</md-icon>
-                            </button>
-                            <md-slide-toggle color="primary" formControlName="multiple-edit" [(ngModel)]="question.multiple">
-                                allow multi select
-                            </md-slide-toggle>
                             
-                            <div *ngFor="let opt of question?.options; let i = index" formGroupName="options-edit">
-                                <md-input-container>
-                                    <span mdPrefix >{{i+1}}. </span>
-                                    <input mdInput [placeholder]="opt?.key" [value]="opt.value" [formControlName]="opt.key">
-                                    <button mdSuffix md-icon-button (click)="delOption(question, i)">
-                                        <md-icon>delete</md-icon>
-                                    </button>
-                                </md-input-container>
-                            </div>
-                            <div *ngIf="question.multiple">
+                            <div *ngIf="formEditGroup.get(question.key).get('multiple-edit').value">
                                 <md-input-container>
                                     <input mdInput placeholder="min Select" formControlName="minSelect-edit">
                                     <md-hint class="alter"
@@ -134,7 +139,7 @@
                     <div class="selection-required">
                         <md-slide-toggle color="primary" formControlName="required-edit">required</md-slide-toggle>
                         
-                        <md-slide-toggle color="accent" >extra validator</md-slide-toggle>
+                        <md-slide-toggle color="accent" formControlName="validator-edit">extra validator</md-slide-toggle>
                     </div>
                 
                 </md-card-content>
@@ -145,13 +150,6 @@
             </md-card>
         </div>
         
-        <!--
-        <div>
-            <p>things from fromObject</p>
-            {{formObject | json}}
-        </div>
-        -->
-    
     </form>
 </div>
 

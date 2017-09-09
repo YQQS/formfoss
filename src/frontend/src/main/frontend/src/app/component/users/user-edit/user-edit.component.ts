@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../../models/user';
-import {UserService} from "../../../services/user.service";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
+import {UserService} from '../../../services/user.service';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import { Location } from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 import {AlertService} from '../../../services/alert.service';
@@ -24,9 +24,8 @@ export class UserEditComponent implements OnInit {
         this.userService.update(this.user)
             .subscribe(
                 (res: string) => {
-                    console.log(res);
                     this.router.navigate(['/user', this.user.userId])
-                        .then(() => this.alertService.success(res));
+                        .then(() => this.alertService.success(res['message'] || JSON.stringify(res)));
                 },
                 (error: string) => this.alertService.error(error));
     }
