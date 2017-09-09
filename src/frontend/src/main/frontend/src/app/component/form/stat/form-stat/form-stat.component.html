@@ -1,29 +1,51 @@
-<div *ngIf="formData && formModel">
+<div *ngIf="formData && formModel && chartModels" class="stat">
     <button md-button (click)="back()">
         <md-icon>arrow_back</md-icon>
         back
     </button>
-    
+
     <a md-button (click)="download()" id="csv-link">
         <md-icon>download</md-icon>
         download result
     </a>
+
     <div class="individual-button">
-        <button md-raised-button (click)="goIndividual()">
+        <button md-raised-button color="primary" (click)="goIndividual()">
             Individuals
         </button>
     </div>
-    
-    <div >
-        <div *ngFor="let chart of chartModels; index as i">
-            <h3>{{i+1}}th question</h3>
-            <h4>{{formModel.title}}</h4>
-            
-            <div *ngIf="formData.data[i].type === 'textbox'" class="question-textbox">
-                <p *ngFor="let txt of formData.data[i].result; index as in" >{{in+1}}. {{txt}}</p>
+
+    <div class="form-title">
+        {{formModel?.title}}
+    </div>
+
+    <div class="question-list">
+        <div *ngFor="let chart of chartModels; index as i" class="list-item">
+            <h3 class="question-title">{{i+1}}th question: {{formModel.formItems[i].title}}</h3>
+
+            <div class="question-type-desc">
+                <p>answer type: {{formModel.formItems[i].controlType}}</p>
+
+                <div *ngIf="formModel.formItems[i].controlType === 'dropdown'" class="question-select-desc">
+                    <p>avaiable options: </p>
+                    <md-chip-list>
+                        <md-chip *ngFor="let opt of formModel.formItems[i]?.options">
+                            {{opt.value}}
+                        </md-chip>
+                    </md-chip-list>
+                </div>
             </div>
-            
-            <div *ngIf="chart.type && chart.data.length > 0" class="question-graph" align="center">
+
+            <div *ngIf="formData.data[i].type === 'textbox'" class="question-textbox">
+                <md-list dense>
+                    <md-list-item *ngFor="let txt of formData.data[i].result; index as x">
+                        <p mdLine *ngIf="txt !== ''" class="text-answered">{{x+1}}. {{txt}}</p>
+                        <p mdLine *ngIf="txt === ''" class="text-not-answered">{{i+1}}. not answered</p>
+                    </md-list-item>
+                </md-list>
+            </div>
+
+            <div *ngIf="chart.type && chart.data.length > 0" class="question-graph">
                 <app-question-stat [chartModel]="chart"></app-question-stat>
             </div>
         </div>

@@ -15,7 +15,7 @@ import {MdSlideToggleChange} from '@angular/material';
     styleUrls: ['./form-list.component.scss']
 })
 export class FormListComponent implements OnInit {
-    questionList: FormModel[];
+    formList: FormModel[];
     onlyMe = true;
     currentUser: AuthenticatedUser;
 
@@ -33,13 +33,13 @@ export class FormListComponent implements OnInit {
 
     getOwnForms() {
         this.qtService.getFormsByUserId(this.currentUser.userId)
-            .subscribe(res => this.questionList = res,
+            .subscribe(res => this.formList = res,
                 (msg: string) => this.alertService.error(msg));
     }
 
     getAllForms() {
         this.qtService.getAllForms()
-            .subscribe(res => this.questionList = res,
+            .subscribe(res => this.formList = res,
                 msg => this.alertService.error(msg));
     }
 
@@ -65,24 +65,17 @@ export class FormListComponent implements OnInit {
 
     }
 
-    publish(uid: number, fid: number) {
-        this.qtService.publish(uid, fid)
+    publish(form: FormModel) {
+        const fid = form.formId;
+        this.qtService.publish(fid)
             .subscribe(res => {
-                if(res.message && res.url) {
-                    this.alertService.success(res.message + '.You can release your form throw url:' + res.url);
-                    let x=document.getElementById(fid.toString());
-                    x.innerHTML="Published";
-                }
-                else if(res.message){
-                    this.alertService.error(res.message);
-                    let x=document.getElementById(fid.toString());
-                    x.innerHTML="Unpublished";
-                }
-            })
+                this.alertService.success(res.message || 'published');
+                this.getForms();
+            }, error => this.alertService.error(error));
     }
 
-    edit(id: number) {
-        this.router.navigate(['/question', id, 'edit']);
+    edit(form: FormModel) {
+        this.router.navigate(['/question', form.formId, 'edit']);
     }
 
     preview(id: number) {

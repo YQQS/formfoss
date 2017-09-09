@@ -1,13 +1,48 @@
 .question-textbox {
-    display: list-item;
-    color: salmon;
-    background-color: transparent;
-    font-family: "DejaVu Sans";
-    font-size: small;
+    padding-left: 20%;
 }
 
 .individual-button {
-    position: fixed;
+    position: absolute;
     right: 10px;
-    top: 70px;
+    top: 75px;
+}
+
+.form-title {
+    font-size: 30px;
+    text-align: center;
+}
+
+.question-list {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.list-item {
+    margin: 10px;
+    border-top: 1px solid aqua;
+}
+
+.question-title {
+    text-align: center;
+}
+
+.question-type-desc {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.question-select-desc {
+}
+
+.text-answered {
+    color: black;
+}
+
+.text-not-answered {
+    color: brown;
+}
+
+.question-graph {
+    padding-left: 10%;
 }

@@ -1,7 +1,13 @@
-.question-graph {
-    width: 50%;
+.graph {
+    width: 80%;
 }
 
 .graph-type {
-    display: inline-flex;
+    position: relative;
+    top: 4px;
+}
+
+.graph-action {
+    position: relative;
+    bottom: 4px;
 }

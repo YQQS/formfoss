@@ -5,6 +5,7 @@ import {QuestionService} from '../../../../services/question.service';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Location} from '@angular/common';
 import {FormUtil} from '../../../../util/form.util';
+import {AlertService} from '../../../../services/alert.service';
 
 @Component({
     selector: 'app-form-edit',
@@ -17,7 +18,8 @@ export class FormEditComponent implements OnInit {
 
     constructor(private activatedRoute: ActivatedRoute,
                 private location: Location,
-                private qtService: QuestionService) { }
+                private qtService: QuestionService,
+                private alertService: AlertService) { }
 
 
     ngOnInit() {
@@ -25,8 +27,8 @@ export class FormEditComponent implements OnInit {
         return this.qtService.getForm(formId)
             .subscribe((form: FormModel) => {
                 this.formObject = form;
-                this.formGroup = FormUtil.toFromEditGroup(this.formObject);
-            })
+                this.formGroup = FormUtil.formModelToEditGroup(this.formObject);
+            }, error => this.alertService.error(error));
     }
 
     goBack() {

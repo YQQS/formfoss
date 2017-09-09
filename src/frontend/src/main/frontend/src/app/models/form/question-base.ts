@@ -18,7 +18,7 @@ export class QuestionBase<T> {
         order?: number,
         inputType?: string,
         controlType?: string,
-        validator?: QuestionValidator
+        validator?: QuestionValidator,
     } = {}) {
         this.value = options.value || null;
         this.key = options.key || '';

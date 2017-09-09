@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {QuestionService} from "../../../../services/question.service";
-import {FormResultModel} from "../../../../models/result/form-result.model";
-import {FormModel} from "../../../../models/form/form.model";
-import {ChartModel} from "../../../../models/result/chart.model";
-import {FormUtil} from "../../../../util/form.util";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {Location} from "@angular/common";
+import {QuestionService} from '../../../../services/question.service';
+import {FormResultModel} from '../../../../models/result/form-result.model';
+import {FormModel} from '../../../../models/form/form.model';
+import {ChartModel} from '../../../../models/result/chart.model';
+import {FormUtil} from '../../../../util/form.util';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {Location} from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 import {AlertService} from '../../../../services/alert.service';
 
