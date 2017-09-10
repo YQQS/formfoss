@@ -70,8 +70,7 @@ public class PublicController {
         countRepository.save(idCount);
         userAnswer.setCommitflag(true);
         userAnswerRepository.save(userAnswer);
-        UserAnswerController controller=new UserAnswerController();
-        controller.updateFormData(userAnswer);
+        formService.updateFormData(userAnswer);
         return new ResponseEntity<String>("{\"message\": \"Create new answer successfully\"}",HttpStatus.OK);
     }
 
