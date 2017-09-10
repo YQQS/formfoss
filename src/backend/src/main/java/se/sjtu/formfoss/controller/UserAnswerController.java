@@ -368,11 +368,14 @@ public class UserAnswerController {
     public @ResponseBody
     ResponseEntity<String> deleteUserAnswer(@RequestParam Integer form_id, @RequestParam Integer user_id,@RequestAttribute Integer userId,
                                             @RequestAttribute String userRole){
-        if(!user_id.equals(userId))
-            throw new PermissionDenyException("not the original submitter,you cannot delete it");
+
         List<UserAnswerEntity> userAnswer = userAnswerRepository.findByFormIdAndUserId(form_id,user_id);
         HttpStatus status=(userAnswer.iterator().hasNext()!=false)?HttpStatus.NON_AUTHORITATIVE_INFORMATION:HttpStatus.NOT_FOUND;
+
         if(userAnswer.iterator().hasNext() != false){
+            if (!AuthRequestUtil.checkUserAnswerSubmitter(userAnswer.get(0), userId)) {
+                throw new PermissionDenyException("not the original submitter");
+            }
             userAnswerRepository.deleteByFormIdAndUserId(form_id,user_id);
             deleteFormData(userAnswer.get(0));
             return  new ResponseEntity<String>("{\"message\": \"Delete successfully\"}",status);
