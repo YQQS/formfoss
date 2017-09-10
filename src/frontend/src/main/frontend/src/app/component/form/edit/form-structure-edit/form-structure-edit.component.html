@@ -65,9 +65,12 @@
                             <md-icon>add</md-icon>
                         </button>
 
+
+    
                         <md-slide-toggle color="primary" formControlName="multiple-edit">
                             allow multi select
                         </md-slide-toggle>
+    
 
                         <div *ngFor="let opt of question?.options; let i = index" formGroupName="options-edit">
                             <md-input-container>
@@ -80,6 +83,7 @@
                         </div>
                     </div>
 
+                    
                     <div [ngSwitch]="question.controlType" [hidden]="!formEditGroup.get(question.key).get('validator-edit').value">
                         <div *ngSwitchCase="'dropdown'" >
 

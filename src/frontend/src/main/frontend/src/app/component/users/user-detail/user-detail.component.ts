@@ -23,7 +23,7 @@ export class UserDetailComponent implements OnInit {
         this.userService.update(this.user)
             .subscribe(
                 (res: any) => {
-                    this.alertService.success(res['message'] || 'OK');
+                    this.alertService.success(res['message'] || JSON.stringify(res));
                 }, error => {
                     this.alertService.error(error);
                 }

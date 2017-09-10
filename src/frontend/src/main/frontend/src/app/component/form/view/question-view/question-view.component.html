@@ -1,7 +1,8 @@
 <div [formGroup]="formGroup">
 
-    <div class="question-title">{{question.title}}</div>
 
+    <div class="question-title">{{question.title}}</div>
+    
     <div [ngSwitch]="question.controlType">
 
         <div *ngSwitchCase="'textbox'">
@@ -50,6 +51,7 @@
                     </div>
                 </div>
 
+                
             </div>
 
             <div class="alter alter-danger" *ngIf="getErrors()">
