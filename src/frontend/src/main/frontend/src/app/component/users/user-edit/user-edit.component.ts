@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 import {AlertService} from '../../../services/alert.service';
 
+
 @Component({
     selector: 'app-user-edit',
     templateUrl: './user-edit.component.html',
