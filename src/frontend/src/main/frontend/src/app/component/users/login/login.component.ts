@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
             .subscribe(res => {
                 if (res.message) {
                     this.loading = true;
-                    this.router.navigate([this.returnUrl])
+                    this.router.navigateByUrl(this.returnUrl)
                         .then(() =>
                             this.alertService.success(res.message));
                 } else if (res.errorMsg) {

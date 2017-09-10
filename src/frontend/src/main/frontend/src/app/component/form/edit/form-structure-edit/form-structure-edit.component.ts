@@ -50,6 +50,11 @@ export class FormStructureEditComponent implements OnInit {
         }
     }
 
+    PreviousQuestions(question: QuestionBase<any>) {
+        const pos = this.formObject.formItems.indexOf(question);
+        return this.formObject.formItems.filter((q, i) => i < pos);
+    }
+
     trackByKey(index: number, question: QuestionBase<any>) {
         return question.key;
     }

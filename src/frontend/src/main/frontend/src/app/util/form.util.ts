@@ -203,6 +203,7 @@ export class FormUtil {
                 'controlType-edit': new FormControl(question.controlType, Validators.required),
                 'required-edit': new FormControl(question.validator.required || false),
                 'validator-edit': new FormControl(question.validator !== null, Validators.required),
+                'depends-edit': new FormControl(question.dependencies.length !== 0),
                 'min-edit': new FormControl(question.validator.min || 0),
                 'max-edit': new FormControl(question.validator.max || 100),
                 'minLength-edit': new FormControl(question.validator.minLength || 10),
@@ -274,6 +275,9 @@ export class FormUtil {
             const options = group.get(question.key).value;
             question.title =  options['title-edit'];
             question.controlType =  options['controlType-edit'];
+
+            question.dependencies = [];
+
 
             question.validator = {};
             question.validator.required =  options['required-edit'];
