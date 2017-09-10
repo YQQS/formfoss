@@ -1,0 +1,58 @@
+
+
+<div *ngIf="user" align="center">
+    <md-toolbar  >
+        <md-icon>edit</md-icon>
+        <span align="center">User Self Edit </span>
+    </md-toolbar>
+    <div>
+        <md-icon >person</md-icon>
+        <md-form-field>
+
+            <input mdInput [(ngModel)]=user.userName placeholder="Name">
+
+        </md-form-field>
+
+    </div>
+
+    <div>
+        <md-icon >vpn_key</md-icon>
+        <md-form-field>
+            <input mdInput [(ngModel)]=user.userPassword placeholder="Paasword">
+        </md-form-field>
+    </div>
+
+    <div>
+        <md-icon >email</md-icon>
+        <md-form-field>
+            <input mdInput [(ngModel)]=user.userEmail placeholder="Email">
+        </md-form-field>
+    </div>
+
+    <div>
+        <md-icon >phone</md-icon>
+        <md-form-field>
+            <input mdInput [(ngModel)]=user.userPhone placeholder="Phone">
+        </md-form-field>
+    </div>
+
+    <div style="float:center" >
+
+        <button md-button (click)="save()" >
+            <md-icon>save</md-icon>
+            Save
+        </button>
+
+        <button md-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+            Back
+        </button>
+
+        <button md-button (click)="deleteUser(user.userId)">
+            <md-icon>delete</md-icon>
+            delete account
+        </button>
+
+    </div>
+
+</div>
