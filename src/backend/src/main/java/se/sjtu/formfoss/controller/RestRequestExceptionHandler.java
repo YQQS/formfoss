@@ -32,7 +32,7 @@ public class RestRequestExceptionHandler {
     public ResponseEntity<Object> handleBadRequest(RuntimeException ex) {
         String errorMsg;
         if (ex.getMessage() != null) {
-            errorMsg = RestResponseUtil.errorMsg("Bad Request" + ex.getMessage());
+            errorMsg = RestResponseUtil.errorMsg("Bad Request: " + ex.getMessage());
         } else {
             errorMsg = RestResponseUtil.errorMsg("Bad Request");
         }

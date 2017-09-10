@@ -9,14 +9,14 @@ import {FormGroup} from '@angular/forms';
 })
 export class QuestionViewComponent implements OnInit {
     @Input() question: QuestionBase<any>;
-    @Input() form: FormGroup;
+    @Input() formGroup: FormGroup;
 
     getErrors() {
-        return this.form.get(this.question.key).errors;
+        return this.formGroup.get(this.question.key).errors;
     }
 
     getFormControl() {
-        return this.form.get(this.question.key);
+        return this.formGroup.get(this.question.key);
     }
 
     constructor() { }

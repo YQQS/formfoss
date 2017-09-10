@@ -21,7 +21,7 @@ export class FormNewComponent implements OnInit {
     ngOnInit() {
         this.formObject = this.qtService.getStartForm();
         this.formObject.userId = ServiceUtil.getCurrentUser().userId;
-        this.formGroup = FormUtil.toFromEditGroup(this.formObject);
+        this.formGroup = FormUtil.formModelToEditGroup(this.formObject);
     }
 
     goBack() {

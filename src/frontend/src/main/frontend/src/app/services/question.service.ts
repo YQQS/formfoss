@@ -23,7 +23,7 @@ export class QuestionService {
             {
                 key: 'question1',
                 controlType: 'textbox',
-                title: 'start question title',
+                title: 'question title',
                 value: '',
                 desc: '',
                 inputType: 'text',
@@ -38,7 +38,7 @@ export class QuestionService {
     private static questionTemp = {
         key: 'question',
         controlType: 'textbox',
-        title: 'Template Title',
+        title: 'Title',
         value: '',
         order: -1,
         inputType: 'text',
@@ -50,7 +50,7 @@ export class QuestionService {
     private dataUrl = ServiceUtil.authUrl + '/formdata';
     private userUrl = ServiceUtil.authUrl + '/users';
     private publishedUrl = ServiceUtil.publicUrl + '/forms/published';
-    private publishedFormurl = ServiceUtil.publicUrl + '/forms/';
+    private publishedFormUrl = ServiceUtil.publicUrl + '/forms/';
     private jsonHeader = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http) {}
@@ -118,7 +118,7 @@ export class QuestionService {
     }
 
     getPublishedById(id: number): Observable<any> {
-        return this.http.get(this.publishedFormurl + id)
+        return this.http.get(this.publishedFormUrl + id)
             .map(res => FormUtil.buildForm(res.json()))
             .catch(ServiceUtil.handleError);
     }
@@ -158,12 +158,12 @@ export class QuestionService {
 
     getFormData(formId: number): Observable<any> {
         return this.http.get(this.dataUrl + '/' + formId, ServiceUtil.buildAuthReqOpts())
-            .map(res => FormUtil.parseResultModel(res.json()) )
+            .map(res => FormUtil.buildResultModel(res.json()) )
             .catch(ServiceUtil.handleError)
     }
 
-    publish(uid: number, fid: number) {
-        return this.http.patch(this.userUrl + '/' + uid + this.formUrl + '/' + fid, '{}', ServiceUtil.buildAuthReqOpts())
+    publish(fid: number) {
+        return this.http.patch(this.formUrl + '/' + fid, '{}', ServiceUtil.buildAuthReqOpts())
             .map(res => res.json())
             .catch(ServiceUtil.handleError)
     }

@@ -129,29 +129,43 @@ public class UserAnswerController {
     }
 
 
+    /**
+     * submit a new answer
+     * should work for logged in user
+     */
     @PostMapping("/useranswers")
     public @ResponseBody
     ResponseEntity<String> createUserAnswer(@RequestBody UserAnswerEntity userAnswer,
                                             @RequestAttribute Integer userId,
                                             @RequestAttribute String userRole) {
-        if(userAnswer.getAnswerId() == null){
+        if (userAnswer.getAnswerId() == null) {
+            /*
+             * for new answers, give a new answerId
+             */
             IdCount idCount=countRepository.findOne("1");
             Integer answerId = idCount.getFormAnswerIdCount();
-            answerId +=1;
+            answerId += 1;
             userAnswer.setAnswerId(answerId);
             idCount.setFormAnswerIdCount(answerId);
             countRepository.save(idCount);
         }
-        int fid=userAnswer.getFormId();
-        List<UserAnswerEntity> answerCheck=userAnswerRepository.findByFormIdAndUserId(fid,userId);
-        if(!answerCheck.isEmpty() && answerCheck.get(0).getCommitflag()){
-            return new ResponseEntity<String>("{\"message\": \"You have already answer the form!\"}",HttpStatus.OK);
+
+        if (!AuthRequestUtil.checkUserAnswerSubmitter(userAnswer, userId)) {
+            throw new PermissionDenyException("current user and the user to answer the form not same");
         }
+
+        int fid = userAnswer.getFormId();
+        List<UserAnswerEntity> answerCheck = userAnswerRepository.findByFormIdAndUserId(fid,userId);
+        if (!answerCheck.isEmpty() && answerCheck.get(0).getCommitflag()) {
+            throw new BadRequestException("You've already answered this form");
+        }
+
         userAnswer.setCommitflag(true);
 
-        userAnswer.setUserId(userId);
+        // userAnswer.setUserId(userId);
         userAnswerRepository.save(userAnswer);
-        int formId=userAnswer.getFormId();
+
+        int formId = userAnswer.getFormId();
         List<Map<String,Object>> answers = userAnswer.getAnswers();
         FormDataEntity formData = formDataRepository.findOne(formId);
         formData.setAnswerCount(formData.getAnswerCount()+1);

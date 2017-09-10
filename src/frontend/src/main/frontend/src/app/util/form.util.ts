@@ -16,6 +16,7 @@ import {QuestionResultModel} from '../models/result/question-result.model';
 
 export class FormUtil {
     static savedForm = 'savedForm';
+
     static buildQuestion(input: {}): QuestionBase<any> {
         const cType = input['controlType'];
         if (cType == null) {
@@ -70,7 +71,7 @@ export class FormUtil {
         return answerModel;
     }
 
-    static parseResultModel(input: any): FormResultModel {
+    static buildResultModel(input: any): FormResultModel {
         let result: FormResultModel = new FormResultModel(input);
 
         return result;
@@ -115,13 +116,13 @@ export class FormUtil {
         return chartModel;
     }
 
-    static toChartModels(questionData: FormResultModel, questionSechema: FormModel): ChartModel[] {
+    static toChartModels(questionData: FormResultModel, questionSecheme: FormModel): ChartModel[] {
         let charts: ChartModel[] = [];
         let len = questionData.data.length;
         let i = 0;
         for (i = 0; i < len; i++) {
             charts.push(FormUtil.toChartModel(questionData.data[i],
-                questionSechema.formItems[i]));
+                questionSecheme.formItems[i]));
         }
 
         return charts;
@@ -171,7 +172,7 @@ export class FormUtil {
         }
     }
 
-    static toFromEditGroup(form: FormModel): FormGroup {
+    static formModelToEditGroup(form: FormModel): FormGroup {
         const questions = form.formItems;
         let group: FormGroup = new FormGroup({
             'title': new FormControl(form.title, Validators.required),
@@ -201,6 +202,7 @@ export class FormUtil {
                 'title-edit': new FormControl(question.title, Validators.required),
                 'controlType-edit': new FormControl(question.controlType, Validators.required),
                 'required-edit': new FormControl(question.validator.required || false),
+                'validator-edit': new FormControl(question.validator !== null, Validators.required),
                 'min-edit': new FormControl(question.validator.min || 0),
                 'max-edit': new FormControl(question.validator.max || 100),
                 'minLength-edit': new FormControl(question.validator.minLength || 10),
@@ -217,7 +219,7 @@ export class FormUtil {
         ));
     }
 
-    static toFormViewGroup(questions: QuestionBase<any>[]) {
+    static formModelToViewGroup(questions: QuestionBase<any>[]) {
         let group = new FormGroup({});
 
         questions.forEach(question => {
@@ -249,7 +251,7 @@ export class FormUtil {
             let questionFormControl;
             if (question instanceof QuestionDropDown && question.multiple) {
                 questionFormControl = new FormArray(
-                    question.options.map(opt => new FormControl(opt.key)),
+                    question.options.map(opt => new FormControl(false)),
                     Validators.compose([
                         FossValidators.maxSelect(question.validator.maxSelect),
                         FossValidators.minSelect(question.validator.minSelect)
@@ -257,13 +259,53 @@ export class FormUtil {
             } else {
                 questionFormControl = new FormControl(question.value, validatorsList);
             }
+
             group.addControl(question.key, questionFormControl);
         });
 
         return group;
-
     }
 
+    static formEditGroupSyncToModel(group: FormGroup, form: FormModel) {
+        const values = group.value;
+        form.title = values['title'];
+        form.desc = values['desc'];
+        form.formItems.forEach((question) => {
+            const options = group.get(question.key).value;
+            question.title =  options['title-edit'];
+            question.controlType =  options['controlType-edit'];
+
+            question.validator = {};
+            question.validator.required =  options['required-edit'];
+            if ( options['validator-edit'] === false) {
+                return;
+            }
+            switch (question.controlType) {
+                case 'textbox':
+                    question.validator.minLength =  options['minLength-edit'];
+                    question.validator.maxLength =  options['maxLength-edit'];
+                    question.validator.pattern =  options['pattern-edit'];
+                    break;
+                case 'slider':
+                    question.validator.min =  options['min-edit'];
+                    question.validator.max =  options['max-edit'];
+                    break;
+                case 'dropdown':
+                    question.validator.minSelect =  options['minSelect-edit'];
+                    question.validator.maxSelect =  options['maxSelect-edit'];
+                    (question as QuestionDropDown).multiple =  options['multiple-edit'];
+                    const keys: string[] = Object.keys( options['options-edit']);
+                    (question as QuestionDropDown).options = [];
+                    keys.forEach(key => {
+                        (question as QuestionDropDown).options.push({
+                            key: key,
+                            value:  options['options-edit'][key]
+                        });
+                    });
+                    break;
+            }
+        })
+    }
 
     static storeFormModel(form: FormModel) {
         localStorage.setItem(

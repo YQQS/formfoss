@@ -1,20 +1,24 @@
-<div align="center">
-    <form (ngSubmit)="onSubmit()" [formGroup]="formGroup">
-        <md-toolbar color="warn" align="center" class="question-header">
-            <p class="header-title">{{formObject.title}}</p>
-        </md-toolbar>
-        <p class="header-desc">{{formObject.desc}}</p>
+<div class="form-content">
+    <div class="nav-list">
 
-        <div *ngFor="let question of formObject.formItems" class="form-row">
-            <app-question-view [question]="question" [form]="formGroup"></app-question-view>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" [formGroup]="formGroup">
+        <p class="form-title">{{formObject.title}}</p>
+
+        <p class="form-desc">{{formObject.desc}}</p>
+
+        <div *ngFor="let question of formObject.formItems">
+            <app-question-view [question]="question" [formGroup]="formGroup"></app-question-view>
         </div>
 
-        <div class="form-row">
+        <div class="form-actions" align="center">
             <button md-raised-button color="primary" type="submit" [disabled]="formGroup.invalid || !formObject.isPublished">Submit</button>
-            <button md-raised-button color="accent" type="button" (click)="save()" [disabled]="formGroup.pristine || !formObject.isPublished">Save</button>
+            <button md-raised-button color="accent" type="button"
+                    (click)="save()" [disabled]="formGroup.pristine || !formObject.isPublished">Save</button>
             <button md-raised-button color="warn" type="reset" [disabled]="formGroup.untouched">Reset</button>
         </div>
-        
+
     </form>
 
 </div>
