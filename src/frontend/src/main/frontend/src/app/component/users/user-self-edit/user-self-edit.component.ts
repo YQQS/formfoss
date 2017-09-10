@@ -11,7 +11,7 @@ import {AlertService} from '../../../services/alert.service';
 @Component({
     selector: 'app-user-self-edit',
     templateUrl: './user-self-edit.component.html',
-    styleUrls: ['./user-self-edit.component.scss']
+    styleUrls: ['./user-self-edit.component.css']
 })
 export class UserSelfEditComponent implements OnInit {
     user: User;
