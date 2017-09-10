@@ -54,6 +54,7 @@ import { CanNotAccessComponent } from './component/extra/can-not-access/can-not-
 import {AdminGuard} from './component/_guards/admin.guard';
 import { AdminComponent } from './component/_navigation/admin/admin.component';
 import { ToolbarComponent } from './component/_navigation/toolbar/toolbar.component';
+import {UserSelfEditComponent}from'./component/users/user-self-edit/user-self-edit.component';
 
 @NgModule({
     declarations: [
@@ -83,7 +84,8 @@ import { ToolbarComponent } from './component/_navigation/toolbar/toolbar.compon
         PageNotFoundComponent,
         CanNotAccessComponent,
         AdminComponent,
-        ToolbarComponent
+        ToolbarComponent,
+        UserSelfEditComponent
     ],
     imports: [
         BrowserModule,

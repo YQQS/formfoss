@@ -31,6 +31,6 @@ export class ToolbarComponent implements OnInit {
 
 
     edit() {
-        this.router.navigate(['/profile', this.currentUser.userId]);
+        this.router.navigate(['/user', this.currentUser.userId ,'self-edit']);
     }
 }
