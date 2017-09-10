@@ -1,4 +1,5 @@
 button {
+    color: black;
     margin-top: 20px;
     font-family: Arial;
     background-color: #eee;
@@ -14,18 +15,20 @@ li:hover {
     left: .1em;
 }
 
+
 .badge  {
+    text-align: center;
     width:1.4cm;
     display: inline-block;
     font-size: small;
     color: white;
     padding: 0.8em 0.7em 0 0.7em;
     background-color: #607D8B;
-    line-height: 200%;
+    line-height: 100%;
     position: relative;
     left: 1px;
-    top: 4px;
-    height: 1.8em;
+    top: 0px;
+    height: 0.6cm;
     margin: .1cm;
     border-radius: 4px 4px 4px 4px;
 }

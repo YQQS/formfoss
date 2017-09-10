@@ -16,7 +16,8 @@ li:hover {
 }
 
 .badge  {
-    width:0.4cm;
+    text-align: center;
+    width:1cm;
     display: inline-block;
     font-size: small;
     color: white;
@@ -26,7 +27,7 @@ li:hover {
     position: relative;
     left: -1px;
     top: -4px;
-    height: 1.8em;
+    height: 0.6cm;
     margin-right: .8em;
     border-radius: 4px 4px 4px 4px;
 }
