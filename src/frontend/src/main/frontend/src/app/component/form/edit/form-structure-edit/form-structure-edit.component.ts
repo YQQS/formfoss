@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
 import {Location} from '@angular/common';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {FormModel} from '../../../../models/form/form.model';
 import {QuestionService} from '../../../../services/question.service';
 import {QuestionBase} from '../../../../models/form/question-base';
@@ -12,7 +12,6 @@ import {MdDialog, MdSelectChange, MdSlideToggleChange} from '@angular/material';
 import {AlertDialogComponent} from '../../../_directives/alert-dialog/alert-dialog.component';
 import {AlertService} from '../../../../services/alert.service';
 import {ServiceUtil} from '../../../../util/service.util';
-import {noUndefined} from '@angular/compiler/src/util';
 
 @Component({
     selector: 'app-form-structure-edit',
@@ -51,40 +50,9 @@ export class FormStructureEditComponent implements OnInit {
         }
     }
 
-    indexOf(question: QuestionBase<any>) {
-        return this.formObject.formItems.indexOf(question);
-    }
-
-    PreviousQuestionKeys(question: QuestionBase<any>) {
+    PreviousQuestions(question: QuestionBase<any>) {
         const pos = this.formObject.formItems.indexOf(question);
-        return this.formObject.formItems
-            .filter((q, i) => i < pos)
-            .map(q => q.key);
-    }
-
-    getQuestionControl(key: string) {
-        return this.formEditGroup.get(key);
-    }
-
-    getDependQuestionControl(thisQuestion: QuestionBase<any>) {
-        const key = this.formEditGroup.get(thisQuestion.key).get('dependency-edit').get('key').value;
-
-        if (key === null) {
-            return null;
-        }
-
-        return this.getQuestionControl(key);
-    }
-
-    getDependQuestionOptionKey(thisQuestion: QuestionBase<any>) {
-        return Object.keys(
-            this.getDependQuestionControl(thisQuestion)
-                .get('options-edit').value);
-    }
-
-    getDependQuestionOptionValue(thisQuestion: QuestionBase<any>, key: string) {
-        return this.getDependQuestionControl(thisQuestion)
-            .get('options-edit').value[key];
+        return this.formObject.formItems.filter((q, i) => i < pos);
     }
 
     trackByKey(index: number, question: QuestionBase<any>) {
@@ -167,7 +135,7 @@ export class FormStructureEditComponent implements OnInit {
         this.updated = true;
 
         const index: number = this.formObject.formItems.indexOf(question);
-        const size: number = (<QuestionDropDown> this.formObject.formItems[index]).options.length;
+        let size: number = (<QuestionDropDown> this.formObject.formItems[index]).options.length;
         let newKey: number;
         if (size === 0) {
             newKey = 1;
@@ -190,31 +158,12 @@ export class FormStructureEditComponent implements OnInit {
     delOption(question: QuestionBase<any>, pos: number) {
         this.updated = true;
 
-        const index = this.formObject.formItems.indexOf(question);
+        let index = this.formObject.formItems.indexOf(question);
         let optKey = (<QuestionDropDown> question).options[pos].key;
 
         (<QuestionDropDown> this.formObject.formItems[index]).options.splice(pos, 1);
         (this.formEditGroup.get(question.key).get('options-edit') as FormGroup)
             .removeControl(optKey);
-    }
-
-    otherOption(question: QuestionBase<any>) {
-        const index = this.indexOf(question);
-
-        (this.formEditGroup.get(question.key).get('options-edit') as FormGroup)
-            .addControl('other', new FormControl('other'));
-        (this.formObject.formItems[index] as QuestionDropDown).options.push({
-            key: 'other',
-            value: 'other'
-        });
-    }
-
-    hasOtherOption(question: QuestionDropDown) {
-        return question.options.filter(opt => opt.key === 'other').length !== 0 ;
-    }
-
-    getControl(question: QuestionBase<any>) {
-        return this.formEditGroup.get(question.key);
     }
 
     settings() {
