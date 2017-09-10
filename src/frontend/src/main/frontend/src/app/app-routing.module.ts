@@ -18,6 +18,8 @@ import {PageNotFoundComponent} from './component/extra/page-not-found/page-not-f
 import {CanNotAccessComponent} from './component/extra/can-not-access/can-not-access.component';
 import {AdminGuard} from './component/_guards/admin.guard';
 import {UserEditComponent} from './component/users/user-edit/user-edit.component';
+import {UserSelfEditComponent} from "./component/users/user-self-edit/user-self-edit.component";
+import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -25,12 +27,15 @@ const routes: Routes = [
     {path: 'prototype', component: FormPrototypeComponent},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
+    {path: 'dialog', component:AlertDialogComponent},
+
 
     {path: 'user', canActivate: [AuthGuard], children: [
         {path: 'list', component: UserListComponent, canActivate: [AdminGuard]},
         {path: ':id', children: [
             {path: '', component: UserDetailComponent},
             {path: 'edit', component: UserEditComponent},
+            {path: 'self-edit', component: UserSelfEditComponent},
         ]},
     ]},
     {path: 'question', children: [
