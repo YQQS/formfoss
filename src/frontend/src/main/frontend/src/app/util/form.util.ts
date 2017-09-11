@@ -13,6 +13,7 @@ import {FossValidators} from '../validator/foss.validator';
 import {FormResultModel} from '../models/result/form-result.model';
 import {ChartModel} from '../models/result/chart.model';
 import {QuestionResultModel} from '../models/result/question-result.model';
+import {ServiceUtil} from './service.util';
 
 export class FormUtil {
     static savedForm = 'savedForm';
@@ -131,9 +132,7 @@ export class FormUtil {
 
     static buildAnswerModel(formGroup: FormGroup, formObject: FormModel) {
         let answerModel = new AnswerModel({formId: formObject.formId});
-        if (formObject.userId) {
-            answerModel.userId = formObject.userId;
-        }
+        answerModel.userId = ServiceUtil.getCurrentUser().userId;
         answerModel.answers = [];
         formObject.formItems.forEach(question => {
             answerModel.answers.push(FormUtil.buildSingleAnswer(formGroup, question))
@@ -151,7 +150,7 @@ export class FormUtil {
             if (question.multiple) {
                 return new AnswerMultiChoice({
                     key: question.key,
-                    answer: (formGroup.value[question.key] as any[])
+                    answer: (formGroup.get(question.key).get('normal').value as any[])
                         .map((item, i) => {
                             if (item !== false) {
                                 return question.options[i].key;
@@ -164,7 +163,8 @@ export class FormUtil {
             } else {
                 return new AnswerSingleChoice({
                     key: question.key,
-                    answer: formGroup.value[question.key]
+                    answer: formGroup.get(question.key).get('normal').value,
+                    other: formGroup.get(question.key).get('other').value
                 })
             }
         } else {
@@ -203,7 +203,11 @@ export class FormUtil {
                 'controlType-edit': new FormControl(question.controlType, Validators.required),
                 'required-edit': new FormControl(question.validator.required || false),
                 'validator-edit': new FormControl(question.validator !== null, Validators.required),
-                'depends-edit': new FormControl(question.dependencies.length !== 0),
+                'depends-edit': new FormControl(question.dependencies.hasOwnProperty('key')),
+                'dependency-edit': new FormGroup({
+                    'key': new FormControl(question.dependencies['key'] || ''),
+                    'requiredOptions': new FormControl(question.dependencies['requiredOptions'] || [])
+                }),
                 'min-edit': new FormControl(question.validator.min || 0),
                 'max-edit': new FormControl(question.validator.max || 100),
                 'minLength-edit': new FormControl(question.validator.minLength || 10),
@@ -251,12 +255,20 @@ export class FormUtil {
 
             let questionFormControl;
             if (question instanceof QuestionDropDown && question.multiple) {
-                questionFormControl = new FormArray(
-                    question.options.map(opt => new FormControl(false)),
-                    Validators.compose([
-                        FossValidators.maxSelect(question.validator.maxSelect),
-                        FossValidators.minSelect(question.validator.minSelect)
-                    ]));
+                questionFormControl = new FormGroup({
+                    'normal': new FormArray(
+                            question.options.map(opt => new FormControl(false)),
+                            Validators.compose([
+                                FossValidators.maxSelect(question.validator.maxSelect),
+                                FossValidators.minSelect(question.validator.minSelect)
+                            ])),
+                    'other': new FormControl('')
+                });
+            } else if (question instanceof QuestionDropDown) {
+                questionFormControl = new FormGroup({
+                    'normal': new FormControl(question.value, validatorsList),
+                    'other': new FormControl('')
+                })
             } else {
                 questionFormControl = new FormControl(question.value, validatorsList);
             }
@@ -276,8 +288,16 @@ export class FormUtil {
             question.title =  options['title-edit'];
             question.controlType =  options['controlType-edit'];
 
-            question.dependencies = [];
-
+            if (!options['depends-edit']) {
+                question.dependencies = null;
+            } else {
+                const key = options['dependency-edit']['key'];
+                const requireds = options['dependency-edit']['requiredOptions'];
+                question.dependencies = {
+                    key: key,
+                    requiredOptions: requireds
+                }
+            }
 
             question.validator = {};
             question.validator.required =  options['required-edit'];
