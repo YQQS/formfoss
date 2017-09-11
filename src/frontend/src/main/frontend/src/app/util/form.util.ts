@@ -158,7 +158,8 @@ export class FormUtil {
                                 return '';
                             }
                         })
-                        .filter(item => item !== '')
+                        .filter(item => item !== ''),
+                    other: formGroup.get(question.key).get('other').value
                 })
             } else {
                 return new AnswerSingleChoice({
