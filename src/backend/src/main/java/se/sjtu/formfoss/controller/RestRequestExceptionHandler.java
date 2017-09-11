@@ -54,7 +54,7 @@ public class RestRequestExceptionHandler {
     public ResponseEntity<Object> handleLoginFailed(RuntimeException ex) {
         String msg = "Login failed";
         if (ex.getMessage() != null) {
-            msg += msg + ": " +ex.getMessage();
+            msg += (": " + ex.getMessage());
         }
 
         return new ResponseEntity<>(RestResponseUtil.errorMsg(msg), HttpStatus.UNAUTHORIZED);

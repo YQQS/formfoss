@@ -68,15 +68,21 @@
                         <md-slide-toggle color="primary" formControlName="multiple-edit">
                             allow multi select
                         </md-slide-toggle>
+                        
+                        <button [disabled]="hasOtherOption(question)" md-icon-button (click)="otherOption(question)"
+                            mdTooltip="add an other optional selection">
+                            <md-icon color="warn">add</md-icon>
+                        </button>
     
                         <div *ngFor="let opt of question?.options; let i = index" formGroupName="options-edit">
-                            <md-input-container>
+                            <md-form-field>
                                 <span mdPrefix >{{i+1}}. </span>
                                 <input mdInput [placeholder]="opt?.key" [value]="opt.value" [formControlName]="opt.key">
                                 <button mdSuffix md-icon-button (click)="delOption(question, i)">
                                     <md-icon>delete</md-icon>
                                 </button>
-                            </md-input-container>
+                                <md-hint align="start" *ngIf="opt?.key === 'other'">other optional answer</md-hint>
+                            </md-form-field>
                         </div>
                         
                     </div>
@@ -131,10 +137,22 @@
                     </div>
                     
                     <div class="dependency-edit" *ngIf="formEditGroup.get(question.key).get('depends-edit').value">
-                        <label>dependency</label>
-                        <md-select>
-                            <md-option *ngFor="let qs of PreviousQuestions(question); index as p" [value]="qs.key">{{p+1}}. {{qs.title}}</md-option>
-                        </md-select>
+                        <div formGroupName="dependency-edit">
+                            <label> depend on </label>
+                            <md-select formControlName="key">
+                                <md-option *ngFor="let qs of PreviousQuestionKeys(question); index as p"
+                                           [value]="qs">{{p+1}}th. {{getQuestionControl(qs)?.get('title-edit').value}}</md-option>
+                            </md-select>
+                            
+                            <div *ngIf="getDependQuestionControl(question)?.get('controlType-edit').value === 'dropdown'">
+                                <label>which option: </label>
+                                <md-select multiple="true" formControlName="requiredOptions">
+                                    <md-option *ngFor="let op of getDependQuestionOptionKey(question); index as opi"
+                                        [value]="op">{{opi + 1}}: {{getDependQuestionOptionValue(question, op)}}</md-option>
+                                </md-select>
+                            </div>
+                        </div>
+                        
                     </div>
                     
                     <div class="edit-select">
@@ -147,9 +165,10 @@
                     <div class="selection-required">
                         <md-slide-toggle color="primary" formControlName="required-edit">required</md-slide-toggle>
                         
-                        <md-slide-toggle color="accent" formControlName="validator-edit">extra validator</md-slide-toggle>
+                        <md-slide-toggle color="accent" formControlName="validator-edit">validator</md-slide-toggle>
                         
-                        <md-slide-toggle color="warn" formControlName="depends-edit">depends on</md-slide-toggle>
+                        <md-slide-toggle color="warn" *ngIf="indexOf(question) > 0"
+                                         formControlName="depends-edit">dependency</md-slide-toggle>
                     </div>
                 
                 </md-card-content>

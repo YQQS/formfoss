@@ -10,7 +10,7 @@ export class QuestionBase<T> {
     controlType: string;
     inputType?: string;
     validator?: QuestionValidator;
-    dependencies?: QuestionDependency[];
+    dependencies?: QuestionDependency;
 
     constructor(options: {
         value?: T,
@@ -21,7 +21,7 @@ export class QuestionBase<T> {
         inputType?: string,
         controlType?: string,
         validator?: QuestionValidator,
-        dependencies?: QuestionDependency[]
+        dependencies?: QuestionDependency
     } = {}) {
         this.value = options.value || null;
         this.key = options.key || '';
@@ -31,6 +31,6 @@ export class QuestionBase<T> {
         this.controlType = options.controlType || '';
         this.inputType = options.inputType || '';
         this.validator = options.validator || {};
-        this.dependencies = options.dependencies || [];
+        this.dependencies = options.dependencies || {};
     }
 }

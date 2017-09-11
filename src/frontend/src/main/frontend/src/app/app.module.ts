@@ -120,7 +120,8 @@ import {UserSelfEditComponent}from'./component/users/user-self-edit/user-self-ed
         MdDialogModule,
         MdTooltipModule,
         MdSnackBarModule,
-        ChartsModule
+        ChartsModule,
+        MdTooltipModule
     ],
     entryComponents: [SubmitPreviewComponent, AlertDialogComponent],
     providers: [UserService, QuestionService, AlertService, AuthGuard, AdminGuard, {
