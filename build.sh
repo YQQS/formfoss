@@ -1,9 +1,11 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
 set -ev
 
-PWD=$(pwd)
+BACKEND=$(pwd)/src/backend
+FRONTEND=$(pwd)/src/frontend/src/main/frontend
 
-cd "$PWD/src/backend" && \
+cd "$BACKEND" && \
     mvn clean package
-cd "$PWD/src/frontend/src/main/frontend/" && \
+cd "$FRONTEND" && \
     yarn build
