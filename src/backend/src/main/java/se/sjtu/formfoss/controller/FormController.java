@@ -102,6 +102,8 @@ public class FormController {
                     Map<String,Object> choiceData=new HashMap<String, Object>();
                     choiceData.put("choiceName",options.get(j).get("key"));
                     choiceData.put("choiceCount",0);
+                    if(options.get(j).get("key").equals("other"))
+                        choiceData.put("other",new ArrayList<Object>());
                     choice.add(choiceData);
                 }
                 datai.put("result",choice);

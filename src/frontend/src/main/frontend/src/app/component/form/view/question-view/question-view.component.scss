@@ -1,10 +1,14 @@
-.alter {
+.dropdown {
+    display: flex;
+    flex-flow: column;
+    margin: 3px;
+}
+
+.alert {
     font-size: 13px;
     color: #c7254e;
     background: #f9f2f4;
     border-radius: 3px;
-    padding: 15px;
-    margin: -26px 0 15px
 }
 
 .textbox-question {
@@ -24,8 +28,11 @@
     width: 50%;
 }
 
-.multi-select {
+.multi {
     padding-left: 8%;
+}
+
+.multi-select {
     display: flex;
     flex-flow: column;
     align-content: flex-start;
@@ -33,12 +40,19 @@
     height: auto;
 }
 
-.single-select {
+.single {
     padding-left: 8%;
+}
+
+.single-select {
     display: inline-flex;
     flex-direction: column;
 }
 
 .select-item {
     margin: 5px;
+}
+
+.input {
+    width: 80%;
 }

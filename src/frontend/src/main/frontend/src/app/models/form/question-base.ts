@@ -1,4 +1,5 @@
 import {QuestionValidator} from './question-validator';
+import {QuestionDependency} from './question-dependency';
 
 export class QuestionBase<T> {
     value: T;
@@ -9,6 +10,7 @@ export class QuestionBase<T> {
     controlType: string;
     inputType?: string;
     validator?: QuestionValidator;
+    dependencies?: QuestionDependency;
 
     constructor(options: {
         value?: T,
@@ -19,6 +21,7 @@ export class QuestionBase<T> {
         inputType?: string,
         controlType?: string,
         validator?: QuestionValidator,
+        dependencies?: QuestionDependency
     } = {}) {
         this.value = options.value || null;
         this.key = options.key || '';
@@ -28,5 +31,6 @@ export class QuestionBase<T> {
         this.controlType = options.controlType || '';
         this.inputType = options.inputType || '';
         this.validator = options.validator || {};
+        this.dependencies = options.dependencies || {};
     }
 }

@@ -64,7 +64,7 @@ public class UserController {
         UserEntity user = userRepository.findOne(id);
 
         if (user == null) {
-            throw new BadRequestException("Bad request, user not exist");
+            throw new BadRequestException("user not exist");
         }
 
         if (! AuthRequestUtil.checkUserOwnership(user, userId, userRole)) {

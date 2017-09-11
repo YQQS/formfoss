@@ -94,10 +94,23 @@ public class FormService {
                         for(Map<String,Object> map2 :result){
                             String choiceName = (String) map2.get("choiceName");
                             Integer choiceCount = (Integer) map2.get("choiceCount");
+
                             if(choiceName.equals(answer)){
-                                choiceCount += 1;
-                                map2.put("choiceCount",choiceCount);
-                                break;
+                                if(!answer.equals("other")) {
+
+                                    choiceCount += 1;
+                                    map2.put("choiceCount", choiceCount);
+                                    break;
+                                }
+                                else{
+                                    List<String> otherResult=(List<String>) map2.get("other");
+                                    choiceCount += 1;
+                                    map2.put("choiceCount", choiceCount);
+                                    String otherAnswer=(String) map.get("other");
+                                    otherResult.add(otherAnswer);
+                                    map2.put("other",otherResult);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -114,8 +127,18 @@ public class FormService {
                             Integer choiceCount = (Integer) map2.get("choiceCount");
                             for(String answer : answerlist){
                                 if (choiceName.equals(answer)) {
-                                    choiceCount += 1;
-                                    map2.put("choiceCount", choiceCount);
+                                    if(!answer.equals("other")) {
+                                        choiceCount += 1;
+                                        map2.put("choiceCount", choiceCount);
+                                    }
+                                    else {
+                                        List<String> otherResult=(List<String>) map2.get("other");
+                                        choiceCount += 1;
+                                        map2.put("choiceCount", choiceCount);
+                                        String otherAnswer=(String) map.get("other");
+                                        otherResult.add(otherAnswer);
+                                        map2.put("other",otherResult);
+                                    }
                                 }
                             }
                         }
