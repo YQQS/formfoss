@@ -27,7 +27,6 @@ import {
     MdToolbarModule, MdTooltipModule
 } from '@angular/material';
 import 'hammerjs';
-import { FormPrototypeComponent } from './component/form-prototype/form-prototype.component';
 import { FormViewComponent } from './component/form/view/form-view/form-view.component';
 import { QuestionViewComponent } from './component/form/view/question-view/question-view.component';
 import { FormStructureEditComponent } from './component/form/edit/form-structure-edit/form-structure-edit.component';
@@ -63,7 +62,6 @@ import {UserSelfEditComponent}from'./component/users/user-self-edit/user-self-ed
         RegisterComponent,
         UserListComponent,
         UserDetailComponent,
-        FormPrototypeComponent,
         FormViewComponent,
         QuestionViewComponent,
         FormStructureEditComponent,
