@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
             .subscribe(res => {
                 if (res.message) {
                     this.loading = true;
-                    this.router.navigate([this.returnUrl])
+                    this.router.navigateByUrl(this.returnUrl)
                         .then(() =>
                             this.alertService.success(res.message));
                 } else if (res.errorMsg) {
@@ -38,12 +38,8 @@ export class LoginComponent implements OnInit {
                 } else {
                     this.alertService.error(JSON.stringify(res));
                 }
-            }, (error: Response) => {
-                if (error.status === 401) {
-                    this.alertService.error('username or password not match');
-                } else {
-                    this.alertService.error('failed, unexpected response returned from server');
-                }
+            }, (error: string) => {
+                this.alertService.error(error);
             });
     }
 

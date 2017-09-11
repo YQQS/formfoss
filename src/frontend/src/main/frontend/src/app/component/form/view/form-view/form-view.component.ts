@@ -11,6 +11,7 @@ import {AlertService} from '../../../../services/alert.service';
 import {AuthenticatedUser} from '../../../../models/authenticatedUser';
 import {ServiceUtil} from '../../../../util/service.util';
 import {FormUtil} from '../../../../util/form.util';
+import {QuestionBase} from '../../../../models/form/question-base';
 
 @Component({
     selector: 'app-form-view',
@@ -61,6 +62,14 @@ export class FormViewComponent implements OnInit {
         this.qtService.saveAnswer(this.formGroup, this.formObject)
             .subscribe(res => this.alertService.success(res.message),
                 error => this.alertService.error(error));
+    }
+
+    getDependQuestion(question: QuestionBase<any>): QuestionBase<any> {
+        if ( question.dependencies && question.dependencies.key) {
+            return this.formObject.formItems.find(q => q.key === question.dependencies.key);
+        } else {
+            return null;
+        }
     }
 
     log() {

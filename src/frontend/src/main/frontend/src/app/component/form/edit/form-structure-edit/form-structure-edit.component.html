@@ -4,12 +4,12 @@
             <md-icon>save</md-icon>
             Save
         </button>
-
+        
         <button md-raised-button color="primary" [disabled]="formObject.isPublished || !formObject.formId" (click)="publish()">
             <md-icon>send</md-icon>
             publish
         </button>
-
+        
         <div class="toggle-button">
             <button md-icon-button (click)="settings()" >
                 <md-icon>settings</md-icon>
@@ -42,7 +42,7 @@
                 </button>
             </div>
         </div>
-
+        
         <div align="center">
             <md-card *ngFor="let question of formObject.formItems; trackBy: trackByKey"
                      [formGroupName]="question.key" class="form-item-edit">
@@ -51,38 +51,45 @@
                         the {{question.order}}th question
                     </md-card-title>
                 </md-card-header>
-
+                
                 <md-card-content>
                     <div>
-                        <md-form-field class="question-titile-edit">
+                        <md-form-field class="question-title-edit">
                             <input mdInput formControlName="title-edit"
                                    [value]="question.title" placeholder="put a title">
                         </md-form-field><br>
                     </div>
-
+                    
                     <div *ngIf="question.controlType === 'dropdown'">
                         <button md-icon-button (click)="addOption(question)" >
                             <md-icon>add</md-icon>
                         </button>
-
+    
                         <md-slide-toggle color="primary" formControlName="multiple-edit">
                             allow multi select
                         </md-slide-toggle>
-
+                        
+                        <button [disabled]="hasOtherOption(question)" md-icon-button (click)="otherOption(question)"
+                            mdTooltip="add an other optional selection">
+                            <md-icon color="warn">add</md-icon>
+                        </button>
+    
                         <div *ngFor="let opt of question?.options; let i = index" formGroupName="options-edit">
-                            <md-input-container>
+                            <md-form-field>
                                 <span mdPrefix >{{i+1}}. </span>
                                 <input mdInput [placeholder]="opt?.key" [value]="opt.value" [formControlName]="opt.key">
                                 <button mdSuffix md-icon-button (click)="delOption(question, i)">
                                     <md-icon>delete</md-icon>
                                 </button>
-                            </md-input-container>
+                                <md-hint align="start" *ngIf="opt?.key === 'other'">other optional answer</md-hint>
+                            </md-form-field>
                         </div>
+                        
                     </div>
-
+                    
                     <div [ngSwitch]="question.controlType" [hidden]="!formEditGroup.get(question.key).get('validator-edit').value">
                         <div *ngSwitchCase="'dropdown'" >
-
+                            
                             <div *ngIf="formEditGroup.get(question.key).get('multiple-edit').value">
                                 <md-input-container>
                                     <input mdInput placeholder="min Select" formControlName="minSelect-edit">
@@ -92,16 +99,16 @@
                                         min select should not large than max select
                                     </md-hint>
                                 </md-input-container>
-
+                                
                                 <md-input-container>
                                     <input mdInput placeholder="max Select" formControlName="maxSelect-edit">
                                     <md-hint class="alter" *ngIf="formEditGroup.get(question.key).errors?.editMaxSelect">
                                         this should not larger than {{question?.options.length}}</md-hint>
                                 </md-input-container>
-
+                            
                             </div>
                         </div>
-
+                        
                         <div *ngSwitchCase="'slider'" class="validator number">
                             <md-input-container>
                                 <input mdInput formControlName="min-edit"
@@ -112,7 +119,7 @@
                                        placeholder="max value">
                             </md-input-container>
                         </div>
-
+                        
                         <div *ngSwitchCase="'textbox'" class="validator textbox">
                             <md-input-container>
                                 <input mdInput placeholder="min Length"
@@ -128,28 +135,51 @@
                             </md-input-container>
                         </div>
                     </div>
-
-                    <br>
+                    
+                    <div class="dependency-edit" *ngIf="formEditGroup.get(question.key).get('depends-edit').value">
+                        <div formGroupName="dependency-edit">
+                            <label> depend on </label>
+                            <md-select formControlName="key">
+                                <md-option *ngFor="let qs of PreviousQuestionKeys(question); index as p"
+                                           [value]="qs">{{p+1}}th. {{getQuestionControl(qs)?.get('title-edit').value}}</md-option>
+                            </md-select>
+                            
+                            <div *ngIf="getDependQuestionControl(question)?.get('controlType-edit').value === 'dropdown'">
+                                <label>which option: </label>
+                                <md-select multiple="true" formControlName="requiredOptions">
+                                    <md-option *ngFor="let op of getDependQuestionOptionKey(question); index as opi"
+                                        [value]="op">{{opi + 1}}: {{getDependQuestionOptionValue(question, op)}}</md-option>
+                                </md-select>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
                     <div class="edit-select">
                         <p class="edit-type-selector">question type</p>
                         <md-select formControlName="controlType-edit" (change)="buildQuestion(question, $event)">
                             <md-option *ngFor="let opt of controlTypes" [value]="opt">{{opt}}</md-option>
                         </md-select>
                     </div>
+                    
                     <div class="selection-required">
                         <md-slide-toggle color="primary" formControlName="required-edit">required</md-slide-toggle>
-
-                        <md-slide-toggle color="accent" formControlName="validator-edit">extra validator</md-slide-toggle>
+                        
+                        <md-slide-toggle color="accent" formControlName="validator-edit">validator</md-slide-toggle>
+                        
+                        <md-slide-toggle color="warn" *ngIf="indexOf(question) > 0"
+                                         formControlName="depends-edit">dependency</md-slide-toggle>
                     </div>
-
+                
                 </md-card-content>
+                
                 <md-card-actions>
                     <button md-raised-button color="primary" (click)="addQuestion(question)">Add question</button>
                     <button md-raised-button color="warn" (click)="delQuestion(question)">Delete</button>
                 </md-card-actions>
             </md-card>
         </div>
-
+        
     </form>
 </div>
 

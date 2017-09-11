@@ -5,7 +5,6 @@ import { LoginComponent } from './component/users/login/login.component';
 import { RegisterComponent } from './component/users/register/register.component';
 import { UserListComponent } from './component/users/user-list/user-list.component';
 import {UserDetailComponent} from './component/users/user-detail/user-detail.component';
-import {FormPrototypeComponent} from './component/form-prototype/form-prototype.component';
 import {FormListComponent} from './component/form/list/form-list.component';
 import {FormPreviewComponent} from './component/form/view/form-preview/form-preview.component';
 import {FormEditComponent} from './component/form/edit/form-edit/form-edit.component';
@@ -18,16 +17,15 @@ import {PageNotFoundComponent} from './component/extra/page-not-found/page-not-f
 import {CanNotAccessComponent} from './component/extra/can-not-access/can-not-access.component';
 import {AdminGuard} from './component/_guards/admin.guard';
 import {UserEditComponent} from './component/users/user-edit/user-edit.component';
-import {UserSelfEditComponent} from "./component/users/user-self-edit/user-self-edit.component";
+import {UserSelfEditComponent} from './component/users/user-self-edit/user-self-edit.component';
 import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
     {path: 'home', component: HomeComponent},
-    {path: 'prototype', component: FormPrototypeComponent},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
-    {path: 'dialog', component:AlertDialogComponent},
+    {path: 'dialog', component: AlertDialogComponent},
 
 
     {path: 'user', canActivate: [AuthGuard], children: [

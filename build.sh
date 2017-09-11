@@ -1,5 +1,11 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
 set -ev
 
-cd src/
-mvn clean package
+BACKEND=$(pwd)/src/backend
+FRONTEND=$(pwd)/src/frontend/src/main/frontend
+
+cd "$BACKEND" && \
+    mvn clean package
+cd "$FRONTEND"
+    yarn && yarn build

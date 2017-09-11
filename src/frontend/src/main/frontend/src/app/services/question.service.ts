@@ -90,7 +90,7 @@ export class QuestionService {
     submitAnswer(formGroup: FormGroup, formObj: FormModel) {
         const answer = FormUtil.buildAnswerModel(formGroup, formObj);
         return this.http.post(this.answerUrl, JSON.stringify(answer), ServiceUtil.buildAuthReqOpts())
-            .map(res => FormUtil.buildForm(res.json()) )
+            .map(res => res.json() )
             .catch(ServiceUtil.handleError)
     }
 

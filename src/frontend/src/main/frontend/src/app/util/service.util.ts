@@ -92,9 +92,9 @@ export class ServiceUtil {
         if (error instanceof Response) {
             const body = error.json() || {};
             const err = body.errorMsg || body.error || body.message || '';
-            errMsg = `${error.status} - ${error.statusText || ''}: ${err}`;
+            errMsg = `${error.status} - ${error.statusText || ''} - ${err}`;
         } else {
-            errMsg = error.message ? error.message : error.toString();
+            errMsg = error.errorMsg ? error.errorMsg : JSON.stringify(error);
         }
         console.log(errMsg);
         return Observable.throw(errMsg);

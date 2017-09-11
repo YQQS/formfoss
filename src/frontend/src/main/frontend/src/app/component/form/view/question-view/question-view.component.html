@@ -1,16 +1,16 @@
-<div [formGroup]="formGroup">
-
+<div [formGroup]="formGroup" *ngIf="satisfyDependency()">
+    
     <div class="question-title">{{question.title}}</div>
-
+    
     <div [ngSwitch]="question.controlType">
-
+        
         <div *ngSwitchCase="'textbox'">
             <md-form-field class="textbox-question">
                 <textarea mdTextareaAutosize mdInput [formControlName]="question.key"
                           [type]="question.inputType">{{question.value}}</textarea>
             </md-form-field>
-
-            <div class="alter alter-danger" *ngIf="getErrors()">
+            
+            <div class="alert" *ngIf="getErrors()">
                 <div *ngIf="getErrors()?.required && !getFormControl().pristine" >
                     {{question?.title}} is required
                 </div>
@@ -28,38 +28,55 @@
                 </div>
             </div>
         </div>
-
-        <div *ngSwitchCase="'dropdown'">
-            <div *ngIf="!question?.multiple">
-                <md-radio-group [formControlName]="question.key" class="single-select">
-                    <md-radio-button class="select-item" *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</md-radio-button>
+        
+        <div *ngSwitchCase="'dropdown'" class="dropdown">
+            <div *ngIf="!question?.multiple" [formGroupName]="question.key" class="single">
+                <md-radio-group class="single-select" formControlName="normal">
+                    <md-radio-button class="select-item"
+                                     *ngFor="let opt of getSpecifiedOption()" [value]="opt.key">{{opt.value}}</md-radio-button>
+                    <md-radio-button class="select-item" *ngIf="getOtherOption()"
+                                     [value]="getOtherOption().key">{{getOtherOption().value}}: </md-radio-button>
                 </md-radio-group>
+                
+                <div>
+                    <md-form-field *ngIf="isOtherChecked()" class="input">
+                        <input mdInput formControlName="other">
+                    </md-form-field>
+                </div>
             </div>
-
-            <div *ngIf="question?.multiple" class="multi-select" [formArrayName]="question.key">
-                <md-checkbox class="select-item" *ngFor="let opt of question?.options; index as i" [formControlName]="i">
-                    {{opt.value}}
-                </md-checkbox>
-
-                <div class="alert alert-danger">
-                    <div *ngIf="getFormControl().hasError('maxSelect')">
+            
+            <div *ngIf="question?.multiple" [formGroupName]="question.key" class="multi">
+                <div formArrayName="normal" class="multi-select">
+                    <md-checkbox class="select-item" *ngFor="let opt of question?.options; index as i"
+                                 [value]="opt.key" [formControlName]="i">
+                        {{opt.value}}
+                    </md-checkbox>
+                </div>
+                
+                <div *ngIf="isOtherChecked()">
+                    <md-form-field class="input">
+                        <input mdInput formControlName="other">
+                    </md-form-field>
+                </div>
+                
+                <div class="alert">
+                    <div *ngIf="getFormControl().get('normal').hasError('maxSelect')">
                         select {{question.validator?.maxSelect}} items at most
                     </div>
-                    <div *ngIf="getFormControl().hasError('minSelect') && !getFormControl().pristine">
+                    <div *ngIf="getFormControl().get('normal').hasError('minSelect') && !getFormControl().pristine">
                         select {{question.validator.minSelect}} items at least
                     </div>
                 </div>
-
             </div>
-
-            <div class="alter alter-danger" *ngIf="getErrors()">
+            
+            <div class="alert" *ngIf="getErrors()">
                 <div *ngIf="getErrors()?.required && !getFormControl().pristine">
                     {{question?.title}} is required
                 </div>
             </div>
-
+        
         </div>
-
+        
         <div *ngSwitchCase="'slider'">
             <md-slider class="question-slider question-item" thumbLabel tickInterval="auto"
                        [min]="question.validator?.min" [max]="question.validator?.max" step="auto"
@@ -67,7 +84,7 @@
             </md-slider>
             <label>value: {{slider.value}}</label>
         </div>
-
+    
     </div>
 
 </div>

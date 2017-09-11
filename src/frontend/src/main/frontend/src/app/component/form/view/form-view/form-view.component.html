@@ -9,7 +9,7 @@
         <p class="form-desc">{{formObject.desc}}</p>
 
         <div *ngFor="let question of formObject.formItems">
-            <app-question-view [question]="question" [formGroup]="formGroup"></app-question-view>
+            <app-question-view [question]="question" [formGroup]="formGroup" [dependQuestion]="getDependQuestion(question)"></app-question-view>
         </div>
 
         <div class="form-actions" align="center">

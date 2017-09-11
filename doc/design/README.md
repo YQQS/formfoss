@@ -8,7 +8,7 @@ this object represent the structure of a form, the front page generate the corre
 e.g:
 ```json
 {
-    "id": 1,
+    "formId": 1,
     "title": "form title",
     "desc": "form description",
     "settings": {
@@ -16,9 +16,10 @@ e.g:
         "shareResult": true,
         "shuffleOrder": false
     },
-    "questions": [
+    "formItems": [
         {
             "key": "keyname",
+            "value": "",
             "title": "item title",
             "desc": "item description",
             "controlType": "textbox",
@@ -33,6 +34,7 @@ e.g:
         },
         {
             "key": "score",
+            "value": 0,
             "title": "another item title",
             "desc": "another item description",
             "controlType": "slider",
@@ -41,10 +43,14 @@ e.g:
                 "min": 2,
                 "max": 20,
                 "required": false
+            },
+            "dependencies": {
+                "key": "keyname"
             }
         },
         {
             "key": "select",
+            "value": "",
             "title": "yet another title",
             "desc": "yet another descript",
             "controlType": "dropdown",
@@ -56,12 +62,12 @@ e.g:
                     "title": "selection1"
                 },
                 {
-                    "key": "option2"
+                    "key": "option2",
                     "title": "selection2"
                 }
             ],
             "validator": {
-                "required": true
+                "required": true,
                 "minSelect": 1,
                 "maxSelect": 2
             }
@@ -73,6 +79,9 @@ e.g:
 
 - key: the key name maped by Angular FormGroup, should be unique
     + type: string
+
+- value: answer of the question
+    + type: string | number
 
 - title: form title
   + type: string
@@ -89,7 +98,7 @@ e.g:
       - type: boolean
       - default: false
 
-- questions: structure of each form item, it is a array of formItem
+- formItems: structure of each form item, it is a array of formItem
 for each formItem:
   + id: unique id of each formItem in the form
       - type: number
@@ -132,6 +141,12 @@ for each formItem:
          + maxSelect: max number of selected options for multi select question, no more than total question number
 
       - any other options don't match will be ignored
+
+  + dependencies: depedency description of the question
+        - key: key of the depended question
+            + type: string
+        - requiredOptions: descibe any of the options in the depended question, both singleChoice and multi choice
+            + type: string | string[]
 
 
 ## formData
