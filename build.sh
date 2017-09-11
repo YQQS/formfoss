@@ -7,5 +7,5 @@ FRONTEND=$(pwd)/src/frontend/src/main/frontend
 
 cd "$BACKEND" && \
     mvn clean package
-cd "$FRONTEND" && \
-    yarn build
+cd "$FRONTEND"
+    yarn && yarn build
