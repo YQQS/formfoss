@@ -24,7 +24,7 @@
                 <configuration>
                     <nodeVersion>v8.4.0</nodeVersion>
                     <npmVersion>5.4.0</npmVersion>
-                    <yarnVersion>v0.27.5</yarnVersion>
+                    <yarnVersion>v1.0.1</yarnVersion>
                     <workingDirectory>src/main/frontend</workingDirectory>
                     <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
                 </configuration>
