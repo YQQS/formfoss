@@ -1,12 +1,17 @@
+.title {
+    text-align: center;
+    display: flex;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
 button {
     color: black;
     margin-top: 20px;
-    font-family: Arial;
     background-color: #eee;
     border: none;
     padding: 5px 10px;
     border-radius: 4px;
-    cursor: pointer; cursor: hand;
 }
 
 li:hover {

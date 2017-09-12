@@ -1,0 +1,16 @@
+<div *ngIf="answer && form" class="answer-detail">
+    <app-answer-view [answer]="answer" [form]="form"></app-answer-view>
+    
+    <div class="actions">
+        <button md-raised-button color="warn" (click)="deleteAnswer()" class="button">
+            <md-icon>delete</md-icon>
+            delete
+        </button>
+        
+        <button md-raised-button color="primary" (click)="changeAnswer()" class="button"
+                [disabled]="isSubmitted()">
+            <md-icon>mode_edit</md-icon>
+            change
+        </button>
+    </div>
+</div>

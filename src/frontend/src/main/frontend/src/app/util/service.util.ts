@@ -34,7 +34,9 @@ export class ServiceUtil {
      * restrict anonymous request
      */
     static isLoggedIn(): boolean {
-        return ServiceUtil.getCurrentUser() !== null;
+        const user = ServiceUtil.getCurrentUser();
+        return user !== null && user.userId !== null
+            && user.username !== null && user.token !== null;
     }
 
     static isAdmin(): boolean {

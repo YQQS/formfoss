@@ -12,13 +12,6 @@
             <app-question-view [question]="question" [formGroup]="formGroup" [dependQuestion]="getDependQuestion(question)"></app-question-view>
         </div>
 
-        <div class="form-actions" align="center">
-            <button md-raised-button color="primary" type="submit" [disabled]="formGroup.invalid || !formObject.isPublished">Submit</button>
-            <button md-raised-button color="accent" type="button"
-                    (click)="save()" [disabled]="formGroup.pristine || !formObject.isPublished">Save</button>
-            <button md-raised-button color="warn" type="reset" [disabled]="formGroup.untouched">Reset</button>
-        </div>
-
     </form>
 
 </div>

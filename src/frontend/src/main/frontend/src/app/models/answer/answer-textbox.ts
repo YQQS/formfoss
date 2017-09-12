@@ -1,9 +1,9 @@
-import {AnswerBase} from "./answer-base";
+import {AnswerBase} from './answer-base';
 
 export class AnswerTextbox extends AnswerBase<string> {
-    type: string = 'textbox';
+    type = 'textbox';
 
-    constructor(input: {}={}) {
+    constructor(input: any) {
         super(input);
     }
 }

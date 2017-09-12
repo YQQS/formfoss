@@ -35,6 +35,7 @@ public class PublicController {
     private FormDataRepository formDataRepository;
     @Autowired
     private FormRepository formRepository;
+
     @RequestMapping(path = "/forms/published", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<FormEntity>> getPublishedForm() {

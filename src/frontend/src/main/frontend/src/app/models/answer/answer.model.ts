@@ -1,22 +1,16 @@
 import {AnswerBase} from './answer-base';
 export class AnswerModel {
-    answerId?: number;
     formId: number;
+    answerId?: number;
     userId?: number;
     commitflag?: boolean;
     answers: AnswerBase<any>[];
 
-    constructor(input: {
-        formId: number,
-        userId?: number,
-        answerId?: number,
-        flag?: boolean,
-        answers?: AnswerBase<any>[]
-    }) {
-        this.formId = input.formId;
-        this.userId = input.userId;
-        this.answerId = input.answerId;
-        this.commitflag = input.flag || false;
-        this.answers = input.answers || [];
+    constructor(input: any) {
+        this.formId = input['formId'];
+        this.userId = input['userId'] || null;
+        this.answerId = input['answerId'] || null;
+        this.commitflag = input['commitflag'] || false;
+        this.answers = input['answers'] || [];
     }
 }

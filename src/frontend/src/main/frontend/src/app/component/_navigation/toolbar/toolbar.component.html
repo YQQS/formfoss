@@ -4,33 +4,40 @@
             <md-icon>home</md-icon>
             Home
         </button>
-        
+
         <button md-button color="" routerLink="/question/list" routerLinkActive="active">
             <md-icon>cloud</md-icon>
             Questions
         </button>
-        
+
+        <button md-button routerLink="/answer/list" routerLinkActive="active">
+            <md-icon>
+                question_answer
+            </md-icon>
+            answers
+        </button>
+
         <button *ngIf="currentUser?.role === 'admin'" md-button routerLink="/user/list" routerLinkActive="active">
             <md-icon>people</md-icon>
             Users
         </button>
     </md-nav-list>
-    
+
     <div class="user-header" >
         <button *ngIf="!currentUser"
-                md-button routerLink="/login" color="accent" routerLinkActive="active">
+            md-button routerLink="/login" color="accent" routerLinkActive="active">
             <md-icon>person</md-icon>
             Login
         </button>
-        
+
         <button *ngIf="currentUser"
-                md-icon-button [mdMenuTriggerFor]="profileMenu">
+            md-icon-button [mdMenuTriggerFor]="profileMenu">
             <md-icon>person</md-icon>
         </button>
-        
+
         <md-menu #profileMenu >
-            <button md-menu-item (click)="edit()">Edit profile</button>
-            <button md-menu-item (click)="logout()" >logout</button>
+            <button md-menu-item (click)="edit()">Profile</button>
+            <button md-menu-item (click)="logout()">Logout</button>
         </md-menu>
     </div>
 </md-toolbar>
