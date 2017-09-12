@@ -1,0 +1,23 @@
+<div *ngIf="formObject && formGroup" >
+    <button md-button color="primary" (click)="goBack()">
+        <md-icon>arrow_back</md-icon>
+        Back
+    </button>
+
+    <button md-button color="primary" (click)="edit()" class="go-edit-button"
+        *ngIf="hasPrivilege()">
+        <md-icon>mode_edit</md-icon>
+        Edit
+    </button>
+
+    <app-form-view [formObject]="formObject" [formGroup]="formGroup"></app-form-view>
+    
+    <div class="form-actions" align="center" [formGroup]="formGroup">
+        <button md-raised-button color="primary" type="button" (click)="onSubmit()"
+                [disabled]="formGroup.invalid || !formObject.isPublished">Submit</button>
+        <button md-raised-button color="accent" type="button"
+                (click)="save()" [disabled]="formGroup.pristine || !formObject.isPublished">Save</button>
+        <button md-raised-button color="warn" type="reset" [disabled]="formGroup.untouched">Reset</button>
+    </div>
+
+</div>

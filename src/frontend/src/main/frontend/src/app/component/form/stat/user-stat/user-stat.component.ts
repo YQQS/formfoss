@@ -34,11 +34,11 @@ export class UserStatComponent implements OnInit {
         this.router.paramMap
             .switchMap((params: ParamMap) => {
                 const formId = +params.get('id');
-                return this.qtService.getForm(formId);
+                return this.qtService.getFormByFormId(formId);
             })
             .subscribe((form: FormModel) => {
                 this.form = form;
-                this.qtService.getUserAnswers(this.form.formId)
+                this.qtService.getAllAnswersOfForm(this.form.formId)
                     .subscribe(answers => {
                         this.answers = answers;
                     })

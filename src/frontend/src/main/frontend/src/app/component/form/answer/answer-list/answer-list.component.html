@@ -1,0 +1,33 @@
+<div>
+    <md-list>
+        <h3 md-subheader>Submitted answers</h3>
+        <md-list-item *ngFor="let answer of submittedAnswers">
+            <md-icon md-list-icon>label</md-icon>
+            <h3 mdLine >answerId: {{answer.answerId}}</h3>
+
+            <button md-icon-button (click)="goDetail(answer)">
+                <md-icon mdTooltip="see detail">loyalty</md-icon>
+            </button>
+            
+            <button md-icon-button (click)="deleteAnswer(answer)">
+                <md-icon mdTooltip="delete this answer">delete_sweep</md-icon>
+            </button>
+        </md-list-item>
+        
+        <md-divider></md-divider>
+        
+        <h3 md-subheader>UnSubmitted answers</h3>
+        <md-list-item *ngFor="let ua of unSubmittedAnswers">
+            <md-icon md-list-icon>label_outline</md-icon>
+            <h3 mdLine >answerId: {{ua.answerId}}</h3>
+    
+            <button md-icon-button (click)="goDetail(ua)">
+                <md-icon mdTooltip="see detail">loyalty</md-icon>
+            </button>
+    
+            <button md-icon-button (click)="deleteAnswer(ua)">
+                <md-icon mdTooltip="delete this answer">delete_sweep</md-icon>
+            </button>
+        </md-list-item>
+    </md-list>
+</div>

@@ -1,45 +1,44 @@
-
 <ul *ngIf="user" >
-    <md-toolbar align="center"  >
+    <md-toolbar class="title">
         <md-icon>assignment</md-icon>
-        <span align="center">Details of User</span>
+        Details of User
     </md-toolbar>
-
+    
     <div>
         <li *ngIf="user">
             <span class="badge">ID    </span>
             <span >{{user.userId}}</span>
-
+        
         </li>
     </div>
-
-
+    
+    
     <div>
         <li *ngIf="user">
             <span class="badge" badge-positive>Name</span>
             <span>{{user.userName}}</span>
-
+        
         </li>
     </div>
-
-
+    
+    
     <div>
         <li *ngIf="user">
             <span class="badge">Password</span>
             <span>{{user.userPassword}}</span>
-
+        
         </li>
     </div>
-
-
+    
+    
     <div>
         <li *ngIf="user">
             <span class="badge">Email</span>
             <span>{{user.userEmail}}</span>
         </li>
     </div>
-
-
+    
+    
     <div>
         <li *ngIf="user">
             <span class="badge">Phone</span>
@@ -52,8 +51,4 @@
             Back
         </button>
     </div>
-
-
-
-
 </ul>

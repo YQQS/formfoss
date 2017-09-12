@@ -1,8 +1,8 @@
-import {AnswerBase} from "./answer-base";
+import {AnswerBase} from './answer-base';
 export class AnswerSlider extends AnswerBase<number> {
-    type: string = 'slider';
+    type = 'slider';
 
-    constructor(input: {}={}) {
+    constructor(input: any) {
         super(input);
     }
 }
