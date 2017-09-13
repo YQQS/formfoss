@@ -6,7 +6,7 @@
     <url>http://maven.apache.org</url>
 
     <artifactId>backend</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <parent>
         <groupId>se.sjtu.formfoss</groupId>
@@ -103,14 +103,13 @@
             <version>${io.jsonwebtoken.version}</version>
         </dependency>
 
-        <!--
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <version>${spring.boot.version}</version>
             <scope>provided</scope>
         </dependency>
-
+        <!--
         <dependency>
             <groupId>se.sjtu.formfoss</groupId>
             <artifactId>frontend</artifactId>
