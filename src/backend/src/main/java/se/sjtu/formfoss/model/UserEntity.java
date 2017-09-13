@@ -38,7 +38,7 @@ public class UserEntity {
     @Column(name = "create_time", insertable = false,updatable = false, nullable = false)
     private Timestamp userCreateTime;
 
-    @Column(name = "role" ,insertable = false,updatable = false, nullable = false)
+    @Column(name = "role", nullable = false)
     private String userRole;
 
     public UserEntity() {
