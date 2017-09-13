@@ -18,6 +18,8 @@
         <div class="answered answered-dropdown">
             <md-list>
                 <md-list-item *ngFor="let opt of allOptions">
+                    <md-icon *ngIf="isSelected(answered, opt.key)" md-list-icon>check_box</md-icon>
+                    <md-icon *ngIf="!isSelected(answered, opt.key)" md-list-icon>check_box_outline_blank</md-icon>
                     <h3 mdLine
                         [ngClass]="{'unselected': !isSelected(answered, opt.key), 'selected': isSelected(answered, opt.key)}">
                         {{opt?.value}}

@@ -167,7 +167,7 @@
                         
                         <md-slide-toggle color="accent" formControlName="validator-edit">validator</md-slide-toggle>
                         
-                        <md-slide-toggle color="warn" *ngIf="indexOf(question) > 0"
+                        <md-slide-toggle color="warn" *ngIf="indexOf(question) > 0 && !isQuestionRequired(question.key)"
                                          formControlName="depends-edit">dependency</md-slide-toggle>
                     </div>
                 

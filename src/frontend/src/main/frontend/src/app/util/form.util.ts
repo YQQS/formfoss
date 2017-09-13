@@ -315,7 +315,7 @@ export class FormUtil {
             question.title =  options['title-edit'];
             question.controlType =  options['controlType-edit'];
 
-            if (!options['depends-edit']) {
+            if (options['depends-edit'] === false || options['required-edit'] === true) {
                 question.dependencies = null;
             } else {
                 const key = options['dependency-edit']['key'];

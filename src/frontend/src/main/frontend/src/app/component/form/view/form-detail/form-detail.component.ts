@@ -32,6 +32,7 @@ export class FormDetailComponent implements OnInit {
 
     ngOnInit() {
         const isPublished = this.activatedRoute.snapshot.queryParams['isPublished'] || false;
+        const answerId = this.activatedRoute.snapshot.queryParams['answerId'] || null;
         const formId = +this.activatedRoute.snapshot.params['id'];
 
         if (isPublished) {
@@ -39,14 +40,18 @@ export class FormDetailComponent implements OnInit {
                 .subscribe(res => {
                     this.formObject = res;
                     this.formGroup = FormUtil.formModelToViewGroup(this.formObject.formItems);
+                    this.answerModel = null;
                 }, error => this.alertService.error(error));
         } else {
-            this.qtService.getAnswerByFormId(formId)
+            this.qtService.getAnswerByAnswerId(answerId)
                 .subscribe(res => {
                     this.answerModel = res;
                     this.getForm(formId);
                     },
-                    error => this.answerModel = null);
+                    error => {
+                        this.answerModel = null;
+                        this.getForm(formId);
+                    });
         }
     }
 
@@ -82,11 +87,16 @@ export class FormDetailComponent implements OnInit {
 
     onSubmit() {
         const dialogRef = this.diaRef.open(SubmitPreviewComponent, {
-            data: this.formGroup.value
+            width: '60%',
+            data: {
+                form: this.formObject,
+                answer: FormUtil.buildAnswerModel(this.formGroup, this.formObject)
+            }
         });
         dialogRef.afterClosed().subscribe((data: {confirm: boolean}) => {
             if (data.confirm) {
-                this.qtService.submitAnswer(this.formGroup, this.formObject)
+                this.updateAnswer();
+                this.qtService.submitAnswer(this.answerModel)
                     .subscribe(res => this.alertService.success(res['message'] || JSON.stringify(res)),
                         error => this.alertService.error(error))
             }
@@ -94,11 +104,21 @@ export class FormDetailComponent implements OnInit {
     }
 
     save() {
-        this.qtService.saveAnswer(this.formGroup, this.formObject)
+        this.updateAnswer();
+        this.qtService.saveAnswer(this.answerModel)
             .subscribe(res => this.alertService.success(res.message),
                 error => this.alertService.error(error));
     }
 
+    updateAnswer() {
+        if (this.answerModel !== null && this.answerModel.answerId !== null) {
+            let answerId = this.answerModel.answerId || null;
+            this.answerModel = FormUtil.buildAnswerModel(this.formGroup, this.formObject);
+            this.answerModel.answerId = answerId;
+        } else {
+            this.answerModel = FormUtil.buildAnswerModel(this.formGroup, this.formObject);
+        }
+    }
 
     log() {
         console.log(
