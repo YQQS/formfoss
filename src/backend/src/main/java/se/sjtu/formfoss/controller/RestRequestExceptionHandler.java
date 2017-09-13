@@ -69,4 +69,14 @@ public class RestRequestExceptionHandler {
         }
         return RestResponseUtil.errorMsg(msg);
     }
+
+    @ExceptionHandler(value = {NoEnoughCreditException.class})
+    public ResponseEntity<Object> handleNotEnoughCredit(RuntimeException ex){
+        String msg = "No enough credit ";
+        if(ex.getMessage() != null) {
+            msg += (": " + ex.getMessage());
+        }
+        return new ResponseEntity<>(RestResponseUtil.errorMsg(msg),HttpStatus.FORBIDDEN);
+    }
+
 }
