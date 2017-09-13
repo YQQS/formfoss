@@ -8,6 +8,7 @@ import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {Location} from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 import {AlertService} from '../../../../services/alert.service';
+import {Angular2Csv} from 'angular2-csv';
 
 @Component({
     selector: 'app-form-stat',
@@ -54,6 +55,17 @@ export class FormStatComponent implements OnInit {
     }
 
     download() {
+
+        const options = {
+            fieldSeparator: ',',
+            quoteStrings: '"',
+            decimalseparator: '.',
+            showLabels: true,
+            showTitle: true,
+            useBom: true
+        };
+        let aCsv = new Angular2Csv(FormUtil.createFormDataList(this.formData), `${this.formModel.title}`, options);
+        /*
         let csvcontent = 'data:text/csv;charset=utf-8,';
         this.chartModels.forEach(item => {
             let dataString = item.label.join(',');
@@ -66,6 +78,7 @@ export class FormStatComponent implements OnInit {
         let encodeUrl = encodeURI(csvcontent);
         let csvElement = <HTMLLinkElement> document.getElementById('csv-link');
         csvElement.href = encodeUrl;
+    */
     }
 
 }

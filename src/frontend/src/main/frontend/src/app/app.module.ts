@@ -129,7 +129,7 @@ import { AnswerDetailComponent } from './component/form/answer/answer-detail/ans
         ChartsModule,
         MdTooltipModule
     ],
-    entryComponents: [SubmitPreviewComponent, AlertDialogComponent],
+    entryComponents: [SubmitPreviewComponent, AlertDialogComponent, FormSettingsComponent],
     providers: [UserService, QuestionService, AlertService, AuthGuard, AdminGuard, {
         provide: LocationStrategy, useClass: HashLocationStrategy}, {
         provide: APP_BASE_HREF, useValue: '/'

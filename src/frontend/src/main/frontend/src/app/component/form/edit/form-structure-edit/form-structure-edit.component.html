@@ -12,7 +12,7 @@
         
         <div class="toggle-button">
             <button md-icon-button (click)="settings()" >
-                <md-icon>settings</md-icon>
+                <md-icon mdTooltip="settings">settings</md-icon>
             </button>
             <md-slide-toggle color="primary" [disabled]="formEditGroup.errors" [checked]="isPreview" (change)="changeMode($event)">
                 Preview Mode

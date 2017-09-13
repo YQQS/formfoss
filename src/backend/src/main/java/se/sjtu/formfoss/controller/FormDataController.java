@@ -50,7 +50,7 @@ public class FormDataController {
 
         FormEntity form = formRepository.findOne(fid);
         // check privilege
-        if (!AuthRequestUtil.checkFormOwnership(form, userId, userRole)) {
+        if (!AuthRequestUtil.checkFormDataAccess(form, userId, userRole)) {
             throw new PermissionDenyException("can not access");
         }
 

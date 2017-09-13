@@ -128,8 +128,8 @@ public class UserAnswerController {
         }
 
         // check ownership
-        if (!AuthRequestUtil.checkFormOwnership(form, userId, userRole)) {
-            throw new PermissionDenyException("not the owner of the form");
+        if (!AuthRequestUtil.checkFormDataAccess(form, userId, userRole)) {
+            throw new PermissionDenyException("can not access");
         }
 
         return userAnswerRepository.findByFormId(formId);

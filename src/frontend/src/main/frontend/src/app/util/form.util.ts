@@ -16,6 +16,7 @@ import {QuestionResultModel} from '../models/result/question-result.model';
 import {ServiceUtil} from './service.util';
 import {noUndefined} from '@angular/compiler/src/util';
 import {AnswerBase} from '../models/answer/answer-base';
+import {checkYarnOrCNPM} from '@angular/cli/utilities/check-package-manager';
 
 export class FormUtil {
     static savedForm = 'savedForm';
@@ -430,5 +431,45 @@ export class FormUtil {
 
     static getOptionValueListFromKey(source: {key: string, value: string}[], keys: string[]) {
         return keys.map(item => FormUtil.getOptionValueFromKey(source, item));
+    }
+
+    static createAnswerList(answers: AnswerModel[]): any[] {
+        let list = [];
+        answers.map(item => {
+            item.answers.map(a => {
+                list.push({
+                    key: a['key'],
+                    answer: a['answer'].toString()
+                });
+            })
+        });
+
+        return list;
+    }
+
+    static createFormDataList(data: FormResultModel): {key: string, answer: any}[] {
+        let list = [];
+        data.data.map(item => {
+            let key = item.key;
+            if (item.type === 'dropdown') {
+                item.result.map(res => {
+                    list.push({
+                        key: key,
+                        answer: res['choiceName'],
+                        count: res['choiceCount']
+                    });
+                })
+            } else {
+                item.result.map(res => {
+                    list.push({
+                        key: key,
+                        answer: res.toString()
+                    });
+                })
+            }
+        });
+        console.log(list)
+
+        return list;
     }
 }

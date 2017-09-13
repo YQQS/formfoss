@@ -8,6 +8,8 @@ import 'rxjs/add/operator/switchMap';
 import {QuestionService} from "../../../../services/question.service";
 import {QuestionBase} from "../../../../models/form/question-base";
 import {QuestionDropDown} from "../../../../models/form/question-dropdown";
+import {Angular2Csv} from 'angular2-csv';
+import {FormUtil} from '../../../../util/form.util';
 
 @Component({
     selector: 'app-user-stat',
@@ -58,5 +60,16 @@ export class UserStatComponent implements OnInit {
         return  selectedValues[0];
     }
 
+    download() {
+        const options = {
+            fieldSeparator: ',',
+            quoteStrings: '"',
+            decimalseparator: '.',
+            showLabels: true,
+            showTitle: true,
+            useBom: true
+        };
+        const aCsv = new Angular2Csv(FormUtil.createAnswerList(this.answers), this.form.title, options);
+    }
 
 }

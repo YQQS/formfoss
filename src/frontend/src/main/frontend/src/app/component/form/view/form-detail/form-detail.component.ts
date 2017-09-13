@@ -97,7 +97,15 @@ export class FormDetailComponent implements OnInit {
             if (data.confirm) {
                 this.updateAnswer();
                 this.qtService.submitAnswer(this.answerModel)
-                    .subscribe(res => this.alertService.success(res['message'] || JSON.stringify(res)),
+                    .subscribe(res => {
+                        if (this.formObject.settings.shareResult === true) {
+                            this.router.navigate(['question', this.formObject.formId, 'stat'])
+                                .then(() =>
+                                    this.alertService.success(res['message'] || JSON.stringify(res))
+                                );
+                        }
+                        this.alertService.success(res['message'] || JSON.stringify(res))
+                        },
                         error => this.alertService.error(error))
             }
         })
