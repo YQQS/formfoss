@@ -1,0 +1,15 @@
+.dialog-title {
+    text-align: center;
+    font-size: 40px;
+    color: blue;
+}
+
+.button {
+    display: inline-flex;
+}
+
+.dialog-button {
+    position: inherit;
+    right: 0;
+    align-items: center;
+}

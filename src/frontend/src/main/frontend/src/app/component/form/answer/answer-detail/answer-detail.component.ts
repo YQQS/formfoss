@@ -4,6 +4,7 @@ import {QuestionService} from '../../../../services/question.service';
 import {AlertService} from '../../../../services/alert.service';
 import {AnswerModel} from '../../../../models/answer/answer.model';
 import {FormModel} from '../../../../models/form/form.model';
+import {Location} from '@angular/common';
 
 @Component({
     selector: 'app-answer-detail',
@@ -16,6 +17,7 @@ export class AnswerDetailComponent implements OnInit {
 
     constructor(private activatedRoute: ActivatedRoute,
                 private router: Router,
+                private location: Location,
                 private qtService: QuestionService,
                 private alertService: AlertService) { }
 
@@ -33,7 +35,11 @@ export class AnswerDetailComponent implements OnInit {
     }
 
     changeAnswer() {
-        this.router.navigate(['question', this.form.formId, 'view']);
+        this.router.navigate(['question', this.form.formId, 'view'], {
+            queryParams: {
+                answerId: this.answer.answerId
+            }
+        });
     }
 
     isSubmitted(): boolean {
@@ -46,6 +52,10 @@ export class AnswerDetailComponent implements OnInit {
                 this.router.navigate(['answer', 'list'])
                     .then(() => this.alertService.success(res['message'] || JSON.stringify(res)))
             }, error => this.alertService.error(error));
+    }
+
+    goBack() {
+        this.location.back();
     }
 
 }

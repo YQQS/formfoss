@@ -221,6 +221,10 @@ export class FormStructureEditComponent implements OnInit {
 
     }
 
+    isQuestionRequired(key: string) {
+        return this.getQuestionControl(key).get('required-edit').value === true;
+    }
+
     trackOption(index: number, option: {key: string, value: string}) {
         return option.key;
     }

@@ -9,6 +9,7 @@ import 'rxjs/add/operator/catch';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/observable/throw';
 import {ServiceUtil} from '../util/service.util';
+import {AnswerModel} from '../models/answer/answer.model';
 
 @Injectable()
 export class QuestionService {
@@ -81,16 +82,14 @@ export class QuestionService {
         }
     }
 
-    saveAnswer(formGroup: FormGroup, formObj: FormModel) {
-        const answer = FormUtil.buildAnswerModel(formGroup, formObj);
+    saveAnswer(answer: AnswerModel) {
         answer.commitflag = false;
         return this.http.post(this.answerUrl + '/save', JSON.stringify(answer), ServiceUtil.buildAuthReqOpts())
             .map(res => res.json())
             .catch(ServiceUtil.handleError)
     }
 
-    submitAnswer(formGroup: FormGroup, formObj: FormModel) {
-        const answer = FormUtil.buildAnswerModel(formGroup, formObj);
+    submitAnswer(answer: AnswerModel) {
         return this.http.post(this.answerUrl, JSON.stringify(answer), ServiceUtil.buildAuthReqOpts())
             .map(res => res.json() )
             .catch(ServiceUtil.handleError)

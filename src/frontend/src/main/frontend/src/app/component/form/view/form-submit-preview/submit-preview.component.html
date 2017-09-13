@@ -1,10 +1,9 @@
-<h2 md-dialog-title>Confirm Your Submit</h2>
+<h2 md-dialog-title class="dialog-title">Please Confirm Your Answer</h2>
 <md-dialog-content>
-    <div *ngFor="let key of keys()">
-        <p>{{key}}:  {{data[key]}}</p>
-    </div>
+    <app-answer-view [form]="data.form" [answer]="data.answer"></app-answer-view>
 </md-dialog-content>
-<md-dialog-actions>
-    <button md-button (click)="back()">Change submit</button>
-    <button md-raised-button color="warn" (click)="confirm()">Confirm</button>
+
+<md-dialog-actions class="dialog-button">
+    <button md-button (click)="back()" class="button">Change submit</button>
+    <button md-raised-button color="warn" (click)="confirm()" class="button">Confirm</button>
 </md-dialog-actions>
