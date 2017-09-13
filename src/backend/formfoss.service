@@ -1,0 +1,10 @@
+[Unit]
+Description=formfoss spring REST application
+After=syslog.target
+
+[Service]
+ExecStart=java -jar /home/ace/backend-1.0.0-RELEASE.jar
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
