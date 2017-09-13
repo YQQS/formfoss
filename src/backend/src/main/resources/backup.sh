@@ -66,6 +66,11 @@ function backup_mongodb {
 }
 
 function restore_mongodb {
+    if [ -r "$MONGO_RESTORE" ] ; then
+        echo "can not find mongorestore"
+        exit 1
+    fi
+
     if [ $# -ne 1 ]; then
         echo -e "resotre directory required\n"
         exit 1

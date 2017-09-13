@@ -11,7 +11,7 @@
     <parent>
         <groupId>se.sjtu.formfoss</groupId>
         <artifactId>formfoss</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0-RELEASE</version>
     </parent>
 
 
@@ -124,6 +124,10 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot.version}</version>
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
+
                 <executions>
                     <execution>
                         <goals>
