@@ -13,6 +13,9 @@ export class QuestionAnsweredViewComponent implements OnInit {
     @Input() answer: AnswerBase<any>;
 
     isSelected(source: string[], key: string): boolean {
+        if (source === null || key === null) {
+            return false;
+        }
         return source.includes(key);
     }
 
