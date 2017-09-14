@@ -439,7 +439,7 @@ export class FormUtil {
             item.answers.map(a => {
                 list.push({
                     key: a['key'],
-                    answer: a['answer'].toString()
+                    answer: a['answer'] === null ? null : a['answer']
                 });
             })
         });
@@ -463,12 +463,12 @@ export class FormUtil {
                 item.result.map(res => {
                     list.push({
                         key: key,
-                        answer: res.toString()
+                        answer: res === null ? null : res.toString()
                     });
                 })
             }
         });
-        console.log(list)
+        console.log(list);
 
         return list;
     }
