@@ -2,8 +2,8 @@ spring:
   datasource:
     url: jdbc:mariadb://localhost:3306/FORMFOSS
     driver-class-name: org.mariadb.jdbc.Driver
-    username: book
-    password: lalaland
+    username: root
+    password: 970308
   jpa:
     hibernate:
       ddl-auto: update

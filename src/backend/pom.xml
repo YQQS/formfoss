@@ -97,6 +97,7 @@
             <version>${spring.security.jwt}</version>
         </dependency>
 
+
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>

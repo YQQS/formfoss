@@ -27,14 +27,13 @@ import {
     MdToolbarModule, MdTooltipModule
 } from '@angular/material';
 import 'hammerjs';
-import { FormPrototypeComponent } from './component/form-prototype/form-prototype.component';
 import { FormViewComponent } from './component/form/view/form-view/form-view.component';
 import { QuestionViewComponent } from './component/form/view/question-view/question-view.component';
 import { FormStructureEditComponent } from './component/form/edit/form-structure-edit/form-structure-edit.component';
 import {QuestionService} from './services/question.service';
 import { HomeComponent} from './component/extra/home/home.component';
 import { FormListComponent } from './component/form/list/form-list.component';
-import { FormPreviewComponent } from './component/form/view/form-preview/form-preview.component';
+import { FormDetailComponent } from './component/form/view/form-detail/form-detail.component';
 import { FormEditComponent } from './component/form/edit/form-edit/form-edit.component';
 import { FormNewComponent } from './component/form/edit/form-new/form-new.component';
 import { FormSettingsComponent } from './component/form/edit/form-settings/form-settings.component';
@@ -57,6 +56,11 @@ import { ToolbarComponent } from './component/_navigation/toolbar/toolbar.compon
 import {UserSelfEditComponent}from'./component/users/user-self-edit/user-self-edit.component';
 import {ChangePasswordComponent}from'./component/users/change-password/change-password.component';
 import {NewPasswordComponent}from'./component/users/new-password/new-password.component';
+import { AnswerViewComponent } from './component/form/answer/answer-view/answer-view.component';
+import { QuestionAnsweredViewComponent } from './component/form/answer/question-answered-view/question-answered-view.component';
+import { AnswerListComponent } from './component/form/answer/answer-list/answer-list.component';
+import { AnswerDetailComponent } from './component/form/answer/answer-detail/answer-detail.component';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -64,13 +68,12 @@ import {NewPasswordComponent}from'./component/users/new-password/new-password.co
         RegisterComponent,
         UserListComponent,
         UserDetailComponent,
-        FormPrototypeComponent,
         FormViewComponent,
         QuestionViewComponent,
         FormStructureEditComponent,
         FormListComponent,
         FormListComponent,
-        FormPreviewComponent,
+        FormDetailComponent,
         FormEditComponent,
         FormNewComponent,
         FormSettingsComponent,
@@ -87,6 +90,10 @@ import {NewPasswordComponent}from'./component/users/new-password/new-password.co
         AdminComponent,
         ToolbarComponent,
         UserSelfEditComponent,
+        AnswerViewComponent,
+        QuestionAnsweredViewComponent,
+        AnswerListComponent,
+        AnswerDetailComponent,
         ChangePasswordComponent,
         NewPasswordComponent
     ],
@@ -123,9 +130,10 @@ import {NewPasswordComponent}from'./component/users/new-password/new-password.co
         MdDialogModule,
         MdTooltipModule,
         MdSnackBarModule,
-        ChartsModule
+        ChartsModule,
+        MdTooltipModule
     ],
-    entryComponents: [SubmitPreviewComponent, AlertDialogComponent],
+    entryComponents: [SubmitPreviewComponent, AlertDialogComponent, FormSettingsComponent],
     providers: [UserService, QuestionService, AlertService, AuthGuard, AdminGuard, {
         provide: LocationStrategy, useClass: HashLocationStrategy}, {
         provide: APP_BASE_HREF, useValue: '/'
