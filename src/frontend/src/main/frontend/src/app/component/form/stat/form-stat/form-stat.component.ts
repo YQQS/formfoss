@@ -33,7 +33,7 @@ export class FormStatComponent implements OnInit {
             })
             .subscribe((formData) => {
                     this.formData = formData;
-                    this.qtService.getForm(formData.formId)
+                    this.qtService.getFormByFormId(formData.formId)
                         .subscribe(res => {
                             this.formModel = res;
                             this.chartModels = FormUtil.toChartModels(

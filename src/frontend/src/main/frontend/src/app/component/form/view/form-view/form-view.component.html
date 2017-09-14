@@ -3,20 +3,13 @@
 
     </div>
 
-    <form (ngSubmit)="onSubmit()" [formGroup]="formGroup">
+    <form [formGroup]="formGroup">
         <p class="form-title">{{formObject.title}}</p>
 
         <p class="form-desc">{{formObject.desc}}</p>
 
         <div *ngFor="let question of formObject.formItems">
             <app-question-view [question]="question" [formGroup]="formGroup" [dependQuestion]="getDependQuestion(question)"></app-question-view>
-        </div>
-
-        <div class="form-actions" align="center">
-            <button md-raised-button color="primary" type="submit" [disabled]="formGroup.invalid || !formObject.isPublished">Submit</button>
-            <button md-raised-button color="accent" type="button"
-                    (click)="save()" [disabled]="formGroup.pristine || !formObject.isPublished">Save</button>
-            <button md-raised-button color="warn" type="reset" [disabled]="formGroup.untouched">Reset</button>
         </div>
 
     </form>

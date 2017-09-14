@@ -24,7 +24,7 @@ export class FormEditComponent implements OnInit {
 
     ngOnInit() {
         const formId = +this.activatedRoute.snapshot.params['id'];
-        return this.qtService.getForm(formId)
+        return this.qtService.getFormByFormId(formId)
             .subscribe((form: FormModel) => {
                 this.formObject = form;
                 this.formGroup = FormUtil.formModelToEditGroup(this.formObject);

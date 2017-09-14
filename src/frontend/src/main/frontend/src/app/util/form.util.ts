@@ -14,6 +14,8 @@ import {FormResultModel} from '../models/result/form-result.model';
 import {ChartModel} from '../models/result/chart.model';
 import {QuestionResultModel} from '../models/result/question-result.model';
 import {ServiceUtil} from './service.util';
+import {noUndefined} from '@angular/compiler/src/util';
+import {AnswerBase} from '../models/answer/answer-base';
 
 export class FormUtil {
     static savedForm = 'savedForm';

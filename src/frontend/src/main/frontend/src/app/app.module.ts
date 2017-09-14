@@ -33,7 +33,7 @@ import { FormStructureEditComponent } from './component/form/edit/form-structure
 import {QuestionService} from './services/question.service';
 import { HomeComponent} from './component/extra/home/home.component';
 import { FormListComponent } from './component/form/list/form-list.component';
-import { FormPreviewComponent } from './component/form/view/form-preview/form-preview.component';
+import { FormDetailComponent } from './component/form/view/form-detail/form-detail.component';
 import { FormEditComponent } from './component/form/edit/form-edit/form-edit.component';
 import { FormNewComponent } from './component/form/edit/form-new/form-new.component';
 import { FormSettingsComponent } from './component/form/edit/form-settings/form-settings.component';
@@ -54,8 +54,16 @@ import {AdminGuard} from './component/_guards/admin.guard';
 import { AdminComponent } from './component/_navigation/admin/admin.component';
 import { ToolbarComponent } from './component/_navigation/toolbar/toolbar.component';
 import {UserSelfEditComponent}from'./component/users/user-self-edit/user-self-edit.component';
+import { AnswerViewComponent } from './component/form/answer/answer-view/answer-view.component';
+import { QuestionAnsweredViewComponent } from './component/form/answer/question-answered-view/question-answered-view.component';
+import { AnswerListComponent } from './component/form/answer/answer-list/answer-list.component';
+import { AnswerDetailComponent } from './component/form/answer/answer-detail/answer-detail.component';
+
 import {ChangePasswordComponent}from'./component/users/change-password/change-password.component';
 import {NewPasswordComponent}from'./component/users/new-password/new-password.component';
+
+
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -68,7 +76,7 @@ import {NewPasswordComponent}from'./component/users/new-password/new-password.co
         FormStructureEditComponent,
         FormListComponent,
         FormListComponent,
-        FormPreviewComponent,
+        FormDetailComponent,
         FormEditComponent,
         FormNewComponent,
         FormSettingsComponent,
@@ -85,8 +93,13 @@ import {NewPasswordComponent}from'./component/users/new-password/new-password.co
         AdminComponent,
         ToolbarComponent,
         UserSelfEditComponent,
+        AnswerViewComponent,
+        QuestionAnsweredViewComponent,
+        AnswerListComponent,
+        AnswerDetailComponent
         ChangePasswordComponent,
         NewPasswordComponent
+
     ],
     imports: [
         BrowserModule,

@@ -19,13 +19,20 @@ import {AdminGuard} from './component/_guards/admin.guard';
 import {UserEditComponent} from './component/users/user-edit/user-edit.component';
 import {UserSelfEditComponent} from './component/users/user-self-edit/user-self-edit.component';
 import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
+import {AnswerListComponent} from './component/form/answer/answer-list/answer-list.component';
+import {AnswerViewComponent} from './component/form/answer/answer-view/answer-view.component';
+import {AnswerDetailComponent} from './component/form/answer/answer-detail/answer-detail.component';
 import {ChangePasswordComponent} from "./component/users/change-password/change-password.component";
 import {NewPasswordComponent}from'./component/users/new-password/new-password.component';
+import {UserSelfEditComponent} from "./component/users/user-self-edit/user-self-edit.component";
+import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
+
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
     {path: 'home', component: HomeComponent},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
+    {path: 'dialog', component: AlertDialogComponent},
 
 
     {path: 'user', canActivate: [AuthGuard], children: [
@@ -36,7 +43,6 @@ const routes: Routes = [
             {path: 'self-edit', component: UserSelfEditComponent},
             {path:'change-password',component:ChangePasswordComponent},
             {path:'new-password',component:NewPasswordComponent},
-
         ]},
     ]},
     {path: 'question', children: [
@@ -44,12 +50,20 @@ const routes: Routes = [
         {path: 'list', component: FormListComponent, canActivate: [AuthGuard]},
         {path: ':id', children: [
             {path: '', redirectTo: 'view', pathMatch: 'prefix'},
-            {path: 'view', component: FormPreviewComponent},
+            {path: 'view', component: FormDetailComponent},
             {path: 'edit', component: FormEditComponent, canActivate: [AuthGuard]},
             {path: 'stat', canActivate: [AuthGuard], children: [
                 {path: '', component: FormStatComponent},
                 {path: 'user', component: UserStatComponent}
             ]}
+        ]}
+    ]},
+    {path: 'answer', canActivate: [AuthGuard], children: [
+        {path: '', redirectTo: 'list', pathMatch: 'prefix'},
+        {path: 'list', component: AnswerListComponent},
+        {path: ':id', children: [
+            {path: '', redirectTo: 'detail', pathMatch: 'prefix'},
+            {path: 'detail', component: AnswerDetailComponent}
         ]}
     ]},
     {path: 'can-not-access', component: CanNotAccessComponent},

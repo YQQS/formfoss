@@ -9,9 +9,11 @@ import 'rxjs/add/operator/catch';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/observable/throw';
 import {ServiceUtil} from '../util/service.util';
+import {AnswerModel} from '../models/answer/answer.model';
 
 @Injectable()
 export class QuestionService {
+
     private static startForm: FormModel = {
         formId: null,
         userId: null,
@@ -47,10 +49,11 @@ export class QuestionService {
 
     private formUrl = ServiceUtil.authUrl + '/forms';
     private answerUrl = ServiceUtil.authUrl + '/useranswers';
+    private answerSaveUrl = ServiceUtil.authUrl + '/useranswers/save';
     private dataUrl = ServiceUtil.authUrl + '/formdata';
     private userUrl = ServiceUtil.authUrl + '/users';
-    private publishedUrl = ServiceUtil.publicUrl + '/forms/published';
-    private publishedFormUrl = ServiceUtil.publicUrl + '/forms/';
+    private publicFormUrl = ServiceUtil.publicUrl + '/forms/';
+
     private jsonHeader = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http) {}

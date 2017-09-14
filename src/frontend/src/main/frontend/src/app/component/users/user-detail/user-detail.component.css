@@ -1,3 +1,10 @@
+.title {
+    text-align: center;
+    display: flex;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
 button {
     color: black;
     margin-top: 20px;

@@ -1,5 +1,5 @@
 import {AnswerBase} from './answer-base';
-export class AnswerMultiChoice extends AnswerBase<String[]> {
+export class AnswerMultiChoice extends AnswerBase<string[]> {
     type = 'multiChoice';
 
     /*
