@@ -10,7 +10,7 @@ button {
 }
 
 li:hover {
-    color: aqua;
+
     background-color: transparent;
     left: .1em;
 }
@@ -26,11 +26,25 @@ li:hover {
     background-color: #607D8B;
     line-height: 100%;
     position: relative;
-    left: 1px;
+    left: 40%;
     top: 0px;
     height: 0.6cm;
     margin: .1cm;
     border-radius: 4px 4px 4px 4px;
+}
+
+.userid{
+    text-align: left;
+    width:1.4cm;
+    display: inline-block;
+    font-size: small;
+    padding: 0.8em 0.7em 0 0.7em;
+    line-height: 100%;
+    position: relative;
+    left: 40%;
+    top: 0px;
+    height: 0.6cm;
+    margin: .1cm;
 }
 
 ul {

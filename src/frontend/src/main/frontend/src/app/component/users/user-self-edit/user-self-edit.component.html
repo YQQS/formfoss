@@ -16,13 +16,6 @@
     </div>
 
     <div>
-        <md-icon >vpn_key</md-icon>
-        <md-form-field>
-            <input mdInput [(ngModel)]=user.userPassword placeholder="Paasword">
-        </md-form-field>
-    </div>
-
-    <div>
         <md-icon >email</md-icon>
         <md-form-field>
             <input mdInput [(ngModel)]=user.userEmail placeholder="Email">
@@ -44,8 +37,8 @@
         </button>
 
         <button md-button (click)="goBack()">
-            <md-icon>arrow_back</md-icon>
-            Back
+            <md-icon>home</md-icon>
+            Back to Home
         </button>
 
         <button md-button (click)="deleteUser(user.userId)">

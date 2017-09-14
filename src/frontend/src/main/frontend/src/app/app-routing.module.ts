@@ -17,23 +17,15 @@ import {PageNotFoundComponent} from './component/extra/page-not-found/page-not-f
 import {CanNotAccessComponent} from './component/extra/can-not-access/can-not-access.component';
 import {AdminGuard} from './component/_guards/admin.guard';
 import {UserEditComponent} from './component/users/user-edit/user-edit.component';
-<<<<<<< HEAD
-import {UserSelfEditComponent} from "./component/users/user-self-edit/user-self-edit.component";
-=======
 import {UserSelfEditComponent} from './component/users/user-self-edit/user-self-edit.component';
->>>>>>> 16b2ef77e997cd20680ab129598f9de29fb8d068
 import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
-
+import {ChangePasswordComponent} from "./component/users/change-password/change-password.component";
+import {NewPasswordComponent}from'./component/users/new-password/new-password.component';
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
     {path: 'home', component: HomeComponent},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
-<<<<<<< HEAD
-    {path: 'dialog', component:AlertDialogComponent},
-=======
-    {path: 'dialog', component: AlertDialogComponent},
->>>>>>> 16b2ef77e997cd20680ab129598f9de29fb8d068
 
 
     {path: 'user', canActivate: [AuthGuard], children: [
@@ -42,6 +34,9 @@ const routes: Routes = [
             {path: '', component: UserDetailComponent},
             {path: 'edit', component: UserEditComponent},
             {path: 'self-edit', component: UserSelfEditComponent},
+            {path:'change-password',component:ChangePasswordComponent},
+            {path:'new-password',component:NewPasswordComponent},
+
         ]},
     ]},
     {path: 'question', children: [
