@@ -1,0 +1,9 @@
+[Unit]
+Description=formfoss backup Service
+After=syslog.target
+
+[Service]
+ExecStart=/opt/formfoss/backup.sh backup -a
+
+[Install]
+WantedBy=multi-user.target
