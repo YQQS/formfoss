@@ -15,10 +15,6 @@ import {AlertService} from '../../../services/alert.service';
 })
 export class UserSelfEditComponent implements OnInit {
     user: User;
-<<<<<<< HEAD
-=======
-    users: User[];
->>>>>>> 746f9e794d1fc28fb81ae58ab6dd3c5c25299f87
 
     constructor(private userService: UserService,
                 private activatedRoute: ActivatedRoute,
@@ -40,11 +36,8 @@ export class UserSelfEditComponent implements OnInit {
     }
 
     goBack(): void {
-<<<<<<< HEAD
         this.router.navigate(['/home'])
-=======
-        this.location.back();
->>>>>>> 746f9e794d1fc28fb81ae58ab6dd3c5c25299f87
+
     }
 
     deleteUser(id: number): void {

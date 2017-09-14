@@ -22,13 +22,8 @@ import { AlertDialogComponent } from './component/_directives/alert-dialog/alert
 import {AnswerListComponent} from './component/form/answer/answer-list/answer-list.component';
 import {AnswerViewComponent} from './component/form/answer/answer-view/answer-view.component';
 import {AnswerDetailComponent} from './component/form/answer/answer-detail/answer-detail.component';
-import {AnswerListComponent} from './component/form/answer/answer-list/answer-list.component';
-import {AnswerViewComponent} from './component/form/answer/answer-view/answer-view.component';
-import {AnswerDetailComponent} from './component/form/answer/answer-detail/answer-detail.component';
 import {ChangePasswordComponent} from "./component/users/change-password/change-password.component";
 import {NewPasswordComponent}from'./component/users/new-password/new-password.component';
-import {UserSelfEditComponent} from "./component/users/user-self-edit/user-self-edit.component";
-import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
