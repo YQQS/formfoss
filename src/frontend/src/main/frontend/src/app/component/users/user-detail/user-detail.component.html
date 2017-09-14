@@ -1,14 +1,20 @@
 
 <ul *ngIf="user" >
-    <md-toolbar align="center"  >
-        <md-icon>assignment</md-icon>
-        <span align="center">Details of User</span>
-    </md-toolbar>
+    <div >
+        <md-toolbar   >
+
+            <md-icon>assignment</md-icon>
+            <span >Details of User</span>
+
+
+        </md-toolbar>
+    </div>
+
 
     <div>
         <li *ngIf="user">
             <span class="badge">ID    </span>
-            <span >{{user.userId}}</span>
+            <span class="userid">{{user.userId}}</span>
 
         </li>
     </div>
@@ -17,7 +23,7 @@
     <div>
         <li *ngIf="user">
             <span class="badge" badge-positive>Name</span>
-            <span>{{user.userName}}</span>
+            <span class="userid">{{user.userName}}</span>
 
         </li>
     </div>
@@ -26,7 +32,7 @@
     <div>
         <li *ngIf="user">
             <span class="badge">Password</span>
-            <span>{{user.userPassword}}</span>
+            <span class="userid">{{user.userPassword}}</span>
 
         </li>
     </div>
@@ -35,7 +41,7 @@
     <div>
         <li *ngIf="user">
             <span class="badge">Email</span>
-            <span>{{user.userEmail}}</span>
+            <span class="userid">{{user.userEmail}}</span>
         </li>
     </div>
 
@@ -43,17 +49,21 @@
     <div>
         <li *ngIf="user">
             <span class="badge">Phone</span>
-            <span>{{user.userPhone}}</span>
+            <span class="userid ">{{user.userPhone}}</span>
         </li>
     </div>
-    <div style="float:center" >
-        <button md-button (click)="goBack()">
-            <md-icon>arrow_back</md-icon>
-            Back
-        </button>
+
+    <div>
+        <li *ngIf="user">
+            <span class="badge">Credit</span>
+            <span class="userid ">{{user.userCredit}}</span>
+        </li>
     </div>
 
-
-
-
 </ul>
+<div align="center">
+    <button md-button (click)="goBack()">
+        <md-icon>arrow_back</md-icon>
+        Back
+    </button>
+</div>

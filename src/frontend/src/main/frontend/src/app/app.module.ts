@@ -55,7 +55,8 @@ import {AdminGuard} from './component/_guards/admin.guard';
 import { AdminComponent } from './component/_navigation/admin/admin.component';
 import { ToolbarComponent } from './component/_navigation/toolbar/toolbar.component';
 import {UserSelfEditComponent}from'./component/users/user-self-edit/user-self-edit.component';
-
+import {ChangePasswordComponent}from'./component/users/change-password/change-password.component';
+import {NewPasswordComponent}from'./component/users/new-password/new-password.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -85,7 +86,9 @@ import {UserSelfEditComponent}from'./component/users/user-self-edit/user-self-ed
         CanNotAccessComponent,
         AdminComponent,
         ToolbarComponent,
-        UserSelfEditComponent
+        UserSelfEditComponent,
+        ChangePasswordComponent,
+        NewPasswordComponent
     ],
     imports: [
         BrowserModule,

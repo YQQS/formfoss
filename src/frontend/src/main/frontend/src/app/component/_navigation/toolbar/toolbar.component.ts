@@ -29,6 +29,10 @@ export class ToolbarComponent implements OnInit {
         this.router.navigate(['/home'])
     }
 
+    changepassword(){
+        this.router.navigate(['/user', this.currentUser.userId ,'change-password'])
+    }
+
 
     edit() {
         this.router.navigate(['/user', this.currentUser.userId ,'self-edit']);
