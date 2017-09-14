@@ -64,7 +64,7 @@ public class FormController {
             throw new ObjectNotFoundException("form not exist");
         }
 
-        if (form.getSettings().get("shareResult").equals(true)) {
+        if (form.getSettings().get("shareResult") != null && form.getSettings().get("shareResult").equals(true)) {
             return form;
         }
 
