@@ -232,9 +232,6 @@ public class UserAnswerController {
     String createUserAnswer(@RequestBody UserAnswerEntity userAnswer,
                             @RequestAttribute Integer userId,
                             @RequestAttribute String userRole) {
-        if (userAnswerRepository.findByFormIdAndUserId(userAnswer.getFormId(), userId).size() > 0) {
-            throw new BadRequestException("you have an unsubmmitted answer");
-        }
         if (userAnswer.getAnswerId() == null) {
             /*
              * for new answers, give a new answerId

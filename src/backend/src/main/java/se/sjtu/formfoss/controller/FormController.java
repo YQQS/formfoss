@@ -55,13 +55,17 @@ public class FormController {
      */
     @GetMapping(path = "/forms/{formId}")
     public @ResponseBody
-    FormEntity searchById(@PathVariable Integer formId,
+    FormEntity getFormById(@PathVariable Integer formId,
                           @RequestAttribute(name = "userId") Integer userId,
                           @RequestAttribute(name = "userRole") String userRole) {
         FormEntity form = formRepository.findOne(formId);
 
         if (form == null) {
             throw new ObjectNotFoundException("form not exist");
+        }
+
+        if (form.getSettings().get("shareResult").equals(true)) {
+            return form;
         }
 
         // check ownership

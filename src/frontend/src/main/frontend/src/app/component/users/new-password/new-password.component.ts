@@ -15,7 +15,6 @@ import {FossValidators} from '../../../validator/foss.validator';
     styleUrls: ['./new-password.component.css']
 })
 export class NewPasswordComponent implements OnInit {
-    user: User;
     registerForm: FormGroup;
 
 
@@ -32,38 +31,26 @@ export class NewPasswordComponent implements OnInit {
 
 
     save(): void {
-        let new_user = new User(this.user.userName,
-                this.registerForm.value.userPassword,
-                this.user.userEmail)
-        this.user.userPassword=this.registerForm.value.userPassword;
-        this.userService.update(this.user)
+        this.userService.changePassword(this.registerForm.get('userPassword').value)
             .subscribe(
                 (res: string) => {
-                    this.router.navigate(['/home'])
+                    this.userService.logout();
+                    this.router.navigate(['/login'])
                         .then(() => this.alertService.success(res['message'] || JSON.stringify(res)));
                 },
                 (error: string) => this.alertService.error(error));
     }
 
     goBack(): void {
-        this.router.navigate(['/home'])
+        this.location.back();
     }
 
 
     ngOnInit() {
         this.registerForm = this.formBuilder.group({
-            userName: [],
             userPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(64)]],
             userPasswordRepeat: ['', Validators.required],
-            userEmail: []
         }, {validator: FossValidators.passwordMatchValidator});
-
-        this.activatedRoute.paramMap
-            .switchMap((params: ParamMap) => {
-                return this.userService.getUser(+params.get('id'))
-            })
-            .subscribe(user => this.user = user,
-                error => this.alertService.error(error));
     }
 
 

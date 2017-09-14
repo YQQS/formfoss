@@ -1,12 +1,15 @@
 package se.sjtu.formfoss.controller;
 
 
+import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.exception.BadRequestException;
+import se.sjtu.formfoss.exception.LoginFailedException;
+import se.sjtu.formfoss.exception.ObjectNotFoundException;
 import se.sjtu.formfoss.exception.PermissionDenyException;
 import se.sjtu.formfoss.model.UserEntity;
 import se.sjtu.formfoss.repository.UserRepository;
@@ -14,6 +17,7 @@ import se.sjtu.formfoss.util.AuthRequestUtil;
 import se.sjtu.formfoss.util.RestResponseUtil;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by ace on 6/28/17.
@@ -128,6 +132,47 @@ public class UserController {
     }
 
 
+    @PostMapping(path = {"/users/verify", "/users/verify/"})
+    public @ResponseBody String verifyPassword(@RequestBody UserEntity user,
+                                               @RequestAttribute Integer userId,
+                                               @RequestAttribute String userRole) {
+        String username = user.getUserName();
+        String password = user.getUserPassword();
 
+        if (username == null || password == null) {
+            throw new BadRequestException("username and password required");
+        }
+
+        List<UserEntity> users = userRepository.findByUserName(username);
+        if (users.size() == 0 || users.size() > 1) {
+            throw new BadRequestException("can't find the user");
+        }
+
+        UserEntity aUser = users.get(0);
+        if (!AuthRequestUtil.checkUserOwnership(aUser, userId, userRole)) {
+            throw new PermissionDenyException();
+        }
+
+        if (!aUser.getUserPassword().equals(password)) {
+            throw new LoginFailedException();
+        }
+
+        return RestResponseUtil.successMsg("verified");
+    }
+
+    @PostMapping(path = {"/users/changePassword", "/users/changePassword/"})
+    public @ResponseBody String changePassword(@RequestAttribute Integer userId,
+                                               @RequestBody UserEntity user) {
+        String password = user.getUserPassword();
+        UserEntity aUser = userRepository.findOne(userId);
+        if (aUser == null) {
+            throw new ObjectNotFoundException("user not exist");
+        }
+
+        aUser.setUserPassword(password);
+        userRepository.save(aUser);
+
+        return RestResponseUtil.successMsg("OK");
+    }
 
 }
