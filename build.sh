@@ -2,6 +2,7 @@
 
 set -ev
 
+cd "$(dirname "$0")"
 BACKEND=$(pwd)/src/backend
 FRONTEND=$(pwd)/src/frontend/src/main/frontend
 

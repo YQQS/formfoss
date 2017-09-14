@@ -81,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // logged in user can access
                 .antMatchers(authenticationUrl + "/**").authenticated()
                 // admin can access
-                .anyRequest().denyAll()
+                .anyRequest().permitAll()
 
         .and()
                 .addFilterBefore(jwtAuthFilterBean(), UsernamePasswordAuthenticationFilter.class);
