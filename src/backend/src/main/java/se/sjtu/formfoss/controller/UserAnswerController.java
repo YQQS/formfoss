@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.exception.*;
 import se.sjtu.formfoss.model.*;
-import se.sjtu.formfoss.repository.CountRepository;
-import se.sjtu.formfoss.repository.UserAnswerRepository;
-import se.sjtu.formfoss.repository.FormDataRepository;
-import se.sjtu.formfoss.repository.FormRepository;
+import se.sjtu.formfoss.repository.*;
 import se.sjtu.formfoss.service.FormService;
 import se.sjtu.formfoss.util.AuthRequestUtil;
 import se.sjtu.formfoss.util.RestResponseUtil;
@@ -35,7 +32,7 @@ public class UserAnswerController {
     @Autowired
     private CountRepository countRepository;
     @Autowired
-    private FormDataRepository formDataRepository;
+    private UserRepository userRepository;
     @Autowired
     private FormRepository formRepository;
     @Autowired
@@ -131,8 +128,8 @@ public class UserAnswerController {
         }
 
         // check ownership
-        if (!AuthRequestUtil.checkFormOwnership(form, userId, userRole)) {
-            throw new PermissionDenyException("not the owner of the form");
+        if (!AuthRequestUtil.checkFormDataAccess(form, userId, userRole)) {
+            throw new PermissionDenyException("can not access");
         }
 
         return userAnswerRepository.findByFormId(formId);
@@ -262,7 +259,10 @@ public class UserAnswerController {
 
         userAnswer.setCommitflag(true);
 
-        // userAnswer.setUserId(userId);
+        UserEntity user = userRepository.findOne(userId);
+        user.setUserCredit(user.getUserCredit() - 1);
+        userRepository.save(user);
+
         userAnswerRepository.save(userAnswer);
         formService.updateFormData(userAnswer);
         return RestResponseUtil.successMsg("answer saved and submitted");

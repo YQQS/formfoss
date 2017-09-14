@@ -3,6 +3,10 @@
         <md-icon>arrow_back</md-icon>
         back
     </button>
+    <button md-button (click)="download()">
+        <md-icon>file_download</md-icon>
+        download
+    </button>
 
     <div class="user-answer-list" *ngFor="let answer of answers" class="answer-body">
         <div *ngFor="let question of form.formItems; index as i" class="user-answer">
