@@ -86,6 +86,27 @@ export class UserService {
             .catch(ServiceUtil.handleError);
     }
 
+    verify(userName: string, userPassword: string): Observable<any> {
+        return this.http.post(this.loginUrl,
+            JSON.stringify({
+                userName: userName,
+                userPassword: userPassword
+            }), {headers: this.jsonHeader})
+
+            .map((response: Response) => {
+                const user = response.json();
+
+                if (user && user.token && user.userId && user.username && user.role) {
+                    sessionStorage.setItem('currentUser', JSON.stringify(user));
+                    return MessageUtil.successMessage('successful authentication');
+                }
+
+                return MessageUtil.errorMessage('request success, but server did not return the proper response');
+            })
+
+            .catch(ServiceUtil.handleError);
+    }
+
     logout() {
         sessionStorage.removeItem('currentUser');
     }

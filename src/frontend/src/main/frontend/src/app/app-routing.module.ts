@@ -22,6 +22,8 @@ import { AlertDialogComponent } from './component/_directives/alert-dialog/alert
 import {AnswerListComponent} from './component/form/answer/answer-list/answer-list.component';
 import {AnswerViewComponent} from './component/form/answer/answer-view/answer-view.component';
 import {AnswerDetailComponent} from './component/form/answer/answer-detail/answer-detail.component';
+import {ChangePasswordComponent} from "./component/users/change-password/change-password.component";
+import {NewPasswordComponent}from'./component/users/new-password/new-password.component';
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -37,6 +39,8 @@ const routes: Routes = [
             {path: '', component: UserDetailComponent},
             {path: 'edit', component: UserEditComponent},
             {path: 'self-edit', component: UserSelfEditComponent},
+            {path:'change-password',component:ChangePasswordComponent},
+            {path:'new-password',component:NewPasswordComponent},
         ]},
     ]},
     {path: 'question', children: [
