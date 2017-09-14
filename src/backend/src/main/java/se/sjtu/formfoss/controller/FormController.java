@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import se.sjtu.formfoss.exception.BadRequestException;
-import se.sjtu.formfoss.exception.GlobalException;
-import se.sjtu.formfoss.exception.ObjectNotFoundException;
-import se.sjtu.formfoss.exception.PermissionDenyException;
+import se.sjtu.formfoss.exception.*;
 import se.sjtu.formfoss.model.*;
 import se.sjtu.formfoss.repository.UserRepository;
 import se.sjtu.formfoss.repository.FormRepository;
@@ -80,6 +77,22 @@ public class FormController {
     ResponseEntity<String> formAdd(@RequestBody FormEntity form,
                                    @RequestAttribute Integer userId,
                                    @RequestAttribute String userRole) {
+        Integer uId = form.getUserId();
+        if (uId == null) {
+            throw new BadRequestException("userId not found in form");
+        }
+        if (!AuthRequestUtil.checkFormOwnership(form, userId, userRole)) {
+            throw new PermissionDenyException();
+        }
+        UserEntity user = userRepository.findOne(uId);
+        Integer userCredit = user.getUserCredit();
+        if(userCredit < 3){
+            throw new NoEnoughCreditException();
+        }
+        userCredit -= 3;
+        user.setUserCredit(userCredit);
+
+        userRepository.save(user);
         IdCount idCount = countRepository.findOne("1");
         Integer formId = idCount.getFormIdCount();
         formId = formId + 1;

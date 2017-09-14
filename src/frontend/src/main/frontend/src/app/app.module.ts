@@ -54,15 +54,12 @@ import {AdminGuard} from './component/_guards/admin.guard';
 import { AdminComponent } from './component/_navigation/admin/admin.component';
 import { ToolbarComponent } from './component/_navigation/toolbar/toolbar.component';
 import {UserSelfEditComponent}from'./component/users/user-self-edit/user-self-edit.component';
+import {ChangePasswordComponent}from'./component/users/change-password/change-password.component';
+import {NewPasswordComponent}from'./component/users/new-password/new-password.component';
 import { AnswerViewComponent } from './component/form/answer/answer-view/answer-view.component';
 import { QuestionAnsweredViewComponent } from './component/form/answer/question-answered-view/question-answered-view.component';
 import { AnswerListComponent } from './component/form/answer/answer-list/answer-list.component';
 import { AnswerDetailComponent } from './component/form/answer/answer-detail/answer-detail.component';
-
-import {ChangePasswordComponent}from'./component/users/change-password/change-password.component';
-import {NewPasswordComponent}from'./component/users/new-password/new-password.component';
-
-
 
 @NgModule({
     declarations: [
@@ -96,10 +93,9 @@ import {NewPasswordComponent}from'./component/users/new-password/new-password.co
         AnswerViewComponent,
         QuestionAnsweredViewComponent,
         AnswerListComponent,
-        AnswerDetailComponent
+        AnswerDetailComponent,
         ChangePasswordComponent,
         NewPasswordComponent
-
     ],
     imports: [
         BrowserModule,
@@ -137,7 +133,7 @@ import {NewPasswordComponent}from'./component/users/new-password/new-password.co
         ChartsModule,
         MdTooltipModule
     ],
-    entryComponents: [SubmitPreviewComponent, AlertDialogComponent],
+    entryComponents: [SubmitPreviewComponent, AlertDialogComponent, FormSettingsComponent],
     providers: [UserService, QuestionService, AlertService, AuthGuard, AdminGuard, {
         provide: LocationStrategy, useClass: HashLocationStrategy}, {
         provide: APP_BASE_HREF, useValue: '/'

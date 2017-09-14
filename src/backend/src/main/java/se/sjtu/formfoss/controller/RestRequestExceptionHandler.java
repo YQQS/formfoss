@@ -32,7 +32,7 @@ public class RestRequestExceptionHandler {
     public ResponseEntity<Object> handleBadRequest(RuntimeException ex) {
         String errorMsg;
         if (ex.getMessage() != null) {
-            errorMsg = RestResponseUtil.errorMsg("Bad Request: " + ex.getMessage());
+            errorMsg = RestResponseUtil.errorMsg(ex.getMessage());
         } else {
             errorMsg = RestResponseUtil.errorMsg("Bad Request");
         }
@@ -42,9 +42,9 @@ public class RestRequestExceptionHandler {
 
     @ExceptionHandler(value = {ObjectNotFoundException.class, ListNotFoundException.class})
     public ResponseEntity<Object> handleObjectNotFound(RuntimeException ex) {
-        String msg = "Not Found";
+        String msg = "";
         if (ex.getMessage() != null) {
-            msg = msg + ": " + ex.getMessage();
+            msg = msg + ex.getMessage();
         }
 
         return new ResponseEntity<>(RestResponseUtil.errorMsg(msg), HttpStatus.NOT_FOUND);
@@ -69,4 +69,14 @@ public class RestRequestExceptionHandler {
         }
         return RestResponseUtil.errorMsg(msg);
     }
+
+    @ExceptionHandler(value = {NoEnoughCreditException.class})
+    public ResponseEntity<Object> handleNotEnoughCredit(RuntimeException ex){
+        String msg = "No enough credit ";
+        if(ex.getMessage() != null) {
+            msg += (": " + ex.getMessage());
+        }
+        return new ResponseEntity<>(RestResponseUtil.errorMsg(msg),HttpStatus.FORBIDDEN);
+    }
+
 }

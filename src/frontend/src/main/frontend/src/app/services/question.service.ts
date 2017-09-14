@@ -82,16 +82,14 @@ export class QuestionService {
         }
     }
 
-    saveAnswer(formGroup: FormGroup, formObj: FormModel) {
-        const answer = FormUtil.buildAnswerModel(formGroup, formObj);
+    saveAnswer(answer: AnswerModel) {
         answer.commitflag = false;
-        return this.http.post(this.answerUrl + '/tempsave', JSON.stringify(answer), ServiceUtil.buildAuthReqOpts())
+        return this.http.post(this.answerUrl + '/save', JSON.stringify(answer), ServiceUtil.buildAuthReqOpts())
             .map(res => res.json())
             .catch(ServiceUtil.handleError)
     }
 
-    submitAnswer(formGroup: FormGroup, formObj: FormModel) {
-        const answer = FormUtil.buildAnswerModel(formGroup, formObj);
+    submitAnswer(answer: AnswerModel) {
         return this.http.post(this.answerUrl, JSON.stringify(answer), ServiceUtil.buildAuthReqOpts())
             .map(res => res.json() )
             .catch(ServiceUtil.handleError)
@@ -114,38 +112,54 @@ export class QuestionService {
             .catch(ServiceUtil.handleError);
     }
 
-    getPublished(): Observable<FormModel[]> {
-        return this.http.get(this.publishedUrl)
+    getPublishedForms(): Observable<FormModel[]> {
+        return this.http.get(this.publicFormUrl + 'published')
             .map(res => res.json().map(item => FormUtil.buildForm(item)))
             .catch(ServiceUtil.handleError)
     }
 
-    getPublishedById(id: number): Observable<any> {
-        return this.http.get(this.publishedFormUrl + id)
+    getPublishedFormById(formId: number): Observable<any> {
+        return this.http.get(this.publicFormUrl + formId)
             .map(res => FormUtil.buildForm(res.json()))
             .catch(ServiceUtil.handleError);
     }
 
-    getForm(id: number): Observable<any> {
-        return this.http.get(this.formUrl + '/' + id, ServiceUtil.buildAuthReqOpts())
+    getFormByFormId(formId: number): Observable<any> {
+        return this.http.get(this.formUrl + '/' + formId, ServiceUtil.buildAuthReqOpts())
             .map(res => FormUtil.buildForm(res.json()))
             .catch(ServiceUtil.handleError)
     }
 
-    deleteForm(id: number) {
-        return this.http.delete(this.formUrl + '/' + id, ServiceUtil.buildAuthReqOpts())
+    deleteForm(formId: number) {
+        return this.http.delete(this.formUrl + '/' + formId, ServiceUtil.buildAuthReqOpts())
             .map(res => res.json())
             .catch(ServiceUtil.handleError)
     }
 
-    getUserAnswer(answerId: number): Observable<any> {
-        return this.http.get(this.answerUrl + '/answer/' + answerId, ServiceUtil.buildAuthReqOpts())
+    getAnswerByAnswerId(answerId: number): Observable<any> {
+        const url = this.answerUrl + `?answerId=${answerId}`;
+        return this.http.get(url, ServiceUtil.buildAuthReqOpts())
             .map(res => FormUtil.parseAnswerModel(res.json()) )
             .catch(ServiceUtil.handleError)
     }
 
-    getUserAnswers(formId: number): Observable<any> {
-        return this.http.get(this.answerUrl + '/' + formId, ServiceUtil.buildAuthReqOpts())
+    deleteAnswerByAnswerId(answerId: number): Observable<any> {
+        const url = this.answerUrl + `/${answerId}`;
+        return this.http.delete(url, ServiceUtil.buildAuthReqOpts())
+            .map(res => res.json())
+            .catch(ServiceUtil.handleError);
+    }
+
+    getAnswerByFormId(formId: number): Observable<any> {
+        const url = this.answerUrl + `?formId=${formId}`;
+        return this.http.get(url, ServiceUtil.buildAuthReqOpts())
+            .map(res => FormUtil.parseAnswerModel(res.json()) )
+            .catch(ServiceUtil.handleError)
+    }
+
+    getAllAnswersOfForm(formId: number): Observable<any> {
+        const url = this.formUrl + `/${formId}/answers`;
+        return this.http.get(url, ServiceUtil.buildAuthReqOpts())
             .map(res => {
                 const answers = res.json() as any[];
                 return answers.map(item => FormUtil.parseAnswerModel(item))
@@ -153,10 +167,23 @@ export class QuestionService {
             .catch(ServiceUtil.handleError)
     }
 
-    getUserAnswerByFormId(userId: number, formId: number): Observable<any> {
-        return this.http.get(this.answerUrl + '/' + userId + '/' + formId, ServiceUtil.buildAuthReqOpts())
-            .map(res => FormUtil.parseAnswerModel(res.json()) )
-            .catch(ServiceUtil.handleError)
+    getAnswerListOfUser(userId: number, isSubmitted?: boolean): Observable<any> {
+        let url = ServiceUtil.authUrl + '/users/' + userId + '/answers';
+        if (isSubmitted !== null) {
+            url += `?submitted=${isSubmitted}`;
+        }
+
+        return this.http.get(url, ServiceUtil.buildAuthReqOpts())
+            .map(res => (res.json() as any[]).map(item => FormUtil.parseAnswerModel(item)))
+            .catch(ServiceUtil.handleError);
+    }
+
+    getAnsweredFormListOfUser(userId: number) {
+        const url = ServiceUtil.authUrl + '/users/' + userId + '/answeredForms';
+
+        return this.http.get(url, ServiceUtil.buildAuthReqOpts())
+            .map(res => (res.json() as any[]).map(item => FormUtil.buildForm(item)))
+            .catch(ServiceUtil.handleError);
     }
 
     getFormData(formId: number): Observable<any> {

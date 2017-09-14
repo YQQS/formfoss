@@ -20,6 +20,10 @@ public class AuthRequestUtil {
         return (data.getUserId() != null && data.getUserId().equals(userId)) || userRole.equals("admin");
     }
 
+    public static boolean checkFormDataAccess(FormEntity form, Integer userId, String userRole) {
+        return form.getUserId().equals(userId) || userRole.equals("admin") || form.getSettings().get("shareResult").equals(true);
+    }
+
     public static boolean checkUserAnswerOwnership(UserAnswerEntity answer, FormEntity form, Integer userId, String userRole) {
         return userRole.equals("admin") ||
                 (form.getUserId() != null && form.getUserId().equals(userId)) ||

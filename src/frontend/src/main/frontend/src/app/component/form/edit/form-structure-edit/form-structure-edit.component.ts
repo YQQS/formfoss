@@ -13,6 +13,8 @@ import {AlertDialogComponent} from '../../../_directives/alert-dialog/alert-dial
 import {AlertService} from '../../../../services/alert.service';
 import {ServiceUtil} from '../../../../util/service.util';
 import {noUndefined} from '@angular/compiler/src/util';
+import {FormSettingsComponent} from '../form-settings/form-settings.component';
+import {FormSettingsModel} from '../../../../models/form/form-settings.model';
 
 @Component({
     selector: 'app-form-structure-edit',
@@ -38,7 +40,8 @@ export class FormStructureEditComponent implements OnInit {
                 public diaRef: MdDialog,
                 private route: Router,
                 private activatedRoute: ActivatedRoute,
-                private alertService: AlertService) {
+                private alertService: AlertService,
+                private mdDialog: MdDialog) {
     }
 
     ngOnInit() {
@@ -218,7 +221,24 @@ export class FormStructureEditComponent implements OnInit {
     }
 
     settings() {
+        const diaRef = this.diaRef.open(FormSettingsComponent, {
+            data: {
+                settings: this.formObject.settings
+            }
+        });
 
+        diaRef.afterClosed().subscribe((msg: {
+            confirm?: boolean,
+            settings?: FormSettingsModel
+        }) => {
+            if (msg !== null && msg !== undefined && msg.confirm === true) {
+                this.formObject.settings = msg.settings;
+            }
+        })
+    }
+
+    isQuestionRequired(key: string) {
+        return this.getQuestionControl(key).get('required-edit').value === true;
     }
 
     isQuestionRequired(key: string) {

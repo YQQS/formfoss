@@ -6,7 +6,7 @@ import { RegisterComponent } from './component/users/register/register.component
 import { UserListComponent } from './component/users/user-list/user-list.component';
 import {UserDetailComponent} from './component/users/user-detail/user-detail.component';
 import {FormListComponent} from './component/form/list/form-list.component';
-import {FormPreviewComponent} from './component/form/view/form-preview/form-preview.component';
+import {FormDetailComponent} from './component/form/view/form-detail/form-detail.component';
 import {FormEditComponent} from './component/form/edit/form-edit/form-edit.component';
 import {FormNewComponent} from './component/form/edit/form-new/form-new.component';
 import {FormStatComponent} from './component/form/stat/form-stat/form-stat.component';
@@ -19,6 +19,9 @@ import {AdminGuard} from './component/_guards/admin.guard';
 import {UserEditComponent} from './component/users/user-edit/user-edit.component';
 import {UserSelfEditComponent} from './component/users/user-self-edit/user-self-edit.component';
 import { AlertDialogComponent } from './component/_directives/alert-dialog/alert-dialog.component';
+import {AnswerListComponent} from './component/form/answer/answer-list/answer-list.component';
+import {AnswerViewComponent} from './component/form/answer/answer-view/answer-view.component';
+import {AnswerDetailComponent} from './component/form/answer/answer-detail/answer-detail.component';
 import {AnswerListComponent} from './component/form/answer/answer-list/answer-list.component';
 import {AnswerViewComponent} from './component/form/answer/answer-view/answer-view.component';
 import {AnswerDetailComponent} from './component/form/answer/answer-detail/answer-detail.component';

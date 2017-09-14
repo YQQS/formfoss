@@ -1,16 +1,15 @@
 package se.sjtu.formfoss.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.sjtu.formfoss.exception.*;
 import se.sjtu.formfoss.model.*;
-import se.sjtu.formfoss.repository.CountRepository;
-import se.sjtu.formfoss.repository.UserAnswerRepository;
-import se.sjtu.formfoss.repository.FormDataRepository;
-import se.sjtu.formfoss.repository.FormRepository;
+import se.sjtu.formfoss.repository.*;
 import se.sjtu.formfoss.service.FormService;
 import se.sjtu.formfoss.util.AuthRequestUtil;
 import se.sjtu.formfoss.util.RestResponseUtil;
@@ -33,7 +32,7 @@ public class UserAnswerController {
     @Autowired
     private CountRepository countRepository;
     @Autowired
-    private FormDataRepository formDataRepository;
+    private UserRepository userRepository;
     @Autowired
     private FormRepository formRepository;
     @Autowired
@@ -41,7 +40,7 @@ public class UserAnswerController {
     /*
      * seems not useful
      */
-    @GetMapping("/useranswers")
+    @GetMapping({"/useranswers/all", "useranswers/all/"})
     public @ResponseBody
     List<UserAnswerEntity> getAllUserAnswers(@RequestAttribute String userRole)  {
         if (!userRole.equals("admin")) {
@@ -52,68 +51,73 @@ public class UserAnswerController {
     }
 
 
-    /*
-     * get a answer by answer id
-     */
-    @GetMapping("/useranswers/answer/{answerId}")
-    public @ResponseBody UserAnswerEntity getUserAnswer(@PathVariable Integer answerId,
-                                                        @RequestAttribute Integer userId,
-                                                        @RequestAttribute String userRole) {
-        UserAnswerEntity answer = userAnswerRepository.findOne(answerId);
-        if (answer == null) {
-            throw new ObjectNotFoundException("requested answer data not found");
-        }
-
-        Integer formId = answer.getFormId();
-        FormEntity form = formRepository.findOne(formId);
-        if (form == null) {
-            throw new ObjectNotFoundException("related form not found, seemed an inner server error");
-        }
-
-        if (!AuthRequestUtil.checkUserAnswerOwnership(answer, form, userId, userRole)) {
-            throw new PermissionDenyException("Do not have privilege to access the answer");
-        }
-
-        return answer;
-    }
-
-
     /**
-     * get the answers of a form owned by a user
+     * get a answer data by answerId or formId
      *
-     * @param uId the user id in the request url
-     * @param fId the form id in the request url.
-     * @param userId the user id in Request Attribute settled by spring filter
-     * @param userRole the user role in Request Attribute settled by spring filter
-     * @return a list of all answers related
+     * @param answerId unique id of answer
+     * @param formId unique id of form
+     * @param userId current user id
+     * @param userRole current user role
+     * @return answer structure (UserAnswerEntity)
      */
-    @GetMapping("/useranswers/{userId}/{formId}")
-    public @ResponseBody
-    UserAnswerEntity getUserAnswer(@PathVariable Integer uId,
-                                   @PathVariable Integer fId,
-                                   @RequestAttribute Integer userId,
-                                   @RequestAttribute String userRole) {
-
-        if (!(userRole.equals("admin") || uId.equals(userId))) {
-            throw new PermissionDenyException("not the owner of the answer");
+    @RequestMapping(path = {"/useranswers", "useranswers/"}, method = RequestMethod.GET)
+    @ResponseStatus(code = HttpStatus.OK)
+    public @ResponseBody UserAnswerEntity getAnswer(@RequestParam(required = false) Integer answerId,
+                                                    @RequestParam(required = false) Integer formId,
+                                                    @RequestAttribute Integer userId,
+                                                    @RequestAttribute String userRole) {
+        if (answerId == null && formId == null) {
+            throw new BadRequestException("no queryParams, either answerId or formId is required");
         }
 
-        List<UserAnswerEntity> answers = userAnswerRepository.findByFormIdAndUserId(fId, uId);
-        if (answers.size() > 1) {
-            throw new InnerServerErrorException("multi answer found");
-        } else if (answers.size() == 1) {
+        else if (answerId != null && formId == null) {
+            UserAnswerEntity answer = userAnswerRepository.findOne(answerId);
+            if (answer == null) {
+                throw new ObjectNotFoundException("the answer of answerId" + answerId + "not found");
+            }
+
+            FormEntity form = formRepository.findOne(answer.getFormId());
+            if (form == null) {
+                throw new ObjectNotFoundException("the form related of formId = " + answer.getFormId() + " not found");
+            }
+
+            // check ownership
+            if (!AuthRequestUtil.checkUserAnswerOwnership(answer, form, userId, userRole)) {
+                throw new PermissionDenyException("do not have privilege");
+            }
+
+            return answer;
+        }
+
+        else if (answerId == null) {
+            FormEntity form = formRepository.findOne(formId);
+            if (form == null) {
+                throw new ObjectNotFoundException("form of formId " + formId + "not found");
+            }
+
+            List<UserAnswerEntity> answers = userAnswerRepository.findByFormIdAndUserId(formId, userId);
+            if (answers.size() == 0) {
+                throw new ObjectNotFoundException("you've not answered the form of formId=" + formId);
+            } else if (answers.size() > 1) {
+                throw new InnerServerErrorException("multi answers found, should be a inner database error");
+            }
+
             return answers.get(0);
-        } else {
-            throw new ObjectNotFoundException("answer not found");
+        }
+
+        else {
+            throw new BadRequestException("answerId and formId both specified, please use only one");
         }
     }
+
+
 
 
     /**
      * get all answers related to one form
      * @return a list of all answers related to the form
      */
-    @GetMapping("useranswers/{formId}")
+    @GetMapping("forms/{formId}/answers")
     public @ResponseBody
     List<UserAnswerEntity> getAnswerOfOneForm(@PathVariable Integer formId,
                                               @RequestAttribute Integer userId,
@@ -124,51 +128,11 @@ public class UserAnswerController {
         }
 
         // check ownership
-        if (!AuthRequestUtil.checkFormOwnership(form, userId, userRole)) {
-            throw new PermissionDenyException("not the owner of the form");
+        if (!AuthRequestUtil.checkFormDataAccess(form, userId, userRole)) {
+            throw new PermissionDenyException("can not access");
         }
 
         return userAnswerRepository.findByFormId(formId);
-    }
-
-
-    /**
-     * submit a new answer
-     * should work for logged in user
-     */
-    @PostMapping("/useranswers")
-    public @ResponseBody
-    ResponseEntity<String> createUserAnswer(@RequestBody UserAnswerEntity userAnswer,
-                                            @RequestAttribute Integer userId,
-                                            @RequestAttribute String userRole) {
-        if (userAnswer.getAnswerId() == null) {
-            /*
-             * for new answers, give a new answerId
-             */
-            IdCount idCount=countRepository.findOne("1");
-            Integer answerId = idCount.getFormAnswerIdCount();
-            answerId += 1;
-            userAnswer.setAnswerId(answerId);
-            idCount.setFormAnswerIdCount(answerId);
-            countRepository.save(idCount);
-        }
-
-        if (!AuthRequestUtil.checkUserAnswerSubmitter(userAnswer, userId)) {
-            throw new PermissionDenyException("current user and the user to answer the form not same");
-        }
-
-        int fid = userAnswer.getFormId();
-        List<UserAnswerEntity> answerCheck = userAnswerRepository.findByFormIdAndUserId(fid,userId);
-        if (!answerCheck.isEmpty() && answerCheck.get(0).getCommitflag()) {
-            throw new BadRequestException("You've already answered this form");
-        }
-
-        userAnswer.setCommitflag(true);
-
-        // userAnswer.setUserId(userId);
-        userAnswerRepository.save(userAnswer);
-        formService.updateFormData(userAnswer);
-        return new ResponseEntity<String>("{\"message\": \"Create new answer successfully\"}",HttpStatus.OK);
     }
 
 
@@ -198,29 +162,55 @@ public class UserAnswerController {
         return answerForms;
     }
 
+    @RequestMapping(value = {"/users/{uId}/answers", "/users/{uId}/answers/"}, method = RequestMethod.GET)
+    public @ResponseBody List<UserAnswerEntity> getAnswersOfUser(@PathVariable Integer uId,
+                                                                 @RequestParam(required = false) Boolean submitted,
+                                                                 @RequestAttribute Integer userId,
+                                                                 @RequestAttribute String userRole) {
+        if (!(userRole.equals("admin") || uId.equals(userId))) {
+            throw new PermissionDenyException();
+        }
+
+        if (submitted == null) {
+            return userAnswerRepository.findByUserId(uId);
+        }
+
+        if (submitted) {
+            return userAnswerRepository.findByUserIdAndCommitflag(uId, true);
+        } else {
+            return userAnswerRepository.findByUserIdAndCommitflag(uId, false);
+        }
+    }
+
 
     /**
-     * deprecated
+     * to save/update an answer but not submit (update formData)
      *
      * @param userAnswer
      * @return
      */
-    @PostMapping("/useranswers/tempsave")
+    @PostMapping("/useranswers/save")
     public @ResponseBody
-    ResponseEntity<String> tempsaveUserAnswer(@RequestBody UserAnswerEntity userAnswer,@RequestAttribute Integer userId) throws Exception{
-        Integer formid = userAnswer.getFormId();
-        FormEntity form = formRepository.findOne(formid);
+    String saveAnswer(@RequestBody UserAnswerEntity userAnswer, @RequestAttribute Integer userId) {
+        if (userAnswer.getCommitflag()) {
+            throw new BadRequestException("can not submit an answer, post to /useranswers instead");
+        }
+
+        Integer formId = userAnswer.getFormId();
+        FormEntity form = formRepository.findOne(formId);
         if (form == null) {
-            throw new ObjectNotFoundException("related form not found, seemed an inner server error");
+            throw new ObjectNotFoundException("related form of formId = " + formId + " not found, check your request");
         }
         Integer answerId = userAnswer.getAnswerId();
         if(answerId != null){
+            // update a existed answer
             if (!AuthRequestUtil.checkUserAnswerSubmitter(userAnswer, userId)) {
                 throw new PermissionDenyException("not the original submitter");
             }
             userAnswerRepository.save(userAnswer);
-            return new ResponseEntity<String>("{\"message\": \"Save answer successfully\"}",HttpStatus.OK);
+            return RestResponseUtil.successMsg("answer saved");
         }
+        // create a new answer
         IdCount idCount=countRepository.findOne("1");
         answerId = idCount.getFormAnswerIdCount();
         answerId +=1;
@@ -229,7 +219,53 @@ public class UserAnswerController {
         idCount.setFormAnswerIdCount(answerId);
         countRepository.save(idCount);
         userAnswerRepository.save(userAnswer);
-        return new ResponseEntity<String>("{\"message\": \"Save answer successfully\"}",HttpStatus.OK);
+        return RestResponseUtil.successMsg("answer saved");
+    }
+
+
+    /**
+     * create a new answer and submit
+     * should work for logged in user
+     */
+    @PostMapping("/useranswers")
+    public @ResponseBody
+    String createUserAnswer(@RequestBody UserAnswerEntity userAnswer,
+                            @RequestAttribute Integer userId,
+                            @RequestAttribute String userRole) {
+        if (userAnswerRepository.findByFormIdAndUserId(userAnswer.getFormId(), userId).size() > 0) {
+            throw new BadRequestException("you have an unsubmmitted answer");
+        }
+        if (userAnswer.getAnswerId() == null) {
+            /*
+             * for new answers, give a new answerId
+             */
+            IdCount idCount=countRepository.findOne("1");
+            Integer answerId = idCount.getFormAnswerIdCount();
+            answerId += 1;
+            userAnswer.setAnswerId(answerId);
+            idCount.setFormAnswerIdCount(answerId);
+            countRepository.save(idCount);
+        }
+
+        if (!AuthRequestUtil.checkUserAnswerSubmitter(userAnswer, userId)) {
+            throw new PermissionDenyException("current user and the user to answer the form not same");
+        }
+
+        int fid = userAnswer.getFormId();
+        List<UserAnswerEntity> answerCheck = userAnswerRepository.findByFormIdAndUserId(fid,userId);
+        if (!answerCheck.isEmpty() && answerCheck.get(0).getCommitflag()) {
+            throw new BadRequestException("You've already answered this form");
+        }
+
+        userAnswer.setCommitflag(true);
+
+        UserEntity user = userRepository.findOne(userId);
+        user.setUserCredit(user.getUserCredit() - 1);
+        userRepository.save(user);
+
+        userAnswerRepository.save(userAnswer);
+        formService.updateFormData(userAnswer);
+        return RestResponseUtil.successMsg("answer saved and submitted");
     }
 
 
@@ -237,6 +273,8 @@ public class UserAnswerController {
     /**
      * update a answer
      * this should only work for logged in user
+     * seems not useful
+     * use /useranswers/save instead
      *
      * @param userAnswer the answer structure
      * @return the success message
@@ -269,23 +307,31 @@ public class UserAnswerController {
         return RestResponseUtil.successMsg("updated");
     }
 
-    @DeleteMapping("/useranswers")
+
+    @DeleteMapping("/useranswers/{answerId}")
     public @ResponseBody
-    ResponseEntity<String> deleteUserAnswer(@RequestParam Integer form_id, @RequestParam Integer user_id,@RequestAttribute Integer userId,
-                                            @RequestAttribute String userRole){
+    String deleteUserAnswer(@PathVariable Integer answerId,
+                            @RequestAttribute Integer userId,
+                            @RequestAttribute String userRole){
 
-        List<UserAnswerEntity> userAnswer = userAnswerRepository.findByFormIdAndUserId(form_id,user_id);
-        HttpStatus status=(userAnswer.iterator().hasNext()!=false)?HttpStatus.NON_AUTHORITATIVE_INFORMATION:HttpStatus.NOT_FOUND;
-
-        if(userAnswer.iterator().hasNext() != false){
-            if (!AuthRequestUtil.checkUserAnswerSubmitter(userAnswer.get(0), userId)) {
-                throw new PermissionDenyException("not the original submitter");
-            }
-            userAnswerRepository.deleteByFormIdAndUserId(form_id,user_id);
-            formService.deleteFormData(userAnswer.get(0));
-            return  new ResponseEntity<String>("{\"message\": \"Delete successfully\"}",status);
+        UserAnswerEntity answer = userAnswerRepository.findOne(answerId);
+        if (answer == null) {
+            throw new ObjectNotFoundException("answer of answerId = " + answerId + " not found");
         }
-        return new ResponseEntity<String>("{\"message\": \"Nothing to delete\"}",HttpStatus.FORBIDDEN);
+        FormEntity form = formRepository.findOne(answer.getFormId());
+        //if (form == null) {
+        //   throw new InnerServerErrorException("original form not found");
+        // }
+
+        if (!AuthRequestUtil.checkUserAnswerOwnership(answer, form, userId, userRole)) {
+            throw new PermissionDenyException("not allowed");
+        }
+        userAnswerRepository.delete(answerId);
+        if (answer.getCommitflag()) {
+            formService.deleteFormData(answer);
+        }
+
+        return RestResponseUtil.successMsg("answer deleted");
     }
 
 

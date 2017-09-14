@@ -38,8 +38,11 @@ public class UserEntity {
     @Column(name = "create_time", insertable = false,updatable = false, nullable = false)
     private Timestamp userCreateTime;
 
-    @Column(name = "role" ,insertable = false,updatable = false, nullable = false)
+    @Column(name = "role", nullable = false)
     private String userRole;
+
+    @Column(name ="credit",length = 11)
+    private Integer userCredit;
 
     public UserEntity() {
     }
@@ -98,6 +101,14 @@ public class UserEntity {
 
     public String getUserRole() {
         return userRole;
+    }
+
+    public Integer getUserCredit() {
+        return userCredit;
+    }
+
+    public void setUserCredit(Integer userCredit) {
+        this.userCredit = userCredit;
     }
 
     @Override

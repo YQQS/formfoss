@@ -15,30 +15,17 @@ export class UserDetailComponent implements OnInit {
     user: User;
 
     constructor(private userService: UserService,
-                private route: ActivatedRoute,
+                private activatedRoute: ActivatedRoute,
                 private location: Location,
                 private alertService: AlertService) { }
-
-    save(): void {
-        this.userService.update(this.user)
-            .subscribe(
-                (res: any) => {
-                    this.alertService.success(res['message'] || JSON.stringify(res));
-                }, error => {
-                    this.alertService.error(error);
-                }
-            )
-    }
 
     goBack(): void {
         this.location.back();
     }
 
     ngOnInit() {
-        this.route.paramMap
-            .switchMap((params: ParamMap) => {
-                return this.userService.getUser(+params.get('id'))
-            })
+        const id = +this.activatedRoute.snapshot.params['id'];
+        this.userService.getUser(id)
             .subscribe(user => this.user = user,
                 error => this.alertService.error(error));
     }

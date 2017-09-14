@@ -1,0 +1,37 @@
+<div class="question-title">
+    {{question.title}}
+</div>
+
+<div class="question-desc">
+    {{question.desc}}
+</div>
+
+<div [ngSwitch]="question.controlType" class="question-body">
+    
+    <div *ngSwitchCase="'textbox'">
+        <div class="answered answered-text">
+            You answered: {{answer.answer}}
+        </div>
+    </div>
+    
+    <div *ngSwitchCase="'dropdown'">
+        <div class="answered answered-dropdown">
+            <md-list>
+                <md-list-item *ngFor="let opt of allOptions">
+                    <md-icon *ngIf="isSelected(answered, opt.key)" md-list-icon>check_box</md-icon>
+                    <md-icon *ngIf="!isSelected(answered, opt.key)" md-list-icon>check_box_outline_blank</md-icon>
+                    <h3 mdLine
+                        [ngClass]="{'unselected': !isSelected(answered, opt.key), 'selected': isSelected(answered, opt.key)}">
+                        {{opt?.value}}
+                    </h3>
+                </md-list-item>
+            </md-list>
+        </div>
+    </div>
+    
+    <div *ngSwitchCase="'slider'">
+        <div class="answered answered-slider">
+            You answered: {{answered}}
+        </div>
+    </div>
+</div>

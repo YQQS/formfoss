@@ -16,6 +16,7 @@ import {QuestionResultModel} from '../models/result/question-result.model';
 import {ServiceUtil} from './service.util';
 import {noUndefined} from '@angular/compiler/src/util';
 import {AnswerBase} from '../models/answer/answer-base';
+import {checkYarnOrCNPM} from '@angular/cli/utilities/check-package-manager';
 
 export class FormUtil {
     static savedForm = 'savedForm';
@@ -227,7 +228,7 @@ export class FormUtil {
         ));
     }
 
-    static formModelToViewGroup(questions: QuestionBase<any>[]) {
+    static formModelToViewGroup(questions: QuestionBase<any>[], answer?: AnswerModel) {
         let group = new FormGroup({});
 
         questions.forEach(question => {
@@ -257,23 +258,47 @@ export class FormUtil {
             }
 
             let questionFormControl;
-            if (question instanceof QuestionDropDown && question.multiple) {
-                questionFormControl = new FormGroup({
-                    'normal': new FormArray(
-                            question.options.map(opt => new FormControl(false)),
+            if (answer !== undefined && answer !== null) {
+                let ans = FormUtil.getAnswerOfKey(answer, question.key);
+
+                if (question instanceof QuestionDropDown && question.multiple) {
+                    questionFormControl = new FormGroup({
+                        'normal': new FormArray(
+                            FormUtil.multiChoiceAnswerToSelect(question, ans.answer || []).map(s => new FormControl(s)),
                             Validators.compose([
                                 FossValidators.maxSelect(question.validator.maxSelect),
                                 FossValidators.minSelect(question.validator.minSelect)
                             ])),
-                    'other': new FormControl('')
-                });
-            } else if (question instanceof QuestionDropDown) {
-                questionFormControl = new FormGroup({
-                    'normal': new FormControl(question.value, validatorsList),
-                    'other': new FormControl('')
-                })
+                        'other': new FormControl((ans as AnswerMultiChoice).other || '')
+                    });
+                } else if (question instanceof QuestionDropDown) {
+                    questionFormControl = new FormGroup({
+                        'normal': new FormControl(ans.answer || question.value, validatorsList),
+                        'other': new FormControl((ans as AnswerSingleChoice).other || '')
+                    })
+                } else {
+                    questionFormControl = new FormControl(ans.answer || question.value, validatorsList);
+                }
+
             } else {
-                questionFormControl = new FormControl(question.value, validatorsList);
+                if (question instanceof QuestionDropDown && question.multiple) {
+                    questionFormControl = new FormGroup({
+                        'normal': new FormArray(
+                            question.options.map(s => new FormControl(false)),
+                            Validators.compose([
+                                FossValidators.maxSelect(question.validator.maxSelect),
+                                FossValidators.minSelect(question.validator.minSelect)
+                            ])),
+                        'other': new FormControl('')
+                    });
+                } else if (question instanceof QuestionDropDown) {
+                    questionFormControl = new FormGroup({
+                        'normal': new FormControl(question.value, validatorsList),
+                        'other': new FormControl('')
+                    })
+                } else {
+                    questionFormControl = new FormControl(question.value, validatorsList);
+                }
             }
 
             group.addControl(question.key, questionFormControl);
@@ -291,7 +316,7 @@ export class FormUtil {
             question.title =  options['title-edit'];
             question.controlType =  options['controlType-edit'];
 
-            if (!options['depends-edit']) {
+            if (options['depends-edit'] === false || options['required-edit'] === true) {
                 question.dependencies = null;
             } else {
                 const key = options['dependency-edit']['key'];
@@ -350,5 +375,101 @@ export class FormUtil {
         }
 
         return null;
+    }
+
+    static getAnswerOfKey(answer: AnswerModel, key: string): AnswerBase<any> {
+        if (answer === null) {
+            return null;
+        }
+
+        const an = answer.answers.find(item => item.key === key);
+        if (an !== null) {
+            return an;
+        } else {
+            return null;
+        }
+    }
+
+    static multiChoiceSelectToAnswer(question: QuestionDropDown, selected: boolean[], other?: string): AnswerMultiChoice {
+        const length = question.options.length;
+        let hasOther = false;
+        if (question.options[length - 1].key === 'other') {
+            hasOther = true;
+        }
+
+        let answer = [];
+        selected.forEach((item, i) => {
+            if (item !== false) {
+                answer.push(question.options[i].key);
+            }
+        });
+
+        return new AnswerMultiChoice({
+            answer: answer,
+            other: other
+        });
+    }
+
+    static multiChoiceAnswerToSelect(question: QuestionDropDown, selected: string[]): boolean[] {
+        return question.options.map(item => {
+            return selected.includes(item.key)
+        });
+    }
+
+    static getOptionValueFromKey(source: {key: string, value: string}[], key: string) {
+        if (source.length === 0) {
+            return null;
+        }
+
+        const res = source.find(item => item.key === key);
+        if (res === null || res === undefined) {
+            return null;
+        }
+
+        return res.value;
+    }
+
+    static getOptionValueListFromKey(source: {key: string, value: string}[], keys: string[]) {
+        return keys.map(item => FormUtil.getOptionValueFromKey(source, item));
+    }
+
+    static createAnswerList(answers: AnswerModel[]): any[] {
+        let list = [];
+        answers.map(item => {
+            item.answers.map(a => {
+                list.push({
+                    key: a['key'],
+                    answer: a['answer'].toString()
+                });
+            })
+        });
+
+        return list;
+    }
+
+    static createFormDataList(data: FormResultModel): {key: string, answer: any}[] {
+        let list = [];
+        data.data.map(item => {
+            let key = item.key;
+            if (item.type === 'dropdown') {
+                item.result.map(res => {
+                    list.push({
+                        key: key,
+                        answer: res['choiceName'],
+                        count: res['choiceCount']
+                    });
+                })
+            } else {
+                item.result.map(res => {
+                    list.push({
+                        key: key,
+                        answer: res.toString()
+                    });
+                })
+            }
+        });
+        console.log(list)
+
+        return list;
     }
 }

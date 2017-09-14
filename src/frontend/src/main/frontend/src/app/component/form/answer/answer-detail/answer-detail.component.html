@@ -1,0 +1,20 @@
+<div *ngIf="answer && form" class="answer-detail">
+    <md-toolbar>
+        <button md-icon-button (click)="goBack()">
+            <md-icon mdTooltip="go back">arrow_back</md-icon>
+        </button>
+        
+        <div class="actions">
+            <button md-icon-button color="primary" (click)="changeAnswer()" class="button"
+                    [disabled]="isSubmitted()">
+                <md-icon mdTooltip="edit the answer">mode_edit</md-icon>
+            </button>
+            
+            <button md-icon-button color="warn" (click)="deleteAnswer()" class="button">
+                <md-icon mdTooltip="delete the answer">delete</md-icon>
+            </button>
+        </div>
+    </md-toolbar>
+    
+    <app-answer-view [answer]="answer" [form]="form"></app-answer-view>
+</div>
