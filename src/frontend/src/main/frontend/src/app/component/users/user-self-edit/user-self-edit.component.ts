@@ -11,7 +11,7 @@ import {AlertService} from '../../../services/alert.service';
 @Component({
     selector: 'app-user-self-edit',
     templateUrl: './user-self-edit.component.html',
-    styleUrls: ['./user-self-edit.component.css']
+    styleUrls: ['./user-self-edit.component.scss']
 })
 export class UserSelfEditComponent implements OnInit {
     user: User;
@@ -37,6 +37,7 @@ export class UserSelfEditComponent implements OnInit {
 
     goBack(): void {
         this.router.navigate(['/home'])
+
     }
 
     deleteUser(id: number): void {
