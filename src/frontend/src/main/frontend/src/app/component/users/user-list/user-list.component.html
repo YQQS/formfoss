@@ -1,7 +1,7 @@
-<md-toolbar align="center"   >
-    <md-icon>assignment</md-icon>
+<mat-toolbar align="center"   >
+    <mat-icon>assignment</mat-icon>
     <span align="center"> Users</span>
-</md-toolbar>
+</mat-toolbar>
 
 
 <ul class="users">
@@ -14,18 +14,18 @@
             </div>
 
             <div align="right" >
-                <button md-button (click)="gotoDetail(user.userId)">
-                    <md-icon>dehaze</md-icon>
+                <button mat-button (click)="gotoDetail(user.userId)">
+                    <mat-icon>dehaze</mat-icon>
                     Details
                 </button>
 
-                <button md-button (click)="gotoEdit(user.userId)">
-                    <md-icon>edit</md-icon>
+                <button mat-button (click)="gotoEdit(user.userId)">
+                    <mat-icon>edit</mat-icon>
                     Edit
                 </button>
 
-                <button md-button (click)="deleteUser(user.userId)">
-                    <md-icon>delete</md-icon>
+                <button mat-button (click)="deleteUser(user.userId)">
+                    <mat-icon>delete</mat-icon>
                     Delete
                 </button>
             </div>

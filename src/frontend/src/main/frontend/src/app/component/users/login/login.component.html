@@ -2,10 +2,10 @@
     <form class="login-form" novalidate
           #loginForm="ngForm" (ngSubmit)="login(loginForm.value)">
         <div>
-            <md-input-container>
-                <input mdInput class="login-input" placeholder="username" type="text"
+            <mat-form-field>
+                <input matInput class="login-input" placeholder="username" type="text"
                        #userName="ngModel" name="userName" ngModel required>
-            </md-input-container>
+            </mat-form-field>
             <div class="alter alter-warn"
                     [hidden]="userName.valid || userName.pristine">
                 Oops, username can not be empty.
@@ -13,10 +13,10 @@
         </div>
 
         <div>
-            <md-input-container>
-                <input mdInput class="login-input" placeholder="password" type="password"
+            <mat-form-field>
+                <input matInput class="login-input" placeholder="password" type="password"
                        #userPassword="ngModel" name="userPassword" ngModel required>
-            </md-input-container>
+            </mat-form-field>
             <div class="alter alter-warn"
                     [hidden]="userPassword.valid || userPassword.pristine">
                 Oops, password can not be empty.
@@ -24,11 +24,11 @@
         </div>
 
         <div>
-            <button md-raised-button color="primary"
+            <button mat-raised-button color="primary"
                     [disabled]="!loginForm.form.valid">
                 login
             </button>
-            <button md-raised-button routerLink="/register" color="accent">register</button>
+            <button mat-raised-button routerLink="/register" color="accent">register</button>
         </div>
     </form>
 </div>

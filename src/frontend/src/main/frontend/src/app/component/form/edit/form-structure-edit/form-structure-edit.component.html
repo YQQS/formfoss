@@ -1,88 +1,88 @@
 <div>
-    <md-toolbar>
-        <button md-raised-button color="primary" [disabled]="formEditGroup.errors || formEditGroup.pristine" (click)="confirmAndSave()">
-            <md-icon>save</md-icon>
+    <mat-toolbar>
+        <button mat-raised-button color="primary" [disabled]="formEditGroup.errors || formEditGroup.pristine" (click)="confirmAndSave()">
+            <mat-icon>save</mat-icon>
             Save
         </button>
         
-        <button md-raised-button color="primary" [disabled]="formObject.isPublished || !formObject.formId" (click)="publish()">
-            <md-icon>send</md-icon>
+        <button mat-raised-button color="primary" [disabled]="formObject.isPublished || !formObject.formId" (click)="publish()">
+            <mat-icon>send</mat-icon>
             publish
         </button>
         
         <div class="toggle-button">
-            <button md-icon-button (click)="settings()" >
-                <md-icon mdTooltip="settings">settings</md-icon>
+            <button mat-icon-button (click)="settings()" >
+                <mat-icon matTooltip="settings">settings</mat-icon>
             </button>
-            <md-slide-toggle color="primary" [disabled]="formEditGroup.errors" [checked]="isPreview" (change)="changeMode($event)">
+            <mat-slide-toggle color="primary" [disabled]="formEditGroup.errors" [checked]="isPreview" (change)="changeMode($event)">
                 Preview Mode
-            </md-slide-toggle>
+            </mat-slide-toggle>
         </div>
-    </md-toolbar>
+    </mat-toolbar>
 </div>
 
 <div *ngIf="!isPreview" class="form-edit">
     <form [formGroup]="formEditGroup" (ngSubmit)="onSubmit()">
         <div class="form-main">
             <div>
-                <md-input-container class="form-title">
-                    <input mdInput formControlName="title" placeholder="title">
-                </md-input-container>
+                <mat-form-field class="form-title">
+                    <input matInput formControlName="title" placeholder="title">
+                </mat-form-field>
             </div>
             <div>
-                <md-form-field class="form-desc">
-                    <textarea mdInput mdTextareaAutosize formControlName="desc"
+                <mat-form-field class="form-desc">
+                    <textarea matInput matTextareaAutosize formControlName="desc"
                               placeholder="description"></textarea>
-                </md-form-field>
+                </mat-form-field>
             </div>
             <div *ngIf="formObject.formItems.length === 0">
-                <button md-icon-button color="warn" (click)="addQuestion()">
-                    <md-icon>add_circle</md-icon>
+                <button mat-icon-button color="warn" (click)="addQuestion()">
+                    <mat-icon>add_circle</mat-icon>
                     Add Question
                 </button>
             </div>
         </div>
         
         <div align="center">
-            <md-card *ngFor="let question of formObject.formItems; trackBy: trackByKey"
+            <mat-card *ngFor="let question of formObject.formItems; trackBy: trackByKey"
                      [formGroupName]="question.key" class="form-item-edit">
-                <md-card-header>
-                    <md-card-title>
+                <mat-card-header>
+                    <mat-card-title>
                         the {{question.order}}th question
-                    </md-card-title>
-                </md-card-header>
+                    </mat-card-title>
+                </mat-card-header>
                 
-                <md-card-content>
+                <mat-card-content>
                     <div>
-                        <md-form-field class="question-title-edit">
-                            <input mdInput formControlName="title-edit"
+                        <mat-form-field class="question-title-edit">
+                            <input matInput formControlName="title-edit"
                                    [value]="question.title" placeholder="put a title">
-                        </md-form-field><br>
+                        </mat-form-field><br>
                     </div>
                     
                     <div *ngIf="question.controlType === 'dropdown'">
-                        <button md-icon-button (click)="addOption(question)" >
-                            <md-icon>add</md-icon>
+                        <button mat-icon-button (click)="addOption(question)" >
+                            <mat-icon>add</mat-icon>
                         </button>
     
-                        <md-slide-toggle color="primary" formControlName="multiple-edit">
+                        <mat-slide-toggle color="primary" formControlName="multiple-edit">
                             allow multi select
-                        </md-slide-toggle>
+                        </mat-slide-toggle>
                         
-                        <button [disabled]="hasOtherOption(question)" md-icon-button (click)="otherOption(question)"
-                            mdTooltip="add an other optional selection">
-                            <md-icon color="warn">add</md-icon>
+                        <button [disabled]="hasOtherOption(question)" mat-icon-button (click)="otherOption(question)"
+                            matTooltip="add an other optional selection">
+                            <mat-icon color="warn">add</mat-icon>
                         </button>
     
                         <div *ngFor="let opt of question?.options; let i = index" formGroupName="options-edit">
-                            <md-form-field>
-                                <span mdPrefix >{{i+1}}. </span>
-                                <input mdInput [placeholder]="opt?.key" [value]="opt.value" [formControlName]="opt.key">
-                                <button mdSuffix md-icon-button (click)="delOption(question, i)">
-                                    <md-icon>delete</md-icon>
+                            <mat-form-field>
+                                <span matPrefix >{{i+1}}. </span>
+                                <input matInput [placeholder]="opt?.key" [value]="opt.value" [formControlName]="opt.key">
+                                <button matSuffix mat-icon-button (click)="delOption(question, i)">
+                                    <mat-icon>delete</mat-icon>
                                 </button>
-                                <md-hint align="start" *ngIf="opt?.key === 'other'">other optional answer</md-hint>
-                            </md-form-field>
+                                <mat-hint align="start" *ngIf="opt?.key === 'other'">other optional answer</mat-hint>
+                            </mat-form-field>
                         </div>
                         
                     </div>
@@ -91,65 +91,65 @@
                         <div *ngSwitchCase="'dropdown'" >
                             
                             <div *ngIf="formEditGroup.get(question.key).get('multiple-edit').value">
-                                <md-input-container>
-                                    <input mdInput placeholder="min Select" formControlName="minSelect-edit">
-                                    <md-hint class="alter"
+                                <mat-form-field>
+                                    <input matInput placeholder="min Select" formControlName="minSelect-edit">
+                                    <mat-hint class="alter"
                                              *ngIf="formEditGroup.get(question.key).errors?.noLarger &&
                                                     formEditGroup.get(question.key).get('maxSelect-edit').value">
                                         min select should not large than max select
-                                    </md-hint>
-                                </md-input-container>
+                                    </mat-hint>
+                                </mat-form-field>
                                 
-                                <md-input-container>
-                                    <input mdInput placeholder="max Select" formControlName="maxSelect-edit">
-                                    <md-hint class="alter" *ngIf="formEditGroup.get(question.key).errors?.editMaxSelect">
-                                        this should not larger than {{question?.options.length}}</md-hint>
-                                </md-input-container>
+                                <mat-form-field>
+                                    <input matInput placeholder="max Select" formControlName="maxSelect-edit">
+                                    <mat-hint class="alter" *ngIf="formEditGroup.get(question.key).errors?.editMaxSelect">
+                                        this should not larger than {{question?.options.length}}</mat-hint>
+                                </mat-form-field>
                             
                             </div>
                         </div>
                         
                         <div *ngSwitchCase="'slider'" class="validator number">
-                            <md-input-container>
-                                <input mdInput formControlName="min-edit"
+                            <mat-form-field>
+                                <input matInput formControlName="min-edit"
                                        placeholder="min value">
-                            </md-input-container>
-                            <md-input-container>
-                                <input mdInput formControlName="max-edit"
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput formControlName="max-edit"
                                        placeholder="max value">
-                            </md-input-container>
+                            </mat-form-field>
                         </div>
                         
                         <div *ngSwitchCase="'textbox'" class="validator textbox">
-                            <md-input-container>
-                                <input mdInput placeholder="min Length"
+                            <mat-form-field>
+                                <input matInput placeholder="min Length"
                                        formControlName="minLength-edit">
-                            </md-input-container>
-                            <md-input-container>
-                                <input mdInput placeholder="max Length"
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput placeholder="max Length"
                                        formControlName="maxLength-edit">
-                            </md-input-container>
-                            <md-input-container>
-                                <input mdInput placeholder="pattern to match"
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput placeholder="pattern to match"
                                        formControlName="pattern-edit">
-                            </md-input-container>
+                            </mat-form-field>
                         </div>
                     </div>
                     
                     <div class="dependency-edit" *ngIf="formEditGroup.get(question.key).get('depends-edit').value">
                         <div formGroupName="dependency-edit">
                             <label> depend on </label>
-                            <md-select formControlName="key">
-                                <md-option *ngFor="let qs of PreviousQuestionKeys(question); index as p"
-                                           [value]="qs">{{p+1}}th. {{getQuestionControl(qs)?.get('title-edit').value}}</md-option>
-                            </md-select>
+                            <mat-select formControlName="key">
+                                <mat-option *ngFor="let qs of PreviousQuestionKeys(question); index as p"
+                                           [value]="qs">{{p+1}}th. {{getQuestionControl(qs)?.get('title-edit').value}}</mat-option>
+                            </mat-select>
                             
                             <div *ngIf="getDependQuestionControl(question)?.get('controlType-edit').value === 'dropdown'">
                                 <label>which option: </label>
-                                <md-select multiple="true" formControlName="requiredOptions">
-                                    <md-option *ngFor="let op of getDependQuestionOptionKey(question); index as opi"
-                                        [value]="op">{{opi + 1}}: {{getDependQuestionOptionValue(question, op)}}</md-option>
-                                </md-select>
+                                <mat-select multiple="true" formControlName="requiredOptions">
+                                    <mat-option *ngFor="let op of getDependQuestionOptionKey(question); index as opi"
+                                        [value]="op">{{opi + 1}}: {{getDependQuestionOptionValue(question, op)}}</mat-option>
+                                </mat-select>
                             </div>
                         </div>
                         
@@ -157,27 +157,27 @@
                     
                     <div class="edit-select">
                         <p class="edit-type-selector">question type</p>
-                        <md-select formControlName="controlType-edit" (change)="buildQuestion(question, $event)">
-                            <md-option *ngFor="let opt of controlTypes" [value]="opt">{{opt}}</md-option>
-                        </md-select>
+                        <mat-select formControlName="controlType-edit" (change)="buildQuestion(question, $event)">
+                            <mat-option *ngFor="let opt of controlTypes" [value]="opt">{{opt}}</mat-option>
+                        </mat-select>
                     </div>
                     
                     <div class="selection-required">
-                        <md-slide-toggle color="primary" formControlName="required-edit">required</md-slide-toggle>
+                        <mat-slide-toggle color="primary" formControlName="required-edit">required</mat-slide-toggle>
                         
-                        <md-slide-toggle color="accent" formControlName="validator-edit">validator</md-slide-toggle>
+                        <mat-slide-toggle color="accent" formControlName="validator-edit">validator</mat-slide-toggle>
                         
-                        <md-slide-toggle color="warn" *ngIf="indexOf(question) > 0 && !isQuestionRequired(question.key)"
-                                         formControlName="depends-edit">dependency</md-slide-toggle>
+                        <mat-slide-toggle color="warn" *ngIf="indexOf(question) > 0 && !isQuestionRequired(question.key)"
+                                         formControlName="depends-edit">dependency</mat-slide-toggle>
                     </div>
                 
-                </md-card-content>
+                </mat-card-content>
                 
-                <md-card-actions>
-                    <button md-raised-button color="primary" (click)="addQuestion(question)">Add question</button>
-                    <button md-raised-button color="warn" (click)="delQuestion(question)">Delete</button>
-                </md-card-actions>
-            </md-card>
+                <mat-card-actions>
+                    <button mat-raised-button color="primary" (click)="addQuestion(question)">Add question</button>
+                    <button mat-raised-button color="warn" (click)="delQuestion(question)">Delete</button>
+                </mat-card-actions>
+            </mat-card>
         </div>
         
     </form>

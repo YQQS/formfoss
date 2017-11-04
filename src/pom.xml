@@ -24,7 +24,7 @@
         <io.jsonwebtoken.version>0.7.0</io.jsonwebtoken.version>
         <java.version>1.8</java.version>
         <maven.compiler.plugin.version>3.6.2</maven.compiler.plugin.version>
-        <frontend.maven.version>1.4</frontend.maven.version>
+        <frontend.maven.version>1.6</frontend.maven.version>
     </properties>
 
 

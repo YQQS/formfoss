@@ -16,16 +16,16 @@
     
     <div *ngSwitchCase="'dropdown'">
         <div class="answered answered-dropdown">
-            <md-list>
-                <md-list-item *ngFor="let opt of allOptions">
-                    <md-icon *ngIf="isSelected(answered, opt.key)" md-list-icon>check_box</md-icon>
-                    <md-icon *ngIf="!isSelected(answered, opt.key)" md-list-icon>check_box_outline_blank</md-icon>
-                    <h3 mdLine
+            <mat-list>
+                <mat-list-item *ngFor="let opt of allOptions">
+                    <mat-icon *ngIf="isSelected(answered, opt.key)" mat-list-icon>check_box</mat-icon>
+                    <mat-icon *ngIf="!isSelected(answered, opt.key)" mat-list-icon>check_box_outline_blank</mat-icon>
+                    <h3 matLine
                         [ngClass]="{'unselected': !isSelected(answered, opt.key), 'selected': isSelected(answered, opt.key)}">
                         {{opt?.value}}
                     </h3>
-                </md-list-item>
-            </md-list>
+                </mat-list-item>
+            </mat-list>
         </div>
     </div>
     

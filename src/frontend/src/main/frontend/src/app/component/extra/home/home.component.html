@@ -1,10 +1,10 @@
-<md-list>
-    <h3 md-subheader>Forms</h3>
-    <md-list-item *ngFor="let question of questionList">
-        <md-icon md-list-icon>mail</md-icon>
-        <h3 md-line>{{question.title}}</h3>
-        <button md-icon-button color="primary" (click)="view(question.formId)">
-            <md-icon>pageview</md-icon>
+<mat-list>
+    <h3 matSubheader>Forms</h3>
+    <mat-list-item *ngFor="let question of questionList">
+        <mat-icon mat-list-icon>mail</mat-icon>
+        <h3 matLine>{{question.title}}</h3>
+        <button mat-icon-button color="primary" (click)="view(question.formId)">
+            <mat-icon>pageview</mat-icon>
         </button>
-    </md-list-item>
-</md-list>
+    </mat-list-item>
+</mat-list>

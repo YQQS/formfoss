@@ -12,19 +12,19 @@ import {UserListComponent} from './component/users/user-list/user-list.component
 import { UserDetailComponent } from './component/users/user-detail/user-detail.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-    MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdCardModule, MdCheckboxModule, MdChipsModule,
-    MdDatepickerModule,
-    MdDialogModule,
-    MdGridListModule,
-    MdIconModule,
-    MdInputModule,
-    MdListModule,
-    MdMenuModule,
-    MdNativeDateModule, MdProgressBarModule, MdProgressSpinnerModule, MdRadioModule, MdSelectModule, MdSidenavModule,
-    MdSliderModule,
-    MdSlideToggleModule, MdSnackBarModule,
-    MdTabsModule,
-    MdToolbarModule, MdTooltipModule
+    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule, MatChipsModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule, MatSnackBarModule,
+    MatTabsModule,
+    MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 import 'hammerjs';
 import { FormViewComponent } from './component/form/view/form-view/form-view.component';
@@ -53,13 +53,14 @@ import { CanNotAccessComponent } from './component/extra/can-not-access/can-not-
 import {AdminGuard} from './component/_guards/admin.guard';
 import { AdminComponent } from './component/_navigation/admin/admin.component';
 import { ToolbarComponent } from './component/_navigation/toolbar/toolbar.component';
-import {UserSelfEditComponent}from'./component/users/user-self-edit/user-self-edit.component';
-import {ChangePasswordComponent}from'./component/users/change-password/change-password.component';
-import {NewPasswordComponent}from'./component/users/new-password/new-password.component';
+import {UserSelfEditComponent} from './component/users/user-self-edit/user-self-edit.component';
+import {ChangePasswordComponent} from './component/users/change-password/change-password.component';
+import {NewPasswordComponent} from './component/users/new-password/new-password.component';
 import { AnswerViewComponent } from './component/form/answer/answer-view/answer-view.component';
 import { QuestionAnsweredViewComponent } from './component/form/answer/question-answered-view/question-answered-view.component';
 import { AnswerListComponent } from './component/form/answer/answer-list/answer-list.component';
 import { AnswerDetailComponent } from './component/form/answer/answer-detail/answer-detail.component';
+import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
 
 @NgModule({
     declarations: [
@@ -103,41 +104,42 @@ import { AnswerDetailComponent } from './component/form/answer/answer-detail/ans
         AppRoutingModule,
         BrowserAnimationsModule,
         FormsModule,
-        MdButtonModule,
-        MdButtonToggleModule,
-        MdCheckboxModule,
-        MdInputModule,
-        MdNativeDateModule,
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatCheckboxModule,
+        MatInputModule,
+        MatNativeDateModule,
         ReactiveFormsModule,
-        MdAutocompleteModule,
-        MdRadioModule,
-        MdDatepickerModule,
-        MdSelectModule,
-        MdSliderModule,
-        MdSlideToggleModule,
-        MdMenuModule,
-        MdSidenavModule,
-        MdToolbarModule,
-        MdListModule,
-        MdGridListModule,
-        MdCardModule,
-        MdTabsModule,
-        MdDialogModule,
-        MdIconModule,
-        MdChipsModule,
-        MdProgressBarModule,
-        MdProgressSpinnerModule,
-        MdDialogModule,
-        MdTooltipModule,
-        MdSnackBarModule,
+        MatAutocompleteModule,
+        MatRadioModule,
+        MatDatepickerModule,
+        MatSelectModule,
+        MatSliderModule,
+        MatSlideToggleModule,
+        MatMenuModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatListModule,
+        MatGridListModule,
+        MatCardModule,
+        MatTabsModule,
+        MatDialogModule,
+        MatIconModule,
+        MatChipsModule,
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        MatDialogModule,
+        MatTooltipModule,
+        MatSnackBarModule,
         ChartsModule,
-        MdTooltipModule
+        MatTooltipModule
     ],
     entryComponents: [SubmitPreviewComponent, AlertDialogComponent, FormSettingsComponent],
-    providers: [UserService, QuestionService, AlertService, AuthGuard, AdminGuard, {
-        provide: LocationStrategy, useClass: HashLocationStrategy}, {
-        provide: APP_BASE_HREF, useValue: '/'
-    }],
+    providers: [UserService, QuestionService, AlertService, AuthGuard, AdminGuard,
+        {provide: LocationStrategy, useClass: HashLocationStrategy},
+        {provide: APP_BASE_HREF, useValue: '/'},
+        {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}
+        ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

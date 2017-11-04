@@ -1,16 +1,16 @@
 <div *ngIf="formData && formModel && chartModels" class="stat">
-    <button md-button (click)="back()">
-        <md-icon>arrow_back</md-icon>
+    <button mat-button (click)="back()">
+        <mat-icon>arrow_back</mat-icon>
         back
     </button>
 
-    <a md-button (click)="download()" id="csv-link">
-        <md-icon>file_download</md-icon>
+    <a mat-button (click)="download()" id="csv-link">
+        <mat-icon>file_download</mat-icon>
         download result
     </a>
 
     <div class="individual-button">
-        <button md-raised-button color="primary" (click)="goIndividual()">
+        <button mat-raised-button color="primary" (click)="goIndividual()">
             Individuals
         </button>
     </div>
@@ -28,21 +28,21 @@
 
                 <div *ngIf="formModel.formItems[i].controlType === 'dropdown'" class="question-select-desc">
                     <p>avaiable options: </p>
-                    <md-chip-list>
-                        <md-chip *ngFor="let opt of formModel.formItems[i]?.options">
+                    <mat-chip-list>
+                        <mat-chip *ngFor="let opt of formModel.formItems[i]?.options">
                             {{opt.value}}
-                        </md-chip>
-                    </md-chip-list>
+                        </mat-chip>
+                    </mat-chip-list>
                 </div>
             </div>
 
             <div *ngIf="formData.data[i].type === 'textbox'" class="question-textbox">
-                <md-list dense>
-                    <md-list-item *ngFor="let txt of formData.data[i].result; index as x">
-                        <p mdLine *ngIf="txt !== ''" class="text-answered">{{x+1}}. {{txt}}</p>
-                        <p mdLine *ngIf="txt === ''" class="text-not-answered">{{i+1}}. not answered</p>
-                    </md-list-item>
-                </md-list>
+                <mat-list dense>
+                    <mat-list-item *ngFor="let txt of formData.data[i].result; index as x">
+                        <p matLine *ngIf="txt !== ''" class="text-answered">{{x+1}}. {{txt}}</p>
+                        <p matLine *ngIf="txt === ''" class="text-not-answered">{{i+1}}. not answered</p>
+                    </mat-list-item>
+                </mat-list>
             </div>
 
             <div *ngIf="chart.type && chart.data.length > 0" class="question-graph">

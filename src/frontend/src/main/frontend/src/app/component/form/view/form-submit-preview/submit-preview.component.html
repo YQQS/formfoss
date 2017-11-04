@@ -1,9 +1,9 @@
-<h2 md-dialog-title class="dialog-title">Please Confirm Your Answer</h2>
-<md-dialog-content>
+<h2 matDialogTitle class="dialog-title">Please Confirm Your Answer</h2>
+<mat-dialog-content>
     <app-answer-view [form]="data.form" [answer]="data.answer"></app-answer-view>
-</md-dialog-content>
+</mat-dialog-content>
 
-<md-dialog-actions class="dialog-button">
-    <button md-button (click)="back()" class="button">Change submit</button>
-    <button md-raised-button color="warn" (click)="confirm()" class="button">Confirm</button>
-</md-dialog-actions>
+<mat-dialog-actions class="dialog-button">
+    <button mat-button (click)="back()" class="button">Change submit</button>
+    <button mat-raised-button color="warn" (click)="confirm()" class="button">Confirm</button>
+</mat-dialog-actions>

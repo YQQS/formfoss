@@ -10,7 +10,7 @@ import {AlertService} from '../../../../services/alert.service';
 import {AuthenticatedUser} from '../../../../models/authenticatedUser';
 import {ServiceUtil} from '../../../../util/service.util';
 import {SubmitPreviewComponent} from '../form-submit-preview/submit-preview.component';
-import {MdDialog} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {AnswerModel} from '../../../../models/answer/answer.model';
 
 @Component({
@@ -28,7 +28,7 @@ export class FormDetailComponent implements OnInit {
                 private router: Router,
                 private qtService: QuestionService,
                 private alertService: AlertService,
-                public diaRef: MdDialog) { }
+                public diaRef: MatDialog) { }
 
     ngOnInit() {
         const isPublished = this.activatedRoute.snapshot.queryParams['isPublished'] || false;

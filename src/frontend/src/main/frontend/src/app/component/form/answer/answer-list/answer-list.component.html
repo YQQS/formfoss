@@ -1,33 +1,33 @@
 <div>
-    <md-list>
-        <h3 md-subheader>Submitted answers</h3>
-        <md-list-item *ngFor="let answer of submittedAnswers">
-            <md-icon md-list-icon>label</md-icon>
-            <h3 mdLine >answerId: {{answer.answerId}}</h3>
+    <mat-list>
+        <h3 matSubheader>Submitted answers</h3>
+        <mat-list-item *ngFor="let answer of submittedAnswers">
+            <mat-icon mat-list-icon>label</mat-icon>
+            <h3 matLine >answerId: {{answer.answerId}}</h3>
 
-            <button md-icon-button (click)="goDetail(answer)">
-                <md-icon mdTooltip="see detail">loyalty</md-icon>
+            <button mat-icon-button (click)="goDetail(answer)">
+                <mat-icon matTooltip="see detail">loyalty</mat-icon>
             </button>
             
-            <button md-icon-button (click)="deleteAnswer(answer)">
-                <md-icon mdTooltip="delete this answer">delete_sweep</md-icon>
+            <button mat-icon-button (click)="deleteAnswer(answer)">
+                <mat-icon matTooltip="delete this answer">delete_sweep</mat-icon>
             </button>
-        </md-list-item>
+        </mat-list-item>
         
-        <md-divider></md-divider>
+        <mat-divider></mat-divider>
         
-        <h3 md-subheader>UnSubmitted answers</h3>
-        <md-list-item *ngFor="let ua of unSubmittedAnswers">
-            <md-icon md-list-icon>label_outline</md-icon>
-            <h3 mdLine >answerId: {{ua.answerId}}</h3>
+        <h3 matSubheader>UnSubmitted answers</h3>
+        <mat-list-item *ngFor="let ua of unSubmittedAnswers">
+            <mat-icon mat-list-icon>label_outline</mat-icon>
+            <h3 matLine >answerId: {{ua.answerId}}</h3>
     
-            <button md-icon-button (click)="goDetail(ua)">
-                <md-icon mdTooltip="see detail">loyalty</md-icon>
+            <button mat-icon-button (click)="goDetail(ua)">
+                <mat-icon matTooltip="see detail">loyalty</mat-icon>
             </button>
     
-            <button md-icon-button (click)="deleteAnswer(ua)">
-                <md-icon mdTooltip="delete this answer">delete_sweep</md-icon>
+            <button mat-icon-button (click)="deleteAnswer(ua)">
+                <mat-icon matTooltip="delete this answer">delete_sweep</mat-icon>
             </button>
-        </md-list-item>
-    </md-list>
+        </mat-list-item>
+    </mat-list>
 </div>

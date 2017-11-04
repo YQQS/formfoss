@@ -6,7 +6,7 @@ import {Subject} from 'rxjs/Subject';
 import {AlertService} from '../../../services/alert.service';
 import {ServiceUtil} from '../../../util/service.util';
 import {AuthenticatedUser} from '../../../models/authenticatedUser';
-import {MdSlideToggleChange} from '@angular/material';
+import {MatSlideToggleChange} from '@angular/material';
 
 
 @Component({
@@ -43,7 +43,7 @@ export class FormListComponent implements OnInit {
                 msg => this.alertService.error(msg));
     }
 
-    updateList(event: MdSlideToggleChange) {
+    updateList(event: MatSlideToggleChange) {
         this.onlyMe = event.checked;
         this.getForms();
     }

@@ -5,10 +5,10 @@
     <div [ngSwitch]="question.controlType">
         
         <div *ngSwitchCase="'textbox'">
-            <md-form-field class="textbox-question">
-                <textarea mdTextareaAutosize mdInput [formControlName]="question.key"
+            <mat-form-field class="textbox-question">
+                <textarea matTextareaAutosize matInput [formControlName]="question.key"
                           [type]="question.inputType">{{question.value}}</textarea>
-            </md-form-field>
+            </mat-form-field>
             
             <div class="alert" *ngIf="getErrors()">
                 <div *ngIf="getErrors()?.required && !getFormControl().pristine" >
@@ -31,32 +31,32 @@
         
         <div *ngSwitchCase="'dropdown'" class="dropdown">
             <div *ngIf="!question?.multiple" [formGroupName]="question.key" class="single">
-                <md-radio-group class="single-select" formControlName="normal">
-                    <md-radio-button class="select-item"
-                                     *ngFor="let opt of getSpecifiedOption()" [value]="opt.key">{{opt.value}}</md-radio-button>
-                    <md-radio-button class="select-item" *ngIf="getOtherOption()"
-                                     [value]="getOtherOption().key">{{getOtherOption().value}}: </md-radio-button>
-                </md-radio-group>
+                <mat-radio-group class="single-select" formControlName="normal">
+                    <mat-radio-button class="select-item"
+                                     *ngFor="let opt of getSpecifiedOption()" [value]="opt.key">{{opt.value}}</mat-radio-button>
+                    <mat-radio-button class="select-item" *ngIf="getOtherOption()"
+                                     [value]="getOtherOption().key">{{getOtherOption().value}}: </mat-radio-button>
+                </mat-radio-group>
                 
                 <div>
-                    <md-form-field *ngIf="isOtherChecked()" class="input">
-                        <input mdInput formControlName="other">
-                    </md-form-field>
+                    <mat-form-field *ngIf="isOtherChecked()" class="input">
+                        <input matInput formControlName="other">
+                    </mat-form-field>
                 </div>
             </div>
             
             <div *ngIf="question?.multiple" [formGroupName]="question.key" class="multi">
                 <div formArrayName="normal" class="multi-select">
-                    <md-checkbox class="select-item" *ngFor="let opt of question?.options; index as i"
+                    <mat-checkbox class="select-item" *ngFor="let opt of question?.options; index as i"
                                  [value]="opt.key" [formControlName]="i">
                         {{opt.value}}
-                    </md-checkbox>
+                    </mat-checkbox>
                 </div>
                 
                 <div *ngIf="isOtherChecked()">
-                    <md-form-field class="input">
-                        <input mdInput formControlName="other">
-                    </md-form-field>
+                    <mat-form-field class="input">
+                        <input matInput formControlName="other">
+                    </mat-form-field>
                 </div>
                 
                 <div class="alert">
@@ -78,10 +78,10 @@
         </div>
         
         <div *ngSwitchCase="'slider'">
-            <md-slider class="question-slider question-item" thumbLabel tickInterval="auto"
+            <mat-slider class="question-slider question-item" thumbLabel tickInterval="auto"
                        [min]="question.validator?.min" [max]="question.validator?.max" step="auto"
                        [value]="question.value" #slider [formControlName]="question.key">
-            </md-slider>
+            </mat-slider>
             <label>value: {{slider.value}}</label>
         </div>
     

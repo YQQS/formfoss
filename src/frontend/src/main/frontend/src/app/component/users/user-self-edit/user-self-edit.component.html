@@ -1,54 +1,54 @@
 <div *ngIf="user" align="center">
-    <md-toolbar  >
-        <md-icon>edit</md-icon>
+    <mat-toolbar  >
+        <mat-icon>edit</mat-icon>
         <span align="center">User Self Edit </span>
-    </md-toolbar>
+    </mat-toolbar>
     
     <div>
-        <md-icon >person</md-icon>
+        <mat-icon >person</mat-icon>
         
-        <md-form-field>
-            <input mdInput disabled [(ngModel)]=user.userName placeholder="Name">
-        </md-form-field>
+        <mat-form-field>
+            <input matInput disabled [(ngModel)]=user.userName placeholder="Name">
+        </mat-form-field>
     </div>
     
     <div>
-        <md-icon>credit_card</md-icon>
-        <md-form-field>
-            <input mdInput disabled [ngModel]="user.userCredit" placeholder="credit">
-        </md-form-field>
+        <mat-icon>credit_card</mat-icon>
+        <mat-form-field>
+            <input matInput disabled [ngModel]="user.userCredit" placeholder="credit">
+        </mat-form-field>
     </div>
     
     <div>
-        <md-icon >email</md-icon>
+        <mat-icon >email</mat-icon>
         
-        <md-form-field>
-            <input mdInput [(ngModel)]=user.userEmail placeholder="Email">
-        </md-form-field>
+        <mat-form-field>
+            <input matInput [(ngModel)]=user.userEmail placeholder="Email">
+        </mat-form-field>
     </div>
     
     <div>
-        <md-icon >phone</md-icon>
-        <md-form-field>
-            <input mdInput [(ngModel)]=user.userPhone placeholder="Phone">
-        </md-form-field>
+        <mat-icon >phone</mat-icon>
+        <mat-form-field>
+            <input matInput [(ngModel)]=user.userPhone placeholder="Phone">
+        </mat-form-field>
     </div>
     
     <div style="float:center" >
         
-        <button md-button (click)="save()" >
-            <md-icon>save</md-icon>
+        <button mat-button (click)="save()" >
+            <mat-icon>save</mat-icon>
             Save
         </button>
         
-        <button md-button (click)="goBack()">
-            <md-icon>home</md-icon>
+        <button mat-button (click)="goBack()">
+            <mat-icon>home</mat-icon>
             Back to Home
         
         </button>
         
-        <button md-button (click)="deleteUser(user.userId)">
-            <md-icon>delete</md-icon>
+        <button mat-button (click)="deleteUser(user.userId)">
+            <mat-icon>delete</mat-icon>
             delete account
         </button>
     

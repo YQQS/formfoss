@@ -5,7 +5,7 @@ import {FormModel} from '../../../../models/form/form.model';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
-import {MdDialog} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {SubmitPreviewComponent} from '../form-submit-preview/submit-preview.component';
 import {AlertService} from '../../../../services/alert.service';
 import {AuthenticatedUser} from '../../../../models/authenticatedUser';

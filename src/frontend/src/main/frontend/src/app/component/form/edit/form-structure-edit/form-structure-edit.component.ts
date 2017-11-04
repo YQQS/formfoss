@@ -8,7 +8,7 @@ import {ActivatedRoute, ParamMap, Route, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import {FormUtil} from '../../../../util/form.util';
 import {QuestionDropDown} from '../../../../models/form/question-dropdown';
-import {MdDialog, MdSelectChange, MdSlideToggleChange} from '@angular/material';
+import {MatDialog, MatSelectChange, MatSlideToggleChange} from '@angular/material';
 import {AlertDialogComponent} from '../../../_directives/alert-dialog/alert-dialog.component';
 import {AlertService} from '../../../../services/alert.service';
 import {ServiceUtil} from '../../../../util/service.util';
@@ -37,11 +37,11 @@ export class FormStructureEditComponent implements OnInit {
     controlTypes = ['textbox', 'dropdown', 'slider'];
 
     constructor(private qtService: QuestionService,
-                public diaRef: MdDialog,
+                public diaRef: MatDialog,
                 private route: Router,
                 private activatedRoute: ActivatedRoute,
                 private alertService: AlertService,
-                private mdDialog: MdDialog) {
+                private mdDialog: MatDialog) {
     }
 
     ngOnInit() {
@@ -128,7 +128,7 @@ export class FormStructureEditComponent implements OnInit {
         this.formEditGroup.removeControl(question.key);
     }
 
-    buildQuestion(question: QuestionBase<any>, event: MdSelectChange) {
+    buildQuestion(question: QuestionBase<any>, event: MatSelectChange) {
         this.updated =  true;
 
         const pos = this.formObject.formItems.indexOf(question);
@@ -158,7 +158,7 @@ export class FormStructureEditComponent implements OnInit {
 
     }
 
-    changeMode(event: MdSlideToggleChange) {
+    changeMode(event: MatSlideToggleChange) {
         if (!this.isPreview) {
             this.sync();
             this.formViewGroup = FormUtil.formModelToViewGroup(this.formObject.formItems);

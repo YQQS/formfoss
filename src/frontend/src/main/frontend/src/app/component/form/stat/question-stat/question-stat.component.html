@@ -1,22 +1,22 @@
-<md-grid-list cols="4" rowHeight="180px" class="graph">
-    <md-grid-tile colspan="3" rowspan="3">
+<mat-grid-list cols="4" rowHeight="180px" class="graph">
+    <mat-grid-tile colspan="3" rowspan="3">
         <canvas baseChart #chart1
             [chartType]="chartModel.type"
             [labels]="chartModel.label"
             [data]="chartModel.data"
             [options]="chartModel.options"
             ></canvas>
-    </md-grid-tile>
+    </mat-grid-tile>
 
 
-    <md-grid-tile colspan="1" rowspan="1" class="graph-type">
-        <md-select [(ngModel)]="chartModel.type" placeholder="chart type">
-            <md-option *ngFor="let opt of chartType" [value]="opt">{{opt}}</md-option>
-        </md-select>
-    </md-grid-tile>
+    <mat-grid-tile colspan="1" rowspan="1" class="graph-type">
+        <mat-select [(ngModel)]="chartModel.type" placeholder="chart type">
+            <mat-option *ngFor="let opt of chartType" [value]="opt">{{opt}}</mat-option>
+        </mat-select>
+    </mat-grid-tile>
 
-    <md-grid-tile colspan="1" rowspan="1" class="graph-action">
-        <a href="{{chart1.toDataURL('image/png')}}"  download="filename.png" md-raised-button>Save Diagram</a>
-    </md-grid-tile>
+    <mat-grid-tile colspan="1" rowspan="1" class="graph-action">
+        <a href="{{chart1.toDataURL('image/png')}}"  download="filename.png" mat-raised-button>Save Diagram</a>
+    </mat-grid-tile>
 
-</md-grid-list>
+</mat-grid-list>

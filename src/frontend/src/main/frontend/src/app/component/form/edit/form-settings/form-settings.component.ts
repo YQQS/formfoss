@@ -1,6 +1,6 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import {FormSettingsModel} from '../../../../models/form/form-settings.model';
-import {MD_DIALOG_DATA, MdDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 @Component({
     selector: 'app-form-settings',
@@ -11,8 +11,8 @@ export class FormSettingsComponent implements OnInit {
     settings: FormSettingsModel;
 
     constructor(
-        public diaRef: MdDialogRef<FormSettingsComponent>,
-        @Inject(MD_DIALOG_DATA) public data: {settings: FormSettingsModel}
+        public diaRef: MatDialogRef<FormSettingsComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: {settings: FormSettingsModel}
     ) {
         this.settings = data.settings;
     }

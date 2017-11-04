@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MD_DIALOG_DATA, MdDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {FormModel} from '../../../../models/form/form.model';
 import {AnswerModel} from '../../../../models/answer/answer.model';
 
@@ -10,8 +10,8 @@ import {AnswerModel} from '../../../../models/answer/answer.model';
 })
 export class SubmitPreviewComponent implements OnInit {
 
-    constructor(public dialogRef: MdDialogRef<SubmitPreviewComponent>,
-                @Inject(MD_DIALOG_DATA) public data: {
+    constructor(public dialogRef: MatDialogRef<SubmitPreviewComponent>,
+                @Inject(MAT_DIALOG_DATA) public data: {
                     form: FormModel,
                     answer: AnswerModel
                 }) { }

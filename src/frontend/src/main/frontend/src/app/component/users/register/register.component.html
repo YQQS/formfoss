@@ -2,11 +2,11 @@
     <h1>Create Your Account</h1>
     <form novalidate [formGroup]="registerForm" (ngSubmit)="register()">
         <div class="form-group">
-            <md-input-container>
+            <mat-form-field>
                 <input formControlName="userName"
-                        mdInput placeholder="username"
+                        matInput placeholder="username"
                         type="text" class="form-control"/><br>
-            </md-input-container>
+            </mat-form-field>
             <div class="alter alter-warn"
                  *ngIf="registerForm.get('userName').errors && !registerForm.get('userName').pristine">
                 <div *ngIf="registerForm.get('userName').hasError('nameConflict')">
@@ -25,11 +25,11 @@
         </div>
 
         <div class="form-group">
-            <md-input-container>
-                <input mdInput placeholder="password"
+            <mat-form-field>
+                <input matInput placeholder="password"
                        formControlName="userPassword"
                        type="password" class="form-control" required />
-            </md-input-container>
+            </mat-form-field>
             <div class="alter alter-warn"
                  *ngIf="registerForm.get('userPassword').errors && !registerForm.get('userPassword').pristine">
                 <div *ngIf="registerForm.get('userPassword').hasError('required')">
@@ -44,11 +44,11 @@
             </div>
         </div>
         <div class="form-group">
-            <md-input-container>
-                <input mdInput placeholder="repeat your password"
+            <mat-form-field>
+                <input matInput placeholder="repeat your password"
                        formControlName="userPasswordRepeat"
                        type="password" class="form-control"><br>
-            </md-input-container>
+            </mat-form-field>
             <div class="alter alter-warn"
                  *ngIf="registerForm.get('userPasswordRepeat').hasError('required') &&
                  !registerForm.get('userPasswordRepeat').pristine">
@@ -60,11 +60,11 @@
             </div>
         </div>
         <div class="form-group">
-            <md-input-container>
-                <input mdInput placeholder="email"
+            <mat-form-field>
+                <input matInput placeholder="email"
                        formControlName="userEmail"
                        type="email" class="form-control" />
-            </md-input-container>
+            </mat-form-field>
             <div class="alter alter-warn"
                     *ngIf="registerForm.get('userEmail').errors && !registerForm.get('userEmail').pristine">
                 <div *ngIf="registerForm.get('userEmail').hasError('required')">
@@ -80,10 +80,10 @@
         </div>
 
         <div>
-            <button md-raised-button color="primary" type="submit" class="btn btn-success"
+            <button mat-raised-button color="primary" type="submit" class="btn btn-success"
                     [disabled]="registerForm.invalid">
                 register</button>
-            <a routerLink="/login" md-button >have a accout?login</a>
+            <a routerLink="/login" mat-button >have a accout?login</a>
         </div>
     </form>
 </div>

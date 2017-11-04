@@ -1,44 +1,44 @@
 <div class="fab-add-button">
-    <button md-fab color="warn" (click)="add()" class="main-fab-icon">
-        <md-icon>add</md-icon>
+    <button mat-fab color="warn" (click)="add()" class="main-fab-icon">
+        <mat-icon>add</mat-icon>
     </button>
 </div>
-<md-list>
-    <h3 mdSubheader>Forms</h3>
-    <md-slide-toggle [disabled]="currentUser?.role !== 'admin'"
+<mat-list>
+    <h3 matSubheader>Forms</h3>
+    <mat-slide-toggle [disabled]="currentUser?.role !== 'admin'"
         (change)="updateList($event)" [checked]="onlyMe">
         only forms created by me
-    </md-slide-toggle>
+    </mat-slide-toggle>
 
-    <md-list-item *ngFor="let form of formList">
-        <md-icon md-list-icon>branding_watermark</md-icon>
-        <h2 md-line>{{form.title}}</h2>
-        <p class="form-desc form-desc-n" *ngIf="form.isPublished" md-line>published</p>
-        <p class="form-desc form-desc-x" *ngIf="!form.isPublished" md-line>not published</p>
+    <mat-list-item *ngFor="let form of formList">
+        <mat-icon mat-list-icon>branding_watermark</mat-icon>
+        <h2 matLine>{{form.title}}</h2>
+        <p class="form-desc form-desc-n" *ngIf="form.isPublished" matLine>published</p>
+        <p class="form-desc form-desc-x" *ngIf="!form.isPublished" matLine>not published</p>
 
-        <button md-icon-button color="primary" (click)="edit(form)" >
-            <md-icon>edit</md-icon>
+        <button mat-icon-button color="primary" (click)="edit(form)" >
+            <mat-icon>edit</mat-icon>
         </button>
-        <button md-icon-button (click)="preview(form.formId)">
-            <md-icon>visibility</md-icon>
+        <button mat-icon-button (click)="preview(form.formId)">
+            <mat-icon>visibility</mat-icon>
         </button>
-        <button md-icon-button (click)="stats(form.formId)">
-            <md-icon>info</md-icon>
+        <button mat-icon-button (click)="stats(form.formId)">
+            <mat-icon>info</mat-icon>
         </button>
 
-        <button md-icon-button [mdMenuTriggerFor]="menu"><md-icon>more_vert</md-icon></button>
+        <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
 
-        <md-menu #menu="mdMenu">
+        <mat-menu #menu="matMenu">
 
-            <button md-menu-item color="primary" (click)="publish(form)" [disabled]="form.isPublished">
-                <md-icon>publish</md-icon>
+            <button mat-menu-item color="primary" (click)="publish(form)" [disabled]="form.isPublished">
+                <mat-icon>publish</mat-icon>
                 publish
             </button>
 
-            <button md-menu-item color="warn" (click)="deleteForm(form.formId)">
-                <md-icon>delete</md-icon>
+            <button mat-menu-item color="warn" (click)="deleteForm(form.formId)">
+                <mat-icon>delete</mat-icon>
                 delete
             </button>
-        </md-menu>
-    </md-list-item>
-</md-list>
+        </mat-menu>
+    </mat-list-item>
+</mat-list>
