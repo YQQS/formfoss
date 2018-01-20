@@ -1,7 +1,7 @@
 export class MessageUtil {
     private static buildMessage(key: string, value: string) {
         // return '{' + key + ':' + value + '}' ;
-        let message = {};
+        const message = {};
         message[key] = value;
         return message;
     }

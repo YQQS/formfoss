@@ -23,7 +23,7 @@ import {AnswerListComponent} from './component/form/answer/answer-list/answer-li
 import {AnswerViewComponent} from './component/form/answer/answer-view/answer-view.component';
 import {AnswerDetailComponent} from './component/form/answer/answer-detail/answer-detail.component';
 import {ChangePasswordComponent} from './component/users/change-password/change-password.component';
-import {NewPasswordComponent} from'./component/users/new-password/new-password.component';
+import {NewPasswordComponent} from './component/users/new-password/new-password.component';
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},

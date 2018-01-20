@@ -60,7 +60,6 @@ import { AnswerViewComponent } from './component/form/answer/answer-view/answer-
 import { QuestionAnsweredViewComponent } from './component/form/answer/question-answered-view/question-answered-view.component';
 import { AnswerListComponent } from './component/form/answer/answer-list/answer-list.component';
 import { AnswerDetailComponent } from './component/form/answer/answer-detail/answer-detail.component';
-import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
 
 @NgModule({
     declarations: [
@@ -138,8 +137,7 @@ import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
     providers: [UserService, QuestionService, AlertService, AuthGuard, AdminGuard,
         {provide: LocationStrategy, useClass: HashLocationStrategy},
         {provide: APP_BASE_HREF, useValue: '/'},
-        {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}
-        ],
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

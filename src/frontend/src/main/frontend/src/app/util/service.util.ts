@@ -1,7 +1,7 @@
 import { RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
-import {AuthenticatedUser} from '../models/authenticatedUser';
+import { AuthenticatedUser } from '../models/authenticatedUser';
 
 export class ServiceUtil {
     static publicUrl = '/public';
@@ -92,8 +92,17 @@ export class ServiceUtil {
         let errMsg: string;
 
         if (error instanceof Response) {
-            const body = error.json() || {};
-            const err = body.errorMsg || body.error || body.message || '';
+            console.log(error);
+            let body ;
+            let err;
+            try {
+                body = error.json();
+                err = body.errorMsg || body.error || body.message || '';
+            } catch (e) {
+                console.log(e);
+                body = error.toString();
+                err = body;
+            }
             errMsg = `${error.status} - ${error.statusText || ''} - ${err}`;
         } else {
             errMsg = error.errorMsg ? error.errorMsg : JSON.stringify(error);

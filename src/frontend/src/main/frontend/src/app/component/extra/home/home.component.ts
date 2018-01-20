@@ -21,7 +21,9 @@ export class HomeComponent implements OnInit {
     getPublished() {
         this.qtService.getPublishedForms()
             .subscribe( res => this.questionList = res,
-                        error => this.alertService.error(error));
+                        error => {
+                this.alertService.error(error)
+            });
     }
 
 

@@ -1,0 +1,11 @@
+.answer-detail {
+}
+.actions {
+    display: flex;
+    position: absolute;
+    right: 0;
+}
+
+.button {
+    margin: 5px;
+}
